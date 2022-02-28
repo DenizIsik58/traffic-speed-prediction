@@ -26,12 +26,14 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+/.idea
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+/traffic_speed_prediction/node_modules
 
 # Installer logs
 pip-log.txt
@@ -127,3 +129,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+.vagrant
+*.json
