@@ -29,5 +29,6 @@ def create_db_object(data: json):
                     "time": time}
 
 
+# Test code
 if __name__ == '__main__':
     print(create_db_object(get_tms_station_data("23001")))
