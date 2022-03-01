@@ -1,0 +1,7 @@
+{
+"urls": {
+"tms_station": {
+  "base_url" : "https://tie.digitraffic.fi/api/v1/data/tms-data/"
+  }
+}
+}
