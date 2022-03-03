@@ -1,9 +1,14 @@
+import ujson
+
+
 def read_config():
-    return eval(open("../../data.json").read())
+    with open("../../data.json", "r") as file:
+        return ujson.load(file)
 
 
 def read_secrets():
-    return eval(open("../../secrets.json").read())
+    with open("../../secrets.json", "r") as file:
+        return ujson.load(file)
 
 
 def convert_to_date(datetime: str):
