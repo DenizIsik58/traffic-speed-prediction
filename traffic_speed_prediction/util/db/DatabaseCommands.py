@@ -2,9 +2,11 @@ import json
 import boto3
 from traffic_speed_prediction.util.config.ReadConfig import read_secrets
 
+# TODO: Make a class with commands for the DB
 
 # Put item in table
 def insert_to_database(object: json):
+    # global keyword can be used here to look for variables out of scope
     resource_db = boto3.resource(
         service_name='dynamodb',
         aws_access_key_id=read_secrets()["aws_access_key_id"],

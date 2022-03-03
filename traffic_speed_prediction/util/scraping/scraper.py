@@ -5,9 +5,14 @@ import time
 from traffic_speed_prediction.util.config.ReadConfig import read_config, convert_to_date
 from traffic_speed_prediction.model.Dataobject import Dataobject
 
+
+# TODO: Make a scraper class with static methods
+
+
 # Fetch data from any given endpoint
 def get_text_from_endpoint(path: string):
     return requests.get(path).text
+
 
 def fetch_and_create_db_object_from_tms_station_data():
     objects = []
@@ -42,6 +47,7 @@ def repeat_fetching(minutes: int):
         for item in fetch_and_create_db_object_from_tms_station_data():
             print(item)
         time.sleep(minutes - ((time.time() - timer) % minutes))
+
 
 # Test code
 if __name__ == '__main__':
