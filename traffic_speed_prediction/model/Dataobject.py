@@ -15,5 +15,5 @@ class Dataobject:
         self.date = date
         self.time = time
 
-    def tostring(self):
-        return "ID: " + str(self.object_id) + ", RoadstationID: " + str(self.roadstation_id) + ", station_name: " + self.station_name + ", speed: " + str(self.speed) + ", date: " + self.date + ", time: " + self.time
+    def __repr__(self):
+        return f"{self.object_id}  RoadstationID:  {self.roadstation_id} station_name: {self.station_name} speed: {self.speed}  date: {self.date}  time: {self.time}"
