@@ -1,16 +1,13 @@
-import json
+import ujson
 import string
 import requests
-import sched
 import time
 from traffic_speed_prediction.util.config.ReadConfig import read_config, convert_to_date
 from traffic_speed_prediction.model.Dataobject import Dataobject
 
-
 # Fetch data from any given endpoint
 def get_text_from_endpoint(path: string):
     return requests.get(path).text
-
 
 def fetch_and_create_db_object_from_tms_station_data():
     objects = []
@@ -18,7 +15,8 @@ def fetch_and_create_db_object_from_tms_station_data():
     # Runs through the specified id's in the data.json file and fetches all the data
     # Then creates a Dataobject 0
     for station_id in read_config()["urls"]["tms_station"]["ids"]:
-        data = json.loads(requests.get(read_config()["urls"]["tms_station"]["base_url"] + station_id).text)
+        # Use ujson (written in C) library to increase performance
+        data = ujson.loads(requests.get(read_config()["urls"]["tms_station"]["base_url"] + station_id).text)
         for item in data['tmsStations'][0]['sensorValues']:
             if item["sensorUnit"] == "km/h":
                 object_id = item["id"]
@@ -42,9 +40,8 @@ def repeat_fetching(minutes: int):
         counter += 1
         print("CURRENT BATCH: " + str(counter) + " DATA = ")
         for item in fetch_and_create_db_object_from_tms_station_data():
-            print(item.tostring())
+            print(item)
         time.sleep(minutes - ((time.time() - timer) % minutes))
-
 
 # Test code
 if __name__ == '__main__':
