@@ -4,6 +4,7 @@ FROM node:16-alpine
 RUN mkdir /app
 WORKDIR /app
 COPY . /app
+COPY /traffic_speed_prediction/package.json /app
 
 # Update the packagemanager and add python3 + pip3
 RUN apk add --update

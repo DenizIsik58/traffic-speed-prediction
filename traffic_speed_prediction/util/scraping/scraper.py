@@ -47,7 +47,6 @@ class Scraper:
                 print(item)
             time.sleep(minutes - ((time.time() - timer) % minutes))
 
-
 # Test code
 if __name__ == '__main__':
     Scraper.repeat_fetching(1)
