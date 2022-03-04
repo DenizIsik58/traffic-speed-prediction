@@ -10,7 +10,6 @@ RUN apk add --update
 RUN apk add python3
 RUN python3 -m ensurepip
 
-RUN npm install
 RUN pip3 install pip --upgrade
 RUN pip3 install -r requirements.txt
 
