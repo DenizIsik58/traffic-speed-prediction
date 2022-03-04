@@ -16,7 +16,6 @@ class DatabaseCommands:
             table_name = Config.read_secrets()["secrets"]["table_names"]["road_table"]
         elif table_name == "tms":
             table_name = Config.read_secrets()["secrets"]["table_names"]["station_table"]
-        print(table_name)
         # global keyword can be used here to look for variables out of scope
         resource_db = boto3.resource(
             service_name='dynamodb',
