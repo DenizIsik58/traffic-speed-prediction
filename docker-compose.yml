@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  traffic_speec_prediction:
+    build: .
+    volumes:
+      - .:/app
+    restart: always
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "python3 traffic_speed_prediction/manage.py migrate
+      && python3 traffic_speed_prediction/manage.py runserver"
