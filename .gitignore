@@ -132,3 +132,4 @@ dmypy.json
 
 .vagrant
 *.json
+traffic_speed_prediction/secrets.json
