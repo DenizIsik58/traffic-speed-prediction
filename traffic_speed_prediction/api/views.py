@@ -66,13 +66,3 @@ class CreateWeather_dataView(APIView):
 
 
 
-
-
-
-
-
-
-
-
-
-

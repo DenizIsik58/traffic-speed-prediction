@@ -9,4 +9,3 @@ class Weather_data(models.Model):
     measured_time = models.CharField(max_length=20, default="", unique=False)
 
 
-
