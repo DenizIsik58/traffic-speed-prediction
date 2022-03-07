@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import Weather_dataView, GetWeather_data, CreateWeather_data
+from .views import WeatherHistoryDataView, GetWeatherHistoryData, CreateWeatherHistoryData,UpdateWeatherHistoryData
 
 urlpatterns = [
-    path('weather_data', Weather_dataView.as_view()),
-    path('create-weather_data', CreateWeather_data.as_view()),
-    path('get-weather_data/<int:road_station_id>/', GetWeather_data.as_view())
+    path('all-whd', WeatherHistoryDataView.as_view()),
+    path('create-whd', CreateWeatherHistoryData.as_view()),
+    path('get-whd', GetWeatherHistoryData.as_view()),
+    path('put-whd',UpdateWeatherHistoryData.as_view())
 ]

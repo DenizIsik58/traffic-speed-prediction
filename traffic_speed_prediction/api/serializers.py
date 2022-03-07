@@ -1,12 +1,17 @@
 from rest_framework import serializers
-from .models import Weather_data
+from .models import WeatherHistoryData
 
-class Weather_dataSerializer(serializers.ModelSerializer):
+class WeatherHistoryDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Weather_data
-        fields = ('id', 'road_station_id', 'sensor_id', 'sensor_value', 'measured_time')
+        model = WeatherHistoryData
+        fields = ('id', 'roadStationId', 'sensorId', 'sensorValue', 'measuredTime')
 
-class Create_Weather_dataSerializer(serializers.ModelSerializer):
+class CreateWeatherHistoryDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Weather_data
-        fields = ('id', 'road_station_id', 'sensor_id', 'sensor_value', 'measured_time') 
+        model = WeatherHistoryData
+        fields = ('id', 'roadStation_id', 'sensorId', 'sensorValue', 'measuredTime')
+        
+class UpdateWeatherHistoryDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WeatherHistoryData
+        fields = ('id', 'roadStation_id', 'sensorId', 'sensorValue', 'measuredTime')
