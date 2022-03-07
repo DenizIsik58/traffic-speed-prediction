@@ -12,6 +12,9 @@
     },
   "road_sections": {
     "base_url" : "https://tie.digitraffic.fi/api/v3/data/road-conditions/"
+  },
+  "road_number": {
+    "base_url": "https://tie.digitraffic.fi/api/v3/metadata/tms-stations/road-number/"
   }
 }
 }
