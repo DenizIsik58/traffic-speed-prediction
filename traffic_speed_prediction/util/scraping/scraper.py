@@ -2,7 +2,7 @@ import ujson
 import string
 import requests
 import time
-from traffic_speed_prediction.util.config.ReadConfig import Config
+from trafic_speed import Config
 from traffic_speed_prediction.model.Dataobject import Dataobject
 
 
@@ -34,6 +34,16 @@ class Scraper:
                     objects.append(data_object)
         # Returns a list of Dataobjects
         return objects
+    
+    @staticmethod
+    def get_road_ids():
+        objects = []
+        data = Scraper.get_text_from_endpoint(Config.read_config()["urls"]["road_sections"]["base_url"])
+        for item in data["weatherData"] :
+            objects.append(item["id"])
+            print(item["id"])
+        return objects
+    
 
     @staticmethod
     def repeat_fetching(minutes: int):
@@ -49,4 +59,4 @@ class Scraper:
 
 # Test code
 if __name__ == '__main__':
-    Scraper.repeat_fetching(1)
+    Scraper.get_road_ids
