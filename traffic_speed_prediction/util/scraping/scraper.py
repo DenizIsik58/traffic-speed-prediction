@@ -37,12 +37,8 @@ class Scraper:
 
     @staticmethod
     def get_road_ids():
-        objects = []
-        print(Config.read_config()["urls"]["road_sections"]["base_url"])
-        roads = ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)
-
         # Find all the ids related to road stations and road number
-        for road_condition in roads['weatherData']:
+        for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)['weatherData']:
             road_number = str(road_condition["id"]).split("_")[0]
             road_section = str(road_condition["id"]).split("_")[1]
 
@@ -54,9 +50,8 @@ class Scraper:
                         # Find the average speed registered in the different TMS stations
                         for station in ujson.loads(requests.get(Config.read_config()["urls"]["tms_station"]["base_url"] + str(roadstation_id)).text)['tmsStations'][0]["sensorValues"]:
                             if station["id"] == 5122:
-                                print("ROAD STAIION ID: " + str(roadstation_id) + " ROAD SECTION: " + str(road_section) + " ROAD NUMBER: " + str(roadnumber) + " CURRENTLY DRIVING: " + str(station["sensorValue"]) + " KM/H")
+                                print("ROAD STATION ID: " + str(roadstation_id) + " ROAD SECTION: " + str(road_section) + " ROAD NUMBER: " + str(roadnumber) + " CURRENTLY DRIVING: " + str(station["sensorValue"]) + " KM/H")
                                 break
-
 
     @staticmethod
     def repeat_fetching(minutes: int):
