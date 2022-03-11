@@ -17,4 +17,4 @@ RUN pip3 install -r requirements.txt
 EXPOSE 8000
 
 # Specify the commands
-CMD ["python3"]
+CMD ["python3", "traffic_speed_prediction/manage.py", "runserver",  "0.0.0.0:8000"]

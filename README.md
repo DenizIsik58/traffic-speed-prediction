@@ -1,1 +1,1 @@
-# traffic-speed-predication
+# traffic-speed-prediction
