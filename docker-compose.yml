@@ -9,5 +9,6 @@ services:
     ports:
       - "8000:8000"
     command: >
-      sh -c "python3 traffic_speed_prediction/manage.py migrate
+      sh -c "python3 traffic_speed_prediction/manage.py makemigrations
+      && python3 traffic_speed_prediction/manage.py migrate
       && python3 traffic_speed_prediction/manage.py runserver"
