@@ -6,5 +6,5 @@ urlpatterns = [
     path('create-whd', CreateWeatherHistoryData.as_view()),
     path('get-whd', GetWeatherHistoryData.as_view()),
     path('put-whd',UpdateWeatherHistoryData.as_view()),
-    path('delete-whd',DeleteWeatherHistoryData.as_view())
+    path('delete-whd/<str:pk>/',DeleteWeatherHistoryData.as_view())
 ]

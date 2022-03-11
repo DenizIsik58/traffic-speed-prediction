@@ -5,18 +5,3 @@ class WeatherHistoryDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = WeatherHistoryData
         fields = ('id', 'roadStationId', 'sensorId', 'sensorValue', 'measuredTime')
-
-class CreateWeatherHistoryDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WeatherHistoryData
-        fields = ('id', 'roadStationId', 'sensorId', 'sensorValue', 'measuredTime')
-        
-class UpdateWeatherHistoryDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WeatherHistoryData
-        fields = ('id', 'roadStationId', 'sensorId', 'sensorValue', 'measuredTime')
-
-class DeleteWeatherHistoryDataSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = WeatherHistoryData
-        fields = ('id', 'roadStationId')

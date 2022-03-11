@@ -1,7 +1,7 @@
 from django.db.migrations import serializer
 from django.shortcuts import render
 from rest_framework import generics, status
-from .serializers import WeatherHistoryDataSerializer,CreateWeatherHistoryDataSerializer,UpdateWeatherHistoryDataSerializer,DeleteWeatherHistoryDataSerializer
+from .serializers import WeatherHistoryDataSerializer
 from .models import WeatherHistoryData
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -30,7 +30,8 @@ class GetWeatherHistoryData(APIView):
 
 
 class CreateWeatherHistoryData(APIView):
-    serializer_class = CreateWeatherHistoryDataSerializer
+    serializer_class = WeatherHistoryDataSerializer
+
     def post(self, request):
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
@@ -40,7 +41,7 @@ class CreateWeatherHistoryData(APIView):
             sensorId = serializer.data.get('sensorId')
             sensorValue = serializer.data.get('sensorValue')
             measuredTime = serializer.data.get('measuredTime')
-            queryset = WeatherHistoryData.objects.filter(roadStationId = roadStationId)
+            queryset = WeatherHistoryData.objects.filter(roadStationId=roadStationId)
             if queryset.exists():
                 weatherHistoryData = queryset[0]
                 weatherHistoryData.roadStationId = roadStationId
@@ -50,7 +51,7 @@ class CreateWeatherHistoryData(APIView):
                 weatherHistoryData.save(update_fields=['roadStationId, sensorId', 'sensorValue', 'measuredTime'])
             else:
                 weatherHistoryData = WeatherHistoryData(roadStationId=roadStationId, sensorId=sensorId,
-                                            sensorValue=sensorValue, measuredTime=measuredTime)
+                                                        sensorValue=sensorValue, measuredTime=measuredTime)
                 weatherHistoryData.save()
 
             return Response(WeatherHistoryDataSerializer(weatherHistoryData).data, status=status.HTTP_201_CREATED)
@@ -59,7 +60,7 @@ class CreateWeatherHistoryData(APIView):
 
 
 class UpdateWeatherHistoryData(APIView):
-    serializer_class = UpdateWeatherHistoryDataSerializer
+    serializer_class = WeatherHistoryDataSerializer
 
     def put(self, request):
         if not self.request.session.exists(self.request.session.session_key):
@@ -85,23 +86,8 @@ class UpdateWeatherHistoryData(APIView):
 
 
 class DeleteWeatherHistoryData(APIView):
-       serializer_class = DeleteWeatherHistoryDataSerializer
-       def delete(self, request):
-           if not self.request.session.exists(self.request.session.session_key):
-                self.request.session.create()
-           serializer = self.serializer_class(data=request.data)
-           if serializer.is_valid():
-                       roadStationId = serializer.data.get('roadStationId')
-                       sensorId = serializer.data.get('sensorId')
-                       sensorValue = serializer.data.get('sensorValue')
-                       measuredTime = serializer.data.get('measuredTime')
-                       queryset = WeatherHistoryData.objects.filter(roadStationId=roadStationId)
-                       if not queryset.exists():
-                           return Response({'msg': 'Station not found.'}, status=status.HTTP_404_NOT_FOUND)
-                       queryset.delete()
-                       return Response(WeatherHistoryDataSerializer(weatherHistoryData).data, status=status.HTTP_200_OK)
-           return Response({'Bad Request': "Invalid Data..."}, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
+    def delete(self, request, pk):
+        instance = WeatherHistoryData.objects.get(roadStationId=pk)
+        instance.delete()
+        return Response(WeatherHistoryDataSerializer.data, status=status.HTTP_200_OK)
