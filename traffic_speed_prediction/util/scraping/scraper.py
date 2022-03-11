@@ -1,9 +1,22 @@
-import ujson
 import string
-import requests
 import time
-from traffic_speed_prediction.util.config.ReadConfig import Config
+
+import requests
+import ujson
+
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "traffic_speed_prediction.settings")
+
+import django
+django.setup()
+
+from traffic_speed_prediction.api.models import Road
 from traffic_speed_prediction.model.Dataobject import Dataobject
+from traffic_speed_prediction.util.config.ReadConfig import Config
+from traffic_speed_prediction.api.models import Road
+
+import os
+import django
 
 
 class Scraper:
@@ -37,21 +50,19 @@ class Scraper:
 
     @staticmethod
     def get_road_ids():
+
         # Find all the ids related to road stations and road number
         for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)['weatherData']:
             road_number = str(road_condition["id"]).split("_")[0]
-            road_section = str(road_condition["id"]).split("_")[1]
-
+            road_sections = []
             # Find all the roadstation ids and road numbers
             for feature in ujson.loads(requests.get(Config.read_config()["urls"]["road_number"]["base_url"] + road_number).text)["features"]:
-                     roadstation_id = feature["properties"]["roadStationId"]
-                     roadnumber = feature["properties"]["roadAddress"]["roadNumber"]
-                     if int(feature["properties"]["roadAddress"]["roadSection"]) == int(road_section):
-                        # Find the average speed registered in the different TMS stations
-                        for station in ujson.loads(requests.get(Config.read_config()["urls"]["tms_station"]["base_url"] + str(roadstation_id)).text)['tmsStations'][0]["sensorValues"]:
-                            if station["id"] == 5122:
-                                print("ROAD STATION ID: " + str(roadstation_id) + " ROAD SECTION: " + str(road_section) + " ROAD NUMBER: " + str(roadnumber) + " CURRENTLY DRIVING: " + str(station["sensorValue"]) + " KM/H")
-                                break
+                     road_sections.append(feature["properties"]["roadAddress"]["roadSection"])
+            print("THESE IDS ARE BOUND TO ROAD NUMBER " + road_number)
+            print(road_sections)
+            Road(id=road_number, roadSections=road_sections).save()
+
+
 
     @staticmethod
     def repeat_fetching(minutes: int):
