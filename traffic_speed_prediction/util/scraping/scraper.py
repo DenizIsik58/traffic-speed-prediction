@@ -4,19 +4,14 @@ import time
 import requests
 import ujson
 
-import os
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "traffic_speed_prediction.settings")
 
-import django
-django.setup()
 
 from traffic_speed_prediction.api.models import Road
 from traffic_speed_prediction.model.Dataobject import Dataobject
 from traffic_speed_prediction.util.config.ReadConfig import Config
 from traffic_speed_prediction.api.models import Road
 
-import os
-import django
+
 
 
 class Scraper:
