@@ -11,6 +11,11 @@ RUN apk add python3
 RUN python3 -m ensurepip
 
 RUN pip3 install pip --upgrade
+
+
+RUN apk update
+RUN apk add postgresql-dev gcc python3-dev musl-dev
+
 RUN pip3 install -r requirements.txt
 
 # Expose port 8000 for the container
