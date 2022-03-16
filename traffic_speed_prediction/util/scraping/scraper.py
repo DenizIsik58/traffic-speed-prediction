@@ -3,6 +3,8 @@ import time
 
 import requests
 import ujson
+
+
 from traffic_speed_prediction.model.Dataobject import Dataobject
 from traffic_speed_prediction.util.config.ReadConfig import Config
 
@@ -72,6 +74,9 @@ if __name__ == '__main__':
     from django.conf import settings
 
     settings.configure()
+    import django
+    django.setup()
 
     from traffic_speed_prediction.api.models import Road
+
     Scraper.get_road_ids()
