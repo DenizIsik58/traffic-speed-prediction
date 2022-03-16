@@ -1,12 +1,8 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
+
 # Create your models here.
-
-
-class Road(models.Model):
-    id = models.IntegerField(primary_key=True)
-    roadSections = ArrayField(ArrayField(models.IntegerField()))
 
 
 class Road_section(models.Model):
@@ -16,6 +12,11 @@ class Road_section(models.Model):
     daylight = models.BooleanField()
     weatherSymbol = models.TextField()
     overallRoadCondition = models.TextField()
+
+
+class Road(models.Model):
+    id = models.IntegerField(primary_key=True)
+    road_sections = models.ManyToManyRel(Road_section)
 
 
 class TMS_station(models.Model):
