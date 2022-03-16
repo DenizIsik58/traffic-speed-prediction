@@ -1,18 +1,11 @@
 import string
 import time
-
 import requests
 import ujson
-
-
-
 from traffic_speed_prediction.api.models import Road
 from traffic_speed_prediction.model.Dataobject import Dataobject
 from traffic_speed_prediction.util.config.ReadConfig import Config
 from traffic_speed_prediction.api.models import Road
-
-
-
 
 class Scraper:
     # TODO: Make a scraper class with static methods
