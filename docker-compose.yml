@@ -14,7 +14,7 @@ services:
     command: >
       sh -c "python3 traffic_speed_prediction/manage.py makemigrations
       && python3 traffic_speed_prediction/manage.py migrate
-      && python3 traffic_speed_prediction/manage.py runserver"
+      && python3 traffic_speed_prediction/manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
   db:
