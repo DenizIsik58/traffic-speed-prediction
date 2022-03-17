@@ -4,8 +4,9 @@ import time
 import requests
 import ujson
 
+from util.config.ReadConfig import Config
 
-from traffic_speed_prediction.util.config.ReadConfig import Config
+from api.models import Road
 
 
 class Scraper:
@@ -36,6 +37,7 @@ class Scraper:
             print("THESE IDS ARE BOUND TO ROAD NUMBER " + road_number)
             print(road_sections)
             Road(id=road_number, roadSections=road_sections).save()
+            print("SAVING ROAD TO DB")
 
     @staticmethod
     def repeat_fetching(minutes: int):
@@ -50,15 +52,4 @@ class Scraper:
             time.sleep(minutes - ((time.time() - timer) % minutes))
 
 
-# Test code
-if __name__ == '__main__':
 
-    from django.conf import settings
-
-    settings.configure()
-    import django
-    django.setup()
-
-    from traffic_speed_prediction.api.models import Road
-
-    Scraper.get_road_ids()

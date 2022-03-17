@@ -31,13 +31,13 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api.apps.ApiConfig',
     'rest_framework',
     'frontend.apps.FrontendConfig',
 ]
@@ -88,7 +88,7 @@ DATABASES = {
 
         'PASSWORD': '1234',
 
-        'HOST': 'db',
+        'HOST': 'localhost',
 
         'PORT': '5432',
 
