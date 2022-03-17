@@ -5,12 +5,10 @@ import requests
 import ujson
 
 
-from traffic_speed_prediction.model.Dataobject import Dataobject
 from traffic_speed_prediction.util.config.ReadConfig import Config
 
 
 class Scraper:
-    # TODO: Make a scraper class with static methods
 
     # Fetch data from any given endpoint
     @staticmethod
@@ -19,24 +17,8 @@ class Scraper:
 
     @staticmethod
     def fetch_and_create_db_object_from_tms_station_data():
-        objects = []
-        # Runs through the specified id's in the data.json file and fetches all the data
-        # Then creates a Dataobject 0
-        for station_id in Config.read_config()["urls"]["tms_station"]["ids"]:
-            # Use ujson (written in C) library to increase performance
-            data = ujson.loads(requests.get(Config.read_config()["urls"]["tms_station"]["base_url"] + station_id).text)
-            for item in data['tmsStations'][0]['sensorValues']:
-                if item["sensorUnit"] == "km/h":
-                    object_id = item["id"]
-                    roadstation_id = item["roadStationId"]
-                    station_name = Config.read_config()["urls"]["tms_station"]["ids"][station_id]
-                    speed = item["sensorValue"]
-                    date = Config.convert_to_date(item["measuredTime"])[0]
-                    time = Config.convert_to_date(item["measuredTime"])[1]
-                    data_object = Dataobject(object_id, roadstation_id, station_name, speed, date, time)
-                    objects.append(data_object)
-        # Returns a list of Dataobjects
-        return objects
+        pass
+
 
     @staticmethod
     def get_road_ids():
