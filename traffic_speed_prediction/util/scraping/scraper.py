@@ -3,6 +3,7 @@ import time
 
 import requests
 import ujson
+from traffic_speed_prediction.api.models import Road_section
 
 from util.config.ReadConfig import Config
 
@@ -36,7 +37,12 @@ class Scraper:
                 road_sections.append(feature["properties"]["roadAddress"]["roadSection"])
             print("THESE IDS ARE BOUND TO ROAD NUMBER " + road_number)
             print(road_sections)
-            Road(id=road_number, roadSections=road_sections).save()
+            road = Road(id=road_number, roadSections=road_sections)
+            road.Save()
+            
+            for section in road_sections:
+                Road_section(id=section, road=road, roadTemperature=1, daylight=True, weatherSymbol="D200", overallRoadCondition="GOOD").save()
+
             print("SAVING ROAD TO DB")
 
     @staticmethod
