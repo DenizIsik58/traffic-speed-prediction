@@ -34,3 +34,4 @@ yarl==1.7.2
 boto3~=1.21.12
 ujson~=5.1.0
 psycopg2==2.9.3
+psycopg2-binary==2.9.3
