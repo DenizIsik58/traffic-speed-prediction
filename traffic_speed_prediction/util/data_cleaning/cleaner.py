@@ -76,21 +76,12 @@ class Condition:
 def clean(data: List[dict], condition):
     cleaned_data = []
     for jObj in data:
+
         if condition.apply(jObj):
             cleaned_data.append(jObj)
+
     return cleaned_data
 
-condition1 = Condition({
-    "roadStationId": [Rule(NOT_NULL, None)],
-    "sensorId": [Rule(NOT_NULL, None)],
-    "sensorValue": [Rule(NOT_NULL, None)],
-    "measuredTime": [Rule(NOT_NULL, None), Rule(EXACT_STRING_LENGTH, 20)],
-    "roadAddress": [Rule(SUB_RULES, Condition({
-        "roadSection": [Rule(NOT_NULL, None)]
-    }))],
-    "roadSpeedLimit": [Rule(NOT_NULL, None)],
-    "roadAverageSpeed": [Rule(LESS_THAN, "roadSpeedLimit")]
-})
 
 if __name__ == "__main__":
     clean_data = clean([{
