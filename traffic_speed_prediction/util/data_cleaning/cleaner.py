@@ -4,49 +4,61 @@ EXACT_STRING_LENGTH = 0  # int
 MIN_STRING_LENGTH = 1  # int
 MAX_STRING_LENGTH = 2  # int
 NOT_NULL = 3  # Any
-SUB_RULES = 4  # Conditions
+SUB_RULES = 4  # Condition
 EQUALS = 5  # Key
 LESS_THAN = 6  # Key
 MORE_THAN = 7  # Key
 IS_TYPE = 8  # type
 IS_POSITIVE = 9  # Number
-NOT = 10  # Rule
-OR = 11  # (Rule, Rule)
+IS_ZERO = 10  # Number
+IS_NEGATIVE = 11  # Number
+NOT = 12  # Rule
+OR = 13  # (Rule, Rule)
+FOR_ALL = 14  # Condition
 
 
 class Rule:
-    def __init__(self, rule_type, determinant):
+    def __init__(self, rule_type, arg):
         self.rule_type = rule_type
-        self.determinant = determinant
+        self.arg = arg
 
     def holds(self, j_obj, val):
         if self.rule_type == EXACT_STRING_LENGTH:
-            return len(val) == self.determinant
+            return len(val) == self.arg
         elif self.rule_type == MIN_STRING_LENGTH:
-            return len(val) >= self.determinant
+            return len(val) >= self.arg
         elif self.rule_type == MAX_STRING_LENGTH:
-            return len(val) <= self.determinant
+            return len(val) <= self.arg
         elif self.rule_type == NOT_NULL:
             return val is not None
         elif self.rule_type == SUB_RULES:
-            return self.determinant.apply(val)
+            return self.arg.apply(val)
         elif self.rule_type == EQUALS:
-            return val == j_obj[self.determinant]
+            return val == j_obj[self.arg]
         elif self.rule_type == LESS_THAN:
-            return val < j_obj[self.determinant]
+            return val < j_obj[self.arg]
         elif self.rule_type == MORE_THAN:
-            return val > j_obj[self.determinant]
+            return val > j_obj[self.arg]
         elif self.rule_type == IS_TYPE:
-            return type(val) == self.determinant
+            return type(val) == self.arg
         elif self.rule_type == IS_POSITIVE:
-            return val >= 0
+            return val > 0
+        elif self.rule_type == IS_ZERO:
+            return val == 0
+        elif self.rule_type == IS_NEGATIVE:
+            return val < 0
         elif self.rule_type == NOT:
-            return not self.determinant.holds(j_obj, val)
+            return not self.arg.holds(j_obj, val)
         elif self.rule_type == OR:
-            return self.determinant[0].holds(j_obj, val) or self.determinant[1].holds(j_obj, val)
+            return self.arg[0].holds(j_obj, val) or self.arg[1].holds(j_obj, val)
+        elif self.rule_type == FOR_ALL:
+            for obj in val:
+                if not self.arg.apply(obj):
+                    return False
+            return True
 
 
-class Conditions:
+class Condition:
     def __init__(self, rules):
         self.rules = rules
 
@@ -68,13 +80,12 @@ def clean(data: List[dict], condition):
             cleaned_data.append(jObj)
     return cleaned_data
 
-
-condition1 = Conditions({
+condition1 = Condition({
     "roadStationId": [Rule(NOT_NULL, None)],
     "sensorId": [Rule(NOT_NULL, None)],
     "sensorValue": [Rule(NOT_NULL, None)],
     "measuredTime": [Rule(NOT_NULL, None), Rule(EXACT_STRING_LENGTH, 20)],
-    "roadAddress": [Rule(SUB_RULES, Conditions({
+    "roadAddress": [Rule(SUB_RULES, Condition({
         "roadSection": [Rule(NOT_NULL, None)]
     }))],
     "roadSpeedLimit": [Rule(NOT_NULL, None)],
