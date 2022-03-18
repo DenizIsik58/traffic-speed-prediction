@@ -1,5 +1,6 @@
 import unittest
-from ..util.data_cleaning.cleaner import *
+from traffic_speed_prediction.util.data_cleaning.cleaner import clean
+from traffic_speed_prediction.util.data_cleaning.cleaner_conditions import *
 
 if __name__ == '__main__':
     unittest.main()
@@ -59,7 +60,56 @@ ENTITY5 = {  # perfect
 
 
 class CleanerTests(unittest.TestCase):
-    def setUp(self):
+    def set_up(self):
         self.data = [ENTITY1, ENTITY2, ENTITY3, ENTITY4, ENTITY5]
 
-    # def test_ExactStringLength(self):
+    def conditions_for_road_number_given_no_or_none_features_returns_empty(self):
+        j_obj = [{
+            "features": None
+        }, {
+        }]
+        self.assertEqual(clean(j_obj, conditions_for_roadNumber), [])
+
+    def conditions_for_road_number_given_no_none_or_negative_feature_id_returns_empty(self):
+        id = [{
+            "features": [{
+                "id": 1
+            },
+                {}]
+        }, {
+            "features": [{
+                "id": 1,
+            }, {
+                "id": None
+            }]
+        }, {
+            "features": [{
+                "id": 2
+            }, {
+                "id": -1
+            }]
+        }]
+        self.assertEqual(clean(id, conditions_for_roadNumber), [])
+
+    def conditions_for_road_number_given_no_or_none_feature_properties_returns_empty(self):
+        properties = [{
+            "features": [{
+                "id": 1,
+                "properties": None
+            }]
+        }, {
+            "features": [{
+                "id": 1
+            }]
+        }]
+        self.assertEqual(clean(properties, conditions_for_roadNumber), [])
+
+
+
+    def conditions_for_road_conditions_given_no_or_none_weatherData_returns_empty(self):
+        no_weather_data = [{}]
+        none_weather_data = [{
+            "weatherData": None
+        }]
+        self.assertEqual()
+        self.assertFalse(clean(none_weather_data,conditions_for_roadConditions))
