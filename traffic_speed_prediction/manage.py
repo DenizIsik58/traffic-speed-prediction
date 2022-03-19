@@ -20,5 +20,7 @@ def main():
 
 if __name__ == '__main__':
     main()
-    from util.scraping.scraper import Scraper
-    Scraper.get_road_ids()
+    from util.db.DatabaseCommands import DatabaseCommands
+    #DatabaseCommands.load_database()
+    #DatabaseCommands.extract_data()
+
