@@ -1,7 +1,8 @@
 import json
 import boto3
-from traffic_speed_prediction.util.config.ReadConfig import Config
-
+from util.config.ReadConfig import Config
+from util.scraping.scraper import Scraper
+from api.models import Road, Road_section, TMS_station
 
 class DatabaseCommands:
     # TODO: Make a class with commands for the DB
@@ -38,5 +39,19 @@ class DatabaseCommands:
         )
 
 
+    @staticmethod
+    def load_database():
+        Scraper.get_road_ids()
+
+
+
+    @staticmethod
+    def extract_data():
+        for road_section in Road_section.objects.all():
+            print("ROAD SECTION -> " + str(road_section.road_section_number))
+            print("-------------------")
+            print("ROADNUMBER: "  + str(road_section.road.Road_number) + " AVG SPEED: " + str(road_section.average_speed) + " road_temp: " + road_section.roadTemperature)
+            print()
+            print()
 
 
