@@ -22,7 +22,6 @@ class Scraper:
 
     @staticmethod
     def get_road_ids():
-
         # Find all the ids related to road stations and road number
 
         for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)['weatherData']:
@@ -35,8 +34,8 @@ class Scraper:
             free_flow_speed1s = []
             road_station_ids = []
 
-            # road = Road(Road_number=road_number)
-            # road.save()
+            road = Road(Road_number=road_number)
+            road.save()
             # Find all the roadstation ids and road numbers
 
             for feature in \
@@ -74,12 +73,13 @@ class Scraper:
                             print("roadmain: " + str(road_maintenance_classes[i]))
                             print("Free flow speed: " + str(free_flow_speed1s[i]))
                             print("road temp: " + road_temp)
-                            # Road_section(road_section_number=section, road=road, roadTemperature=road_temp,
-                            #            daylight=daylight,
-                            #            weatherSymbol=weather_symbol, roadMaintenanceClass=road_maintenance_class,
-                            #            freeFlowSpeed1=free_flow_speed1,
-                            #            average_speed=avg_speed).save()
-                            # TMS_station(tms_station=road_station_id, roadSection=section).save()
+                            sect = Road_section(road_section_number=section, road=road, roadTemperature=road_temp,
+                                        daylight=daylight,
+                                        weatherSymbol=weather_symbol, roadMaintenanceClass=road_maintenance_classes[i],
+                                        freeFlowSpeed1=free_flow_speed1s[i],
+                                        average_speed=avg_speed)
+                            sect.save()
+                            TMS_station(tms_station=road_station_ids[i], roadSection=sect).save()
                             print("SAVING ROAD TO DB")
                             print()
                             print()
