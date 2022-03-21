@@ -15,9 +15,6 @@ jobs:
       matrix:
         python-version: [3.9]
 
-    container:
-      image: node:16-alpine
-
     services:
       db:
         image: postgres:latest
