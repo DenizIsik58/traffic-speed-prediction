@@ -23,4 +23,4 @@ EXPOSE 8000
 EXPOSE 5432
 
 # Specify the commands
-CMD ["python3"]
+CMD ["python3", "traffic_speed_prediction/manage.py", "runserver",  "0.0.0.0:8000"]
