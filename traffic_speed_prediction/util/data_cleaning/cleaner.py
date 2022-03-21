@@ -3,18 +3,22 @@ from typing import List
 EXACT_STRING_LENGTH = 0  # int
 MIN_STRING_LENGTH = 1  # int
 MAX_STRING_LENGTH = 2  # int
-NOT_NULL = 3  # Any
+NOT_NONE = 3  # Any
 SUB_RULES = 4  # Condition
-EQUALS = 5  # Key
-LESS_THAN = 6  # Key
-MORE_THAN = 7  # Key
+EQUALS = 5  # Any
+LESS_THAN = 6  # Number
+MORE_THAN = 7  # Number
 IS_TYPE = 8  # type
-IS_POSITIVE = 9  # Number
-IS_ZERO = 10  # Number
-IS_NEGATIVE = 11  # Number
+IS_POSITIVE = 9  # Any
+IS_ZERO = 10  # Any
+IS_NEGATIVE = 11  # Any
 NOT = 12  # Rule
-OR = 13  # (Rule, Rule)
+OR = 13  # list[Rule]
 FOR_ALL = 14  # Condition
+EQUALS_FIELD = 15  # Key
+LESS_THAN_FIELD = 16  # Key
+MORE_THAN_FIELD = 17  # Key
+
 
 
 class Rule:
@@ -29,16 +33,16 @@ class Rule:
             return len(val) >= self.arg
         elif self.rule_type == MAX_STRING_LENGTH:
             return len(val) <= self.arg
-        elif self.rule_type == NOT_NULL:
+        elif self.rule_type == NOT_NONE:
             return val is not None
         elif self.rule_type == SUB_RULES:
             return self.arg.apply(val)
         elif self.rule_type == EQUALS:
-            return val == j_obj[self.arg]
+            return val == self.arg
         elif self.rule_type == LESS_THAN:
-            return val < j_obj[self.arg]
+            return val < self.arg
         elif self.rule_type == MORE_THAN:
-            return val > j_obj[self.arg]
+            return val > self.arg
         elif self.rule_type == IS_TYPE:
             return type(val) == self.arg
         elif self.rule_type == IS_POSITIVE:
@@ -50,12 +54,21 @@ class Rule:
         elif self.rule_type == NOT:
             return not self.arg.holds(j_obj, val)
         elif self.rule_type == OR:
-            return self.arg[0].holds(j_obj, val) or self.arg[1].holds(j_obj, val)
+            for rule in self.arg:
+                if rule.holds(j_obj, val):
+                    return True
+            return False
         elif self.rule_type == FOR_ALL:
             for obj in val:
                 if not self.arg.apply(obj):
                     return False
             return True
+        elif self.rule_type == EQUALS_FIELD:
+            return val == j_obj[self.arg]
+        elif self.rule_type == LESS_THAN_FIELD:
+            return val < j_obj[self.arg]
+        elif self.rule_type == MORE_THAN_FIELD:
+            return val > j_obj[self.arg]
 
 
 class Condition:
@@ -83,41 +96,4 @@ def clean(data: List[dict], condition):
     return cleaned_data
 
 
-if __name__ == "__main__":
-    clean_data = clean([{
-        "roadStationId": 4051,
-        "sensorId": 9,
-        "sensorValue": 0.0,
-        "measuredTime": "2022-03-15T07:49:00Z"
-    }, {
-        "roadStationId": 4052,
-        "sensorId": 126,
-        "sensorValue": 0.0,
-        "measuredTime": "2022-03-15T07:09:00Z",
-        "roadAddress": {
-            "roadSection": None
-        }
-    }, {
-        "roadStationId": 4053,
-        "sensorId": 125,
-        "sensorValue": 0.82,
-        "measuredTime": "2022-03-15T07:49:00Z",
-        "roadAddress": {
-            "roadSection": 1
-        },
-        "roadSpeedLimit": 50,
-        "roadAverageSpeed": 48
-    }, {
-        "roadStationId": 4053,
-        "sensorId": 125,
-        "sensorValue": 0.82,
-        "measuredTime": "2022-03-15T07:49:00Z",
-        "roadAddress": {
-            "roadSection": 1
-        },
-        "roadSpeedLimit": 50,
-        "roadAverageSpeed": 62
-    }], condition1)
 
-    for d in clean_data:
-        print(d)
