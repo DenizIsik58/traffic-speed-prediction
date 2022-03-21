@@ -23,8 +23,12 @@ class Scraper:
     @staticmethod
     def get_road_ids():
         # Find all the ids related to road stations and road number
-
+        print("begin scraping")
         for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)['weatherData']:
+            # Check if this is the start of the roadsection, only part concerning us
+            if str(road_condition["id"]).split("_")[2] != "00000":
+                continue
+            
             road_temp = road_condition["roadConditions"][0]["roadTemperature"]
             daylight = road_condition["roadConditions"][0]["daylight"]
             weather_symbol = road_condition["roadConditions"][0]["weatherSymbol"]
@@ -34,15 +38,18 @@ class Scraper:
             free_flow_speed1s = []
             road_station_ids = []
 
+            # Save road to database
             road = Road(Road_number=road_number)
             road.save()
-            # Find all the roadstation ids and road numbers
 
+            # Find all the roadstation ids and road numbers
             for feature in \
                     ujson.loads(
                         requests.get(Config.read_config()["urls"]["road_number"]["base_url"] + road_number).text)[
                         "features"]:
                 road_sections.append(feature["properties"]["roadAddress"]["roadSection"])
+                
+                # not all roads have maintanence classes. In this case set it to 0.
                 try:
                     road_maintenance_classes.append(feature["properties"]["roadAddress"]["roadMaintenanceClass"])
                 except:
@@ -63,16 +70,16 @@ class Scraper:
                     for censor in station["sensorValues"]:
                         if str(censor["id"]) == "5122":
                             avg_speed = censor["sensorValue"]
-                            print("road_section: " + str(
-                                section) + " road number: " + road_number + " road station number " + str(
-                                road_station_ids[i]))
-                            print("--------------------")
-                            print("AVG SPEED: " + str(avg_speed))
-                            print("weather: " + weather_symbol)
-                            print("daylight: " + str(daylight))
-                            print("roadmain: " + str(road_maintenance_classes[i]))
-                            print("Free flow speed: " + str(free_flow_speed1s[i]))
-                            print("road temp: " + road_temp)
+                            #print("road_section: " + str(
+                                #section) + " road number: " + road_number + " road station number " + str(
+                                #road_station_ids[i]))
+                            #print("--------------------")
+                            #print("AVG SPEED: " + str(avg_speed))
+                            #print("weather: " + weather_symbol)
+                            #print("daylight: " + str(daylight))
+                            #print("roadmain: " + str(road_maintenance_classes[i]))
+                            #print("Free flow speed: " + str(free_flow_speed1s[i]))
+                            #print("road temp: " + road_temp)
                             sect = Road_section(road_section_number=section, road=road, roadTemperature=road_temp,
                                         daylight=daylight,
                                         weatherSymbol=weather_symbol, roadMaintenanceClass=road_maintenance_classes[i],
@@ -80,9 +87,9 @@ class Scraper:
                                         average_speed=avg_speed)
                             sect.save()
                             TMS_station(tms_station=road_station_ids[i], roadSection=sect).save()
-                            print("SAVING ROAD TO DB")
-                            print()
-                            print()
+                            #print("SAVING ROAD TO DB")
+                            #print()
+                            #print()
                             break
 
     @staticmethod
