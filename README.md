@@ -1,4 +1,5 @@
 # Traffic-speed-prediction
+![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
 ![GitHub branch status check](https://img.shields.io/github/checks-status/denizisik58/traffic-speed-prediction/main?logo=GitHub&style=for-the-badge)
@@ -39,11 +40,11 @@ ConnectionString_TSP:"Server=db;Database=<dbname>;UserId=<username>;Password=<pa
 ## Contributors
 - Adrian Bay Dorph
 - Anton Marius Breinholt
-- Casper Skourup
+- Casper Wasser Skourup
 - Deniz Isik
 - Jack Kryger Sørensen
 - Mads Piriwe Risom Andersen
-- Villum Niels Robert Sonne
+- Villum Nils Robert Sonne
 
 ## License
 - [MIT](https://github.com/denizisik58/traffic-speed-prediction/blob/main/LICENSE)
