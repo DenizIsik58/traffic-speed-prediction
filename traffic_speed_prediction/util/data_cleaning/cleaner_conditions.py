@@ -1,4 +1,4 @@
-from cleaner import *
+from .cleaner import *
 
 conditions_for_roadNumber = Condition({
     # https://tie.digitraffic.fi/api/v3/metadata/tms-stations/road-number/78
