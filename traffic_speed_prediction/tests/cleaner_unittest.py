@@ -193,7 +193,7 @@ class CleanerTests(unittest.TestCase):
 
         self.assertEqual(cleaned, [ENTITY1, ENTITY4])
 
-    #def
+    # def
 
     def test_Rule_EqualsField_given_another_field_returns_2(self):
         con = Condition({
@@ -221,5 +221,6 @@ class CleanerTests(unittest.TestCase):
         cleaned = clean(self.data, con)
 
         self.assertEqual(cleaned, [ENTITY4])
+
 
 FOR_ALL = 14  # Condition

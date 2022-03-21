@@ -692,4 +692,3 @@ class CleanerTests(unittest.TestCase):
             }]
         }]
         self.assertEqual([], clean(data, conditions_for_tmsData))
-
