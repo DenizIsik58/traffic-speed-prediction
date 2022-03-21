@@ -26,7 +26,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Setup containers
-      run: StartApplication.ps1
+      run: docker-compose up -d --build
     - name: Run Tests
       run: |
         cd traffic_speed_prediction
