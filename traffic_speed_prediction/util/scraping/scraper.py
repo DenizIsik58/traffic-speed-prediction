@@ -57,7 +57,6 @@ class Scraper:
                 free_flow_speed1s.append(feature["properties"]["freeFlowSpeed1"])
                 road_station_ids.append(feature["properties"]["roadStationId"])
 
-            # print("THESE IDS ARE BOUND TO ROAD NUMBER " + road_number)
             i = -1
             for section in road_sections:
 
@@ -70,16 +69,6 @@ class Scraper:
                     for censor in station["sensorValues"]:
                         if str(censor["id"]) == "5122":
                             avg_speed = censor["sensorValue"]
-                            #print("road_section: " + str(
-                                #section) + " road number: " + road_number + " road station number " + str(
-                                #road_station_ids[i]))
-                            #print("--------------------")
-                            #print("AVG SPEED: " + str(avg_speed))
-                            #print("weather: " + weather_symbol)
-                            #print("daylight: " + str(daylight))
-                            #print("roadmain: " + str(road_maintenance_classes[i]))
-                            #print("Free flow speed: " + str(free_flow_speed1s[i]))
-                            #print("road temp: " + road_temp)
                             sect = Road_section(road_section_number=section, road=road, roadTemperature=road_temp,
                                         daylight=daylight,
                                         weatherSymbol=weather_symbol, roadMaintenanceClass=road_maintenance_classes[i],
@@ -87,19 +76,4 @@ class Scraper:
                                         average_speed=avg_speed)
                             sect.save()
                             TMS_station(tms_station=road_station_ids[i], roadSection=sect).save()
-                            #print("SAVING ROAD TO DB")
-                            #print()
-                            #print()
                             break
-
-    @staticmethod
-    def repeat_fetching(minutes: int):
-        timer = time.time()
-        minutes = minutes * 60
-        counter = 0
-        while True:
-            counter += 1
-            print("CURRENT BATCH: " + str(counter) + " DATA = ")
-            for item in Scraper.fetch_and_create_db_object_from_tms_station_data():
-                print(item)
-            time.sleep(minutes - ((time.time() - timer) % minutes))

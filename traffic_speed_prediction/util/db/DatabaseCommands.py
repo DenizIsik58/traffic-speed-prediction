@@ -47,7 +47,7 @@ class DatabaseCommands:
 
 
     @staticmethod
-    def extract_data():
+    def extract_data_and_write_to_csv():
         with open("data.csv", "w") as file:
             csv_writer = csv.writer(file)
 
