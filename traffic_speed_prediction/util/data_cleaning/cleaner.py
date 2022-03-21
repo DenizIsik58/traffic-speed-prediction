@@ -20,7 +20,6 @@ LESS_THAN_FIELD = 16  # Key
 MORE_THAN_FIELD = 17  # Key
 
 
-
 class Rule:
     def __init__(self, rule_type, arg):
         self.rule_type = rule_type
@@ -94,6 +93,3 @@ def clean(data: List[dict], condition):
             cleaned_data.append(jObj)
 
     return cleaned_data
-
-
-
