@@ -40,4 +40,6 @@ jobs:
     - name: Run Tests
       run: |
         cd traffic_speed_prediction
+        python manage.py makemigrations
+        python manage.py migrate
         python manage.py test
