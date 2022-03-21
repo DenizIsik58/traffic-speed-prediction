@@ -225,7 +225,18 @@ class CleanerTests(unittest.TestCase):
 
         self.assertEqual(cleaned, [ENTITY1, ENTITY4])
 
-    #def
+    def test_Rule_ForAll_given_sub_rules_IsPositive_returns_2_3_5(self):
+        con = Condition({
+            "features": [Rule(FOR_ALL, Condition(
+                {
+                    "schools": [Rule(IS_POSITIVE, 0)]
+                }
+            ))]
+        })
+
+        cleaned = clean(self.data, con)
+
+        self.assertEqual(cleaned, [ENTITY2, ENTITY3, ENTITY5])
 
     def test_Rule_EqualsField_given_another_field_returns_2(self):
         con = Condition({
@@ -254,15 +265,4 @@ class CleanerTests(unittest.TestCase):
 
         self.assertEqual(cleaned, [ENTITY4])
 
-    def test_Rule_ForAll_given_sub_rules_IsPositive_returns_2_3_5(self):
-        con = Condition({
-            "features": [Rule(FOR_ALL, Condition(
-                {
-                    "schools": [Rule(IS_POSITIVE, 0)]
-                }
-            ))]
-        })
 
-        cleaned = clean(self.data, con)
-
-        self.assertEqual(cleaned, [ENTITY2, ENTITY3, ENTITY5])
