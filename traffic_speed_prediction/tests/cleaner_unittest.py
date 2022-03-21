@@ -21,7 +21,10 @@ ENTITY2 = {  # sensorValue is None
         "roadSection": 8
     },
     "roadSpeedLimit": 50,
-    "roadAverageSpeed": 50
+    "roadAverageSpeed": 50,
+    "features": [  # empty
+
+    ]
 }
 ENTITY3 = {  # measuredTime is too short
     "roadStationId": 4053,
@@ -32,7 +35,17 @@ ENTITY3 = {  # measuredTime is too short
         "roadSection": 7
     },
     "roadSpeedLimit": 50,
-    "roadAverageSpeed": 48
+    "roadAverageSpeed": 48,
+    "features": [  #perfect
+        {
+            "schools": 5,
+            "sand": True,
+            "forrest": False},
+        {
+            "schools": 2,
+            "sand": False,
+            "forrest": False},
+    ]
 }
 ENTITY4 = {  # roadAverageSpeed is greater than roadSpeedLimit
     "roadStationId": 4054,
@@ -43,7 +56,16 @@ ENTITY4 = {  # roadAverageSpeed is greater than roadSpeedLimit
         "roadSection": 6
     },
     "roadSpeedLimit": 80,
-    "roadAverageSpeed": 81
+    "roadAverageSpeed": 81,
+    "features": [  #missing schools in second entry
+        {
+            "schools": 3,
+            "sand": True,
+            "forrest": False},
+        {
+            "sand": True,
+            "forrest": False},
+    ]
 }
 ENTITY5 = {  # perfect
     "roadStationId": 4055,
@@ -54,7 +76,17 @@ ENTITY5 = {  # perfect
         "roadSection": 5
     },
     "roadSpeedLimit": 50,
-    "roadAverageSpeed": 48
+    "roadAverageSpeed": 48,
+    "features": [
+        {
+            "schools": 4,
+            "sand": False,
+            "forrest": True},
+        {
+            "schools": 3,
+            "sand": False,
+            "forrest": False},
+    ]
 }
 
 
@@ -222,4 +254,15 @@ class CleanerTests(unittest.TestCase):
 
         self.assertEqual(cleaned, [ENTITY4])
 
-FOR_ALL = 14  # Condition
+    def test_Rule_ForAll_given_sub_rules_IsPositive_returns_2_3_5(self):
+        con = Condition({
+            "features": [Rule(FOR_ALL, Condition(
+                {
+                    "schools": [Rule(IS_POSITIVE, 0)]
+                }
+            ))]
+        })
+
+        cleaned = clean(self.data, con)
+
+        self.assertEqual(cleaned, [ENTITY2, ENTITY3, ENTITY5])
