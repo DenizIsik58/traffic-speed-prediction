@@ -1,3 +1,4 @@
+import csv
 import json
 import boto3
 from util.config.ReadConfig import Config
@@ -47,11 +48,20 @@ class DatabaseCommands:
 
     @staticmethod
     def extract_data():
-        for road_section in Road_section.objects.all():
-            print("ROAD SECTION -> " + str(road_section.road_section_number))
-            print("-------------------")
-            print("ROADNUMBER: "  + str(road_section.road.Road_number) + " AVG SPEED: " + str(road_section.average_speed) + " road_temp: " + road_section.roadTemperature)
-            print()
-            print()
+        with open("data.csv", "w") as file:
+            csv_writer = csv.writer(file)
 
+            header = ['road_number', 'road_temperature', 'daylight', 'roadMaintenanceClass', 'freeflowspeed', 'average_speed']
+            csv_writer.writerow(header)
+            for road_section in Road_section.objects.all():
+                data = []
+                data.append(road_section.road.Road_number)
+                data.append(str(road_section.roadTemperature).replace("+", ""))
+                data.append(str(str(road_section.weatherSymbol)[1:]))
+                data.append(road_section.roadMaintenanceClass)
+                data.append( road_section.freeFlowSpeed1)
+                data.append(road_section.average_speed)
+                csv_writer.writerow(data)
+
+            file.close()
 
