@@ -1,15 +1,13 @@
-import string
-import time
-
-import requests
 import ujson
-
-from util.config.ReadConfig import Config
-
-from api.models import Road, Road_section, TMS_station
+import string
+import requests
+import time
+from traffic_speed_prediction.util.config.ReadConfig import Config
+from traffic_speed_prediction.model.Dataobject import Dataobject
 
 
 class Scraper:
+    # TODO: Make a scraper class with static methods
 
     # Fetch data from any given endpoint
     @staticmethod
@@ -18,62 +16,37 @@ class Scraper:
 
     @staticmethod
     def fetch_and_create_db_object_from_tms_station_data():
-        pass
+        objects = []
+        # Runs through the specified id's in the data.json file and fetches all the data
+        # Then creates a Dataobject 0
+        for station_id in Config.read_config()["urls"]["tms_station"]["ids"]:
+            # Use ujson (written in C) library to increase performance
+            data = ujson.loads(requests.get(Config.read_config()["urls"]["tms_station"]["base_url"] + station_id).text)
+            for item in data['tmsStations'][0]['sensorValues']:
+                if item["sensorUnit"] == "km/h":
+                    object_id = item["id"]
+                    roadstation_id = item["roadStationId"]
+                    station_name = Config.read_config()["urls"]["tms_station"]["ids"][station_id]
+                    speed = item["sensorValue"]
+                    date = Config.convert_to_date(item["measuredTime"])[0]
+                    time = Config.convert_to_date(item["measuredTime"])[1]
+                    data_object = Dataobject(object_id, roadstation_id, station_name, speed, date, time)
+                    objects.append(data_object)
+        # Returns a list of Dataobjects
+        return objects
 
     @staticmethod
-    def get_road_ids():
-        # Find all the ids related to road stations and road number
-        print("begin scraping")
-        for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)['weatherData']:
-            # Check if this is the start of the roadsection, only part concerning us
-            if str(road_condition["id"]).split("_")[2] != "00000":
-                continue
-            
-            road_temp = road_condition["roadConditions"][0]["roadTemperature"]
-            daylight = road_condition["roadConditions"][0]["daylight"]
-            weather_symbol = road_condition["roadConditions"][0]["weatherSymbol"]
-            road_number = str(road_condition["id"]).split("_")[0]
-            road_sections = []
-            road_maintenance_classes = []
-            free_flow_speed1s = []
-            road_station_ids = []
+    def repeat_fetching(minutes: int):
+        timer = time.time()
+        minutes = minutes * 60
+        counter = 0
+        while True:
+            counter += 1
+            print("CURRENT BATCH: " + str(counter) + " DATA = ")
+            for item in Scraper.fetch_and_create_db_object_from_tms_station_data():
+                print(item)
+            time.sleep(minutes - ((time.time() - timer) % minutes))
 
-            # Save road to database
-            road = Road(Road_number=road_number)
-            road.save()
-
-            # Find all the roadstation ids and road numbers
-            for feature in \
-                    ujson.loads(
-                        requests.get(Config.read_config()["urls"]["road_number"]["base_url"] + road_number).text)[
-                        "features"]:
-                road_sections.append(feature["properties"]["roadAddress"]["roadSection"])
-                
-                # not all roads have maintanence classes. In this case set it to 0.
-                try:
-                    road_maintenance_classes.append(feature["properties"]["roadAddress"]["roadMaintenanceClass"])
-                except:
-                    road_maintenance_classes.append(0)
-                free_flow_speed1s.append(feature["properties"]["freeFlowSpeed1"])
-                road_station_ids.append(feature["properties"]["roadStationId"])
-
-            i = -1
-            for section in road_sections:
-
-                i += 1
-                if len(road_sections) == 0:
-                    break
-                for station in ujson.loads(requests.get(
-                        Config.read_config()["urls"]["tms_station"]["base_url"] + str(road_station_ids[i])).text)[
-                    "tmsStations"]:
-                    for censor in station["sensorValues"]:
-                        if str(censor["id"]) == "5122":
-                            avg_speed = censor["sensorValue"]
-                            sect = Road_section(road_section_number=section, road=road, roadTemperature=road_temp,
-                                        daylight=daylight,
-                                        weatherSymbol=weather_symbol, roadMaintenanceClass=road_maintenance_classes[i],
-                                        freeFlowSpeed1=free_flow_speed1s[i],
-                                        average_speed=avg_speed)
-                            sect.save()
-                            TMS_station(tms_station=road_station_ids[i], roadSection=sect).save()
-                            break
+# Test code
+if __name__ == '__main__':
+    Scraper.repeat_fetching(1)
