@@ -17,7 +17,7 @@ frozenlist==1.2.0
 idna==3.3
 multidict==5.2.0
 platformdirs==2.5.1
-pytz==2021.3
+pytz==2022.1
 random-user-agent==1.0.1
 requests~=2.27.1
 requests-toolbelt==0.9.1
