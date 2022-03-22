@@ -1,20 +1,14 @@
 {
 "urls": {
-  "tms_station": {
-    "base_url" : "https://tie.digitraffic.fi/api/v1/data/tms-data/",
-    "ids":{
-      "23110" :  "VT4_Mäntsälä_Hakkari",
-      "23429": "VT3 Riihimäki, Parmala",
-      "23824" : "KT75 Nilsiä, Suholanmäki",
-      "24101": "VT4 pyhäjärvi, Lamminaho",
-      "24437": "VT4 Keminmaa, Isohaara"
-      }
-    },
-  "road_sections": {
-    "base_url" : "https://tie.digitraffic.fi/api/v3/data/road-conditions/"
-  },
-  "road_number": {
-    "base_url": "https://tie.digitraffic.fi/api/v3/metadata/tms-stations/road-number/"
+"tms_station": {
+  "base_url" : "https://tie.digitraffic.fi/api/v1/data/tms-data/",
+  "ids":{
+    "23110" :  "VT4_Mäntsälä_Hakkari",
+    "23429": "VT3 Riihimäki, Parmala",
+    "23824" : "KT75 Nilsiä, Suholanmäki",
+    "24101": "VT4 pyhäjärvi, Lamminaho",
+    "24437": "VT4 Keminmaa, Isohaara"
+    }
   }
 }
 }

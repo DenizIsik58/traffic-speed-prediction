@@ -1,33 +1,13 @@
 version: '3.9'
 
 services:
-  app:
+  traffic_speec_prediction:
     build: .
-    container_name: TSP
     volumes:
       - .:/app
-    env_file:
-      - ./.env
     restart: always
     ports:
       - "8000:8000"
     command: >
-      sh -c "python3 traffic_speed_prediction/manage.py makemigrations
-      && python3 traffic_speed_prediction/manage.py migrate
+      sh -c "python3 traffic_speed_prediction/manage.py migrate
       && python3 traffic_speed_prediction/manage.py runserver 0.0.0.0:8000"
-    depends_on:
-      - db
-  db:
-    image: postgres
-    container_name: db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    restart: always
-    env_file:
-      - ./.env
-    ports:
-      - "5432:5432"
-
-volumes:
-  postgres_data:
-

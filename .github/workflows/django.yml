@@ -15,18 +15,6 @@ jobs:
       matrix:
         python-version: [3.9]
 
-    services:
-      db:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 1234
-          POSTGRES_DB: testdb
-        ports:
-          - 5432:5432
-        # needed because the postgres container does not provide a healthcheck
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -40,6 +28,4 @@ jobs:
     - name: Run Tests
       run: |
         cd traffic_speed_prediction
-        python manage.py makemigrations
-        python manage.py migrate
-        python manage.py test
+        pytest
