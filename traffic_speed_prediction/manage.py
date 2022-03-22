@@ -20,8 +20,11 @@ def main():
 
 if __name__ == '__main__':
     main()
+<<<<<<< HEAD
 
     from util.db.DatabaseCommands import DatabaseCommands
     #DatabaseCommands.load_database()
     #DatabaseCommands.extract_data_and_write_to_csv()
 
+=======
+>>>>>>> parent of 6003d6e... Revert "Clean data (#19)"
