@@ -20,7 +20,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-
     from util.db.DatabaseCommands import DatabaseCommands
     #DatabaseCommands.load_database()
     #DatabaseCommands.extract_data_and_write_to_csv()
