@@ -5,7 +5,7 @@
 ![GitHub branch status check](https://img.shields.io/github/checks-status/denizisik58/traffic-speed-prediction/main?logo=GitHub&style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/denizisik58/traffic-speed-prediction?style=for-the-badge)
 
-Everything in this repository is currently under development. The following information given is used to boot up the application for development purposes.
+Everything in this repository is currently under development. The following information provided is used to boot up the application for development purposes.
 ## Prerequisites
 Make sure to have the following software installed before running the application:
 - [Docker](https://www.docker.com/)
@@ -20,7 +20,7 @@ Please keep in mind that docker doesn't provide docker-compose binary in some op
 
 ## Installation via scripts
 
-A BASH and PowerShell script has been written to start up docker. The scripts will automatically start 2 containers - a postgres container for the database and the application.
+A BASH and PowerShell script has been written to start up docker. The scripts will automatically start 2 containers - a postgres container for the database and one for the application.
 
 **Unix:** sh StartApplication.sh 
 
@@ -37,7 +37,7 @@ POSTGRES_DB="<dbname>"
 POSTGRES_HOST="db"
 ConnectionString_TSP:"Server=db;Database=<dbname>;UserId=<username>;Password=<password>"
 ```
-Make sure to change the credentials inside the `traffic_speed_prediction/settings.py` file, so they match.
+Make sure to change the credentials inside the `traffic_speed_prediction/settings.py` file so they match.
 
 ## Contributors
 - Adrian Bay Dorph
