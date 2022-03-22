@@ -5,7 +5,7 @@ async-timeout==4.0.2
 attrs==21.3.0
 Brotli==1.0.9
 certifi==2021.10.8
-charset-normalizer==2.0.9
+charset-normalizer==2.0.12
 colorama==0.4.4
 discum==1.4.0
 distlib==0.3.4
