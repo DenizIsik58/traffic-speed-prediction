@@ -5,7 +5,7 @@ class Config:
 
     @staticmethod
     def read_config():
-        with open("../../data.json", "r") as file:
+        with open("data.json", "r") as file:
             return ujson.load(file)
 
     @staticmethod
