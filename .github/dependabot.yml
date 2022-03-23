@@ -13,9 +13,12 @@ updates:
       time: "09:00"
       # Use Copenhagen Standard Time (UTC +09:00)
       timezone: Europe/Copenhagen
-    # prefix all commit messages with pip  
+    # prefix all commit messages with pip
+    # to pip against the `dependabot-updates` branch
+    target-branch: "dependabot-updates"
     commit-message:
       prefix: "pip"
+
       
       
       
