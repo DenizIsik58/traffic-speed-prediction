@@ -9,7 +9,7 @@ charset-normalizer==2.0.12
 colorama==0.4.4
 discum==1.4.0
 distlib==0.3.4
-Django==3.2.12
+Django==4.0.3
 djangorestframework==3.13.1
 filelock==3.6.0
 filetype==1.0.10
