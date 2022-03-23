@@ -2,7 +2,7 @@ aiohttp==3.8.1
 aiosignal==1.2.0
 asgiref==3.5.0
 async-timeout==4.0.2
-attrs==21.3.0
+attrs==21.4.0
 Brotli==1.0.9
 certifi==2021.10.8
 charset-normalizer==2.0.12
