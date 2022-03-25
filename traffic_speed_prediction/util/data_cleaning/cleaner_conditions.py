@@ -44,7 +44,7 @@ conditions_for_roadConditions = Condition({  # det er kun den første
             "daylight": [Rule(NOT_NONE, None)],
             "roadTemperature": [Rule(NOT_NONE, None)],
             "weatherSymbol": [Rule(NOT_NONE, None)],
-            "overAllRoadCondition": [Rule(NOT_NONE, None)],
+            "overallRoadCondition": [Rule(NOT_NONE, None)],
         }))]
 })
 
