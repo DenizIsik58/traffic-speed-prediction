@@ -15,9 +15,10 @@ IS_NEGATIVE = 11  # Any
 NOT = 12  # Rule
 OR = 13  # list[Rule]
 FOR_ALL = 14  # Condition
-EQUALS_FIELD = 15  # Key
-LESS_THAN_FIELD = 16  # Key
-MORE_THAN_FIELD = 17  # Key
+EXISTS = 15
+EQUALS_FIELD = 16  # Key
+LESS_THAN_FIELD = 17  # Key
+MORE_THAN_FIELD = 18  # Key
 
 
 class Rule:
@@ -62,6 +63,11 @@ class Rule:
                 if not self.arg.apply(obj):
                     return False
             return True
+        elif self.rule_type == EXISTS:
+            for obj in val:
+                if self.arg.apply(obj):
+                    return True
+            return False
         elif self.rule_type == EQUALS_FIELD:
             return val == j_obj[self.arg]
         elif self.rule_type == LESS_THAN_FIELD:
@@ -133,5 +139,3 @@ def clean_and_repair(data: List[dict], condition):
             cleaned_data.append(cleaned_j_obj)
 
     return cleaned_data
-
-

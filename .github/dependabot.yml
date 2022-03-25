@@ -10,7 +10,7 @@ updates:
     schedule:
       interval: "daily"
       # Check for updates at 9 in the morning just before we start working
-      time: "09:00"
+      time: "08:00"
       # Use Copenhagen Standard Time (UTC +09:00)
       timezone: Europe/Copenhagen
     # prefix all commit messages with pip
@@ -27,10 +27,11 @@ updates:
     schedule:
       interval: "daily"
       # Check for updates at 9 in the morning just before we start working
-      time: "09:00"
+      time: "08:00"
       # Use Copenhagen Standard Time (UTC +09:00)
       timezone: Europe/Copenhagen
-      
+    # to pip against the `dependabot-updates` branch
+    target-branch: "dependabot-updates"
     commit-message:
       # Prefix all commit messages with "npm"
       prefix: "npm"
