@@ -22,9 +22,9 @@ Please keep in mind that docker doesn't provide docker-compose binary in some op
 
 A BASH and PowerShell script has been written to start up docker. The scripts will automatically start 2 containers - a postgres container for the database and one for the application.
 
-**Unix:** sh StartApplication.sh 
+**Unix:** `./StartApplication.sh`
 
-**Windows:** .\StartApplication.ps1
+**Windows:** `StartApplication.ps1`
 
 You should now be able to visit https://localhost:8000
 
