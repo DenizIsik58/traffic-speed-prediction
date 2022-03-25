@@ -37,7 +37,6 @@ conditions_for_roadConditions = Condition({  # det er kun den første
     # https://tie.digitraffic.fi/api/v3/data/road-conditions/54
     "id": [
         Rule(NOT_NONE, None),
-        Rule(IS_POSITIVE, None)
     ],
     "roadConditions": [
         Rule(NOT_NONE, None),
@@ -53,7 +52,6 @@ conditions_for_tmsData = Condition({
     # https://tie.digitraffic.fi//api/v1/data/tms-data/23408
     "id": [
         Rule(NOT_NONE, None),
-        Rule(IS_POSITIVE, None)
     ],
     "sensorValues": [
         Rule(NOT_NONE, None),
