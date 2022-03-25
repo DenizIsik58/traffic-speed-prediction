@@ -1,6 +1,10 @@
 from django.urls import path
-from .views import main
+from .views import WeatherHistoryDataView, GetWeatherHistoryData, CreateWeatherHistoryData,UpdateWeatherHistoryData, DeleteWeatherHistoryData
 
 urlpatterns = [
-    path('', main)
+    path('all-whd', WeatherHistoryDataView.as_view()),
+    path('create-whd', CreateWeatherHistoryData.as_view()),
+    path('get-whd', GetWeatherHistoryData.as_view()),
+    path('put-whd',UpdateWeatherHistoryData.as_view()),
+    path('delete-whd/<str:pk>/',DeleteWeatherHistoryData.as_view())
 ]
