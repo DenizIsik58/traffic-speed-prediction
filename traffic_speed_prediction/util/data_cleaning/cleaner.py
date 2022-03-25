@@ -68,6 +68,16 @@ class Rule:
             return val < j_obj[self.arg]
         elif self.rule_type == MORE_THAN_FIELD:
             return val > j_obj[self.arg]
+        else:
+            return False
+
+    def fix(self, val):
+        if self.rule_type == IS_TYPE:
+            return True, self.arg(val)
+        elif self.rule_type == FOR_ALL:
+            return True, clean_and_repair(val, self.arg)
+        else:
+            return False, val
 
 
 class Condition:
@@ -84,12 +94,41 @@ class Condition:
                     return False
         return True
 
+    def enforce(self, j_obj):
+        new_j_obj = {}
+        for key, rules in self.rules.items():
+            for rule in rules:
+                try:
+                    repaired, new_val = rule.fix(j_obj[key])
+                    if repaired:
+                        new_j_obj[key] = new_val
+                    elif rule.holds(j_obj, j_obj[key]):
+                        new_j_obj[key] = j_obj[key]
+                    else:
+                        return False, None
+                except KeyError:
+                    return False, None
+                except ValueError:
+                    return False, None
+        return True, new_j_obj
+
 
 def clean(data: List[dict], condition):
     cleaned_data = []
-    for jObj in data:
+    for j_obj in data:
 
-        if condition.apply(jObj):
-            cleaned_data.append(jObj)
+        if condition.apply(j_obj):
+            cleaned_data.append(j_obj)
 
     return cleaned_data
+
+
+def clean_and_repair(data: List[dict], condition):
+    cleaned_data = []
+    for j_obj in data:
+        cleaned, cleaned_j_obj = condition.enforce(j_obj)
+        if cleaned:
+            cleaned_data.append(cleaned_j_obj)
+
+    return cleaned_data
+
