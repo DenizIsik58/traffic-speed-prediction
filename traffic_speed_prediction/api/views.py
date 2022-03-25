@@ -74,7 +74,7 @@ class CreateWeatherHistoryData(APIView):
 
 
 class UpdateWeatherHistoryData(APIView):
-    serializer_class = UpdateWeatherHistoryDataSerializer
+    serializer_class = WeatherHistoryDataSerializer
 
     def put(self, request):
         if not self.request.session.exists(self.request.session.session_key):

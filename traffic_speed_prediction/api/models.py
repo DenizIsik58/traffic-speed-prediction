@@ -27,8 +27,17 @@ class TMS_station(models.Model):
     tms_station = models.IntegerField()
     roadSection = models.ForeignKey('Road_section', on_delete=models.CASCADE)
 
+class PredictionRequest(models.Model):
+    roadId = models.IntegerField(default=0)
+    onGoingSectionId = models.IntegerField(null=True, default=0)
+    offGoingSectionId = models.IntegerField(null=True, default=0)
 
-
+class PredictionResponse(models.Model):
+    roadId = models.IntegerField(default=0)
+    onGoingSectionId = models.IntegerField(null=True, default=0)
+    offGoingSectionId = models.IntegerField(null=True, default=0)
+    speedLimit = models.IntegerField(default=0)
+    predictedSpeed = models.FloatField(default=0)
 
 
 
