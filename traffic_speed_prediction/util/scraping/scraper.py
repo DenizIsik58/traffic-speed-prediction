@@ -33,7 +33,7 @@ class Scraper:
             cleaned_road_condition = clean_and_repair([road_condition], conditions_for_roadConditions)
             print(cleaned_road_condition)
 
-            if str(cleaned_road_condition["id"]).split("_")[2] != "00000":
+            if str(cleaned_road_condition[0]["id"]).split("_")[2] != "00000":
                 continue
             road_temp = cleaned_road_condition[0]["roadConditions"][0]["roadTemperature"]
             daylight = cleaned_road_condition[0]["roadConditions"][0]["daylight"]

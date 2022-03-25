@@ -40,7 +40,7 @@ conditions_for_roadConditions = Condition({  # det er kun den første
     ],
     "roadConditions": [
         Rule(NOT_NONE, None),
-        Rule(EXISTS, Condition({
+        Rule(FOR_ALL, Condition({
             "daylight": [Rule(NOT_NONE, None)],
             "roadTemperature": [Rule(NOT_NONE, None)],
             "weatherSymbol": [Rule(NOT_NONE, None)],
