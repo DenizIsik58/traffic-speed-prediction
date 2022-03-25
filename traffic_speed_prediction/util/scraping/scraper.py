@@ -5,11 +5,11 @@ import traceback
 import requests
 import ujson
 
-from traffic_speed_prediction.util.config.ReadConfig import Config
+from util.config.ReadConfig import Config
 
-from traffic_speed_prediction.api.models import Road, Road_section, TMS_station
-from traffic_speed_prediction.util.data_cleaning.cleaner import *
-from traffic_speed_prediction.util.data_cleaning.cleaner_conditions import *
+from api.models import Road, Road_section, TMS_station
+from util.data_cleaning.cleaner import *
+from util.data_cleaning.cleaner_conditions import *
 
 
 class Scraper:
@@ -29,9 +29,11 @@ class Scraper:
         print("begin scraping")
         for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)['weatherData']:
             # Check if this is the start of the roadsection, only part concerning us
-            cleaned_road_condition = clean_and_repair(road_condition, conditions_for_roadConditions)
+            print(road_condition)
+            cleaned_road_condition = clean_and_repair([road_condition], conditions_for_roadConditions)
             print(cleaned_road_condition)
-            if str(cleaned_road_condition[0]["id"]).split("_")[2] != "00000":
+
+            if str(cleaned_road_condition["id"]).split("_")[2] != "00000":
                 continue
             road_temp = cleaned_road_condition[0]["roadConditions"][0]["roadTemperature"]
             daylight = cleaned_road_condition[0]["roadConditions"][0]["daylight"]
