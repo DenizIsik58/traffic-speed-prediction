@@ -5,11 +5,11 @@ import traceback
 import requests
 import ujson
 
-from util.config.ReadConfig import Config
+from traffic_speed_prediction.util.config.ReadConfig import Config
 
-from api.models import Road, Road_section, TMS_station
-from util.data_cleaning.cleaner import Condition
-from util.data_cleaning.cleaner_conditions import conditions_for_roadNumber, conditions_for_roadConditions, conditions_for_tmsData
+from traffic_speed_prediction.api.models import Road, Road_section, TMS_station
+from traffic_speed_prediction.util.data_cleaning.cleaner import *
+from traffic_speed_prediction.util.data_cleaning.cleaner_conditions import *
 
 
 class Scraper:
@@ -25,11 +25,11 @@ class Scraper:
 
     @staticmethod
     def get_road_ids():
-
         # Find all the ids related to road stations and road number
         print("begin scraping")
         for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)['weatherData']:
             # Check if this is the start of the roadsection, only part concerning us
+            cleaned_road_condition = clean_and_repair([road_condition], conditions_for_roadConditions)
             if str(road_condition["id"]).split("_")[2] != "00000":
                 continue
             road_temp = road_condition["roadConditions"][0]["roadTemperature"]
@@ -54,7 +54,7 @@ class Scraper:
 
                 # not all roads have maintanence classes. In this case set it to 0.
                 try:
-                    main = Condition.clean([feature], conditions_for_roadNumber)
+                    main = clean_and_repair([feature], conditions_for_roadNumber)
                     road_sections.append(main[0]["properties"]["roadAddress"]["roadSection"])
                     road_maintenance_classes.append(main[0]["properties"]["roadAddress"]["roadMaintenanceClass"])
                     free_flow_speed1s.append(main[0]["properties"]["freeFlowSpeed1"])
@@ -75,7 +75,8 @@ class Scraper:
                 for station in ujson.loads(requests.get(
                         Config.read_config()["urls"]["tms_station"]["base_url"] + str(road_station_ids[i])).text)[
                     "tmsStations"]:
-                    for censor in station["sensorValues"]:
+                    cleaned_station = clean_and_repair([station], conditions_for_tmsData)
+                    for censor in cleaned_station[0]["sensorValues"]:
                         if str(censor["id"]) == "5122":
                             avg_speed = censor["sensorValue"]
                             sect = Road_section(road_section_number=section, road=road, roadTemperature=road_temp,
