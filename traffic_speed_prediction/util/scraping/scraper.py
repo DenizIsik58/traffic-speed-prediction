@@ -29,13 +29,14 @@ class Scraper:
         print("begin scraping")
         for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)['weatherData']:
             # Check if this is the start of the roadsection, only part concerning us
-            cleaned_road_condition = clean_and_repair([road_condition], conditions_for_roadConditions)
-            if str(road_condition["id"]).split("_")[2] != "00000":
+            cleaned_road_condition = clean_and_repair(road_condition, conditions_for_roadConditions)
+            print(cleaned_road_condition)
+            if str(cleaned_road_condition[0]["id"]).split("_")[2] != "00000":
                 continue
-            road_temp = road_condition["roadConditions"][0]["roadTemperature"]
-            daylight = road_condition["roadConditions"][0]["daylight"]
-            weather_symbol = road_condition["roadConditions"][0]["weatherSymbol"]
-            road_number = str(road_condition["id"]).split("_")[0]
+            road_temp = cleaned_road_condition[0]["roadConditions"][0]["roadTemperature"]
+            daylight = cleaned_road_condition[0]["roadConditions"][0]["daylight"]
+            weather_symbol = cleaned_road_condition[0]["roadConditions"][0]["weatherSymbol"]
+            road_number = str(cleaned_road_condition[0]["id"]).split("_")[0]
             road_sections = []
             road_maintenance_classes = []
             free_flow_speed1s = []
