@@ -1,5 +1,10 @@
+@font-face {
+    font-family: 'Raleway';
+    src: url('/static/fonts/Raleway-Regular.ttf');
+}
+
 body {
-    
+    font-family: Raleway;
 }       
 
 #header {
@@ -24,11 +29,14 @@ body {
 }
 
 #navigation li p {
+    width: 70px;
     display: block;
+
     color: white;
-    text-align: center;
-    padding: 16px;
+    text-align: left;
+    padding: 10px 50px 10px 10px;
     text-decoration: none;
+    font-size: 24px;
 }
 
 #navigation li a {
@@ -48,6 +56,6 @@ body {
 #content {
     height: 800px;
     width: 100%;
-    background: url('https://www.norden.org/sites/default/files/styles/content_size_800/public/images/Finsk%2520flag106604.jpeg') no-repeat;
+    background: url("/static/images/background_image.png") no-repeat;
     background-size: 100%;
 }
