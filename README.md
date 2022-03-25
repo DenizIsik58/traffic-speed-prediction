@@ -24,18 +24,18 @@ A BASH and PowerShell script has been written to start up docker. The scripts wi
 
 **Unix:** sh StartApplication.sh 
 
-**Windows:** ps StartApplication.ps1
+**Windows:** .\StartApplication.ps1
 
 You should now be able to visit https://localhost:8000
 
 ## .ENV
 A .env file can be found in the source code in the following format:
 ```
-POSTGRES_USER="<username>"
+POSTGRES_USER="postgres"
 POSTGRES_PASSWORD="<password>"
 POSTGRES_DB="<dbname>"
 POSTGRES_HOST="db"
-ConnectionString_TSP:"Server=db;Database=<dbname>;UserId=<username>;Password=<password>"
+ConnectionString_TSP:"Server=db;Database=<dbname>;UserId=postgres;Password=<password>"
 ```
 Make sure to change the credentials inside the `traffic_speed_prediction/settings.py` file so they match.
 
