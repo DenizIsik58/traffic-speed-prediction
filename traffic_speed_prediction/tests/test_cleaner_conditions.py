@@ -32,7 +32,7 @@ class CleanerTests(unittest.TestCase):
                 }
             }
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadNumber))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadNumber))
 
     def test_conditions_for_road_number_given_no_or_none_feature_properties_returns_empty(self):
         data = [{
@@ -45,7 +45,7 @@ class CleanerTests(unittest.TestCase):
                 "id": 1
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadNumber))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadNumber))
 
     def test_condition_for_road_number_given_no_or_none_road_station_id_returns_empty(self):
         data = [{
@@ -72,7 +72,7 @@ class CleanerTests(unittest.TestCase):
                 }
             }
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadNumber))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadNumber))
 
     def test_condition_for_road_number_given_no_or_none_tms_number_returns_empty(self):
         data = [{
@@ -99,7 +99,7 @@ class CleanerTests(unittest.TestCase):
                 }
             }
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadNumber))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadNumber))
 
     def test_condition_for_road_number_given_no_or_none_free_flow_speed1_returns_empty(self):
         data = [{
@@ -126,7 +126,7 @@ class CleanerTests(unittest.TestCase):
                 }
             }
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadNumber))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadNumber))
 
     def test_condition_for_road_number_given_no_or_none_roadAddress_returns_empty(self):
         data = [{
@@ -145,7 +145,7 @@ class CleanerTests(unittest.TestCase):
                 "freeFlowSpeed1": 1
             }
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadNumber))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadNumber))
 
     def test_condition_for_road_number_given_no_or_none_road_number_returns_empty(self):
         data = [{
@@ -172,7 +172,7 @@ class CleanerTests(unittest.TestCase):
                 }
             }
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadNumber))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadNumber))
 
     def test_condition_for_road_number_given_no_or_none_road_section_returns_empty(self):
         data = [{
@@ -199,7 +199,7 @@ class CleanerTests(unittest.TestCase):
                 }
             }
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadNumber))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadNumber))
 
     def test_condition_for_road_number_given_no_or_none_road_maintenance_class_returns_empty(self):
         data = [{
@@ -230,7 +230,7 @@ class CleanerTests(unittest.TestCase):
                 }
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadNumber))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadNumber))
 
     def test_condition_for_road_number_given_acceptable_data_returns_the_data(self):
         data = [{
@@ -246,7 +246,7 @@ class CleanerTests(unittest.TestCase):
                 }
             }
         }]
-        self.assertEqual(data, Condition.clean(data, conditions_for_roadNumber))
+        self.assertEqual(data, clean_and_repair(data, conditions_for_roadNumber))
 
     def test_condition_for_road_conditions_given_acceptable_data_returns_the_data(self):
         data = [{
@@ -258,7 +258,7 @@ class CleanerTests(unittest.TestCase):
                 "overAllRoadCondition": "NORMAL"
             }]
         }]
-        self.assertEqual(data, Condition.clean(data, conditions_for_roadConditions))
+        self.assertEqual(data, clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_road_conditions_given_no_or_none_id_returns_empty(self):
         data = [{
@@ -277,7 +277,7 @@ class CleanerTests(unittest.TestCase):
                 "overAllRoadCondition": "NORMAL"
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadConditions))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_road_conditions_given_no_or_none_road_conditions_returns_empty(self):
         data = [{
@@ -286,7 +286,7 @@ class CleanerTests(unittest.TestCase):
             "id": 1,
             "roadConditions": None
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadConditions))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_road_conditions_given_no_or_none_daylight_returns_empty(self):
         data = [{
@@ -305,7 +305,7 @@ class CleanerTests(unittest.TestCase):
                 "overAllRoadCondition": "NORMAL"
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadConditions))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_road_conditions_given_no_or_none_road_temperature_returns_empty(self):
         data = [{
@@ -324,7 +324,7 @@ class CleanerTests(unittest.TestCase):
                 "overAllRoadCondition": "NORMAL"
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadConditions))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_road_conditions_given_no_or_none_weather_symbol_returns_empty(self):
         data = [{
@@ -343,7 +343,7 @@ class CleanerTests(unittest.TestCase):
                 "overAllRoadCondition": "NORMAL"
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadConditions))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_road_conditions_given_no_or_none_over_all_road_condition_returns_empty(self):
         data = [{
@@ -362,7 +362,7 @@ class CleanerTests(unittest.TestCase):
                 "weatherSymbol": "d400"
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_roadConditions))
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_tms_data_given_acceptable_data_returns_the_data(self):
         data = [{
@@ -373,7 +373,7 @@ class CleanerTests(unittest.TestCase):
                 "sensorUnit": "km/h"
             }]
         }]
-        self.assertEqual(data, Condition.clean(data, conditions_for_tmsData))
+        self.assertEqual(data, clean_and_repair(data, conditions_for_tmsData))
 
     def test_condition_for_tms_data_given_no_or_none_id_returns_empty(self):
         data = [{
@@ -390,7 +390,7 @@ class CleanerTests(unittest.TestCase):
                 "sensorUnit": "km/h"
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_tmsData))
+        self.assertEqual([], clean_and_repair(data, conditions_for_tmsData))
 
     def test_condition_for_tms_data_given_no_or_none_sensor_values_returns_empty(self):
         data = [{
@@ -399,7 +399,7 @@ class CleanerTests(unittest.TestCase):
             "id": 1,
             "sensorValues": None
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_tmsData))
+        self.assertEqual([], clean_and_repair(data, conditions_for_tmsData))
 
     def test_condition_for_tms_data_given_no_none_or_not_5122_sensor_values_id_returns_empty(self):
         data = [{
@@ -422,7 +422,7 @@ class CleanerTests(unittest.TestCase):
                 "sensorUnit": "km/h"
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_tmsData))
+        self.assertEqual([], clean_and_repair(data, conditions_for_tmsData))
 
     def test_condition_for_tms_data_given_no_or_none_sensor_value_returns_empty(self):
         data = [{
@@ -439,7 +439,7 @@ class CleanerTests(unittest.TestCase):
                 "sensorUnit": "km/h"
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_tmsData))
+        self.assertEqual([], clean_and_repair(data, conditions_for_tmsData))
 
     def test_condition_for_tms_data_given_no_none_or_not_kmh_returns_empty(self):
         data = [{
@@ -462,4 +462,4 @@ class CleanerTests(unittest.TestCase):
                 "sensorUnit": "kpl"
             }]
         }]
-        self.assertEqual([], Condition.clean(data, conditions_for_tmsData))
+        self.assertEqual([], clean_and_repair(data, conditions_for_tmsData))
