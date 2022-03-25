@@ -12,6 +12,7 @@ class GetPrediction(APIView):
     lookup_url_kwarg = 'roadId'
     def get(self, request):
         roadId = request.GET.get(self.lookup_url_kwarg)
+        predictionRequest = PredictionRequest.objects.filter(roadId = roadId)
         # predictedSpeed = AutoML.makePrediction(roadId)
         # speedLimit = database.getSpeedLimitfor(roadId)
         predictedSpeed = 33.7
