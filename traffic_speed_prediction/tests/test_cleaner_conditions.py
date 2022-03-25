@@ -255,7 +255,7 @@ class CleanerTests(unittest.TestCase):
                 "daylight": True,
                 "roadTemperature": "+20",
                 "weatherSymbol": "d400",
-                "overAllRoadCondition": "NORMAL"
+                "overallRoadCondition": "NORMAL"
             }]
         }]
         self.assertEqual(data, clean_and_repair(data, conditions_for_roadConditions))
@@ -267,14 +267,14 @@ class CleanerTests(unittest.TestCase):
                 "daylight": True,
                 "roadTemperature": "+20",
                 "weatherSymbol": "d400",
-                "overAllRoadCondition": "NORMAL"
+                "overallRoadCondition": "NORMAL"
             }]
         }, {
             "roadConditions": [{
                 "daylight": True,
                 "roadTemperature": "+20",
                 "weatherSymbol": "d400",
-                "overAllRoadCondition": "NORMAL"
+                "overallRoadCondition": "NORMAL"
             }]
         }]
         self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
@@ -294,7 +294,7 @@ class CleanerTests(unittest.TestCase):
             "roadConditions": [{
                 "roadTemperature": "+20",
                 "weatherSymbol": "d400",
-                "overAllRoadCondition": "NORMAL"
+                "overallRoadCondition": "NORMAL"
             }]
         }, {
             "id": 1,
@@ -302,10 +302,11 @@ class CleanerTests(unittest.TestCase):
                 "daylight": None,
                 "roadTemperature": "+20",
                 "weatherSymbol": "d400",
-                "overAllRoadCondition": "NORMAL"
+                "overallRoadCondition": "NORMAL"
             }]
         }]
-        self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
+        self.assertEqual([{'id': 1, 'roadConditions': []}, {'id': 1, 'roadConditions': []}]
+                         , clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_road_conditions_given_no_or_none_road_temperature_returns_empty(self):
         data = [{
@@ -314,17 +315,17 @@ class CleanerTests(unittest.TestCase):
                 "daylight": True,
                 "roadTemperature": None,
                 "weatherSymbol": "d400",
-                "overAllRoadCondition": "NORMAL"
+                "overallRoadCondition": "NORMAL"
             }]
         }, {
             "id": 1,
             "roadConditions": [{
                 "roadTemperature": "+20",
                 "weatherSymbol": "d400",
-                "overAllRoadCondition": "NORMAL"
+                "overallRoadCondition": "NORMAL"
             }]
         }]
-        self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
+        self.assertEqual([{'id': 1, 'roadConditions': []}, {'id': 1, 'roadConditions': []}], clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_road_conditions_given_no_or_none_weather_symbol_returns_empty(self):
         data = [{
@@ -333,17 +334,17 @@ class CleanerTests(unittest.TestCase):
                 "daylight": True,
                 "roadTemperature": "+20",
                 "weatherSymbol": None,
-                "overAllRoadCondition": "NORMAL"
+                "overallRoadCondition": "NORMAL"
             }]
         }, {
             "id": 1,
             "roadConditions": [{
                 "daylight": True,
                 "roadTemperature": "+20",
-                "overAllRoadCondition": "NORMAL"
+                "overallRoadCondition": "NORMAL"
             }]
         }]
-        self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
+        self.assertEqual([{'id': 1, 'roadConditions': []}, {'id': 1, 'roadConditions': []}], clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_road_conditions_given_no_or_none_over_all_road_condition_returns_empty(self):
         data = [{
@@ -352,7 +353,7 @@ class CleanerTests(unittest.TestCase):
                 "daylight": True,
                 "roadTemperature": "+20",
                 "weatherSymbol": "d400",
-                "overAllRoadCondition": None
+                "overallRoadCondition": None
             }]
         }, {
             "id": 1,
@@ -362,7 +363,7 @@ class CleanerTests(unittest.TestCase):
                 "weatherSymbol": "d400"
             }]
         }]
-        self.assertEqual([], clean_and_repair(data, conditions_for_roadConditions))
+        self.assertEqual([{'id': 1, 'roadConditions': []}, {'id': 1, 'roadConditions': []}], clean_and_repair(data, conditions_for_roadConditions))
 
     def test_condition_for_tms_data_given_acceptable_data_returns_the_data(self):
         data = [{
