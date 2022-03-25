@@ -1,5 +1,6 @@
 import string
 import time
+import traceback
 
 import requests
 import ujson
@@ -7,6 +8,8 @@ import ujson
 from util.config.ReadConfig import Config
 
 from api.models import Road, Road_section, TMS_station
+from util.data_cleaning.cleaner import Condition
+from util.data_cleaning.cleaner_conditions import conditions_for_roadNumber, conditions_for_roadConditions, conditions_for_tmsData
 
 
 class Scraper:
@@ -22,13 +25,13 @@ class Scraper:
 
     @staticmethod
     def get_road_ids():
+
         # Find all the ids related to road stations and road number
         print("begin scraping")
         for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)['weatherData']:
             # Check if this is the start of the roadsection, only part concerning us
             if str(road_condition["id"]).split("_")[2] != "00000":
                 continue
-            
             road_temp = road_condition["roadConditions"][0]["roadTemperature"]
             daylight = road_condition["roadConditions"][0]["daylight"]
             weather_symbol = road_condition["roadConditions"][0]["weatherSymbol"]
@@ -39,6 +42,7 @@ class Scraper:
             road_station_ids = []
 
             # Save road to database
+
             road = Road(Road_number=road_number)
             road.save()
 
@@ -47,16 +51,21 @@ class Scraper:
                     ujson.loads(
                         requests.get(Config.read_config()["urls"]["road_number"]["base_url"] + road_number).text)[
                         "features"]:
-                road_sections.append(feature["properties"]["roadAddress"]["roadSection"])
-                
+
                 # not all roads have maintanence classes. In this case set it to 0.
                 try:
-                    road_maintenance_classes.append(feature["properties"]["roadAddress"]["roadMaintenanceClass"])
+                    main = Condition.clean([feature], conditions_for_roadNumber)
+                    road_sections.append(main[0]["properties"]["roadAddress"]["roadSection"])
+                    road_maintenance_classes.append(main[0]["properties"]["roadAddress"]["roadMaintenanceClass"])
+                    free_flow_speed1s.append(main[0]["properties"]["freeFlowSpeed1"])
+                    road_station_ids.append(main[0]["properties"]["roadStationId"])
+                    print(str([main[0]["properties"]["roadAddress"]["roadSection"]][0]))
+                    print("ROAD SECTION: " + str(main[0]["properties"]["roadAddress"]["roadSection"]))
+                    print("FREE FLOW SPEED: " + str(main[0]["properties"]["freeFlowSpeed1"]))
+                    print("ROAD STATION ID : " + str(main[0]["properties"]["roadStationId"]))
                 except:
-                    road_maintenance_classes.append(0)
-                free_flow_speed1s.append(feature["properties"]["freeFlowSpeed1"])
-                road_station_ids.append(feature["properties"]["roadStationId"])
-
+                    traceback.print_exc()
+                    break
             i = -1
             for section in road_sections:
 

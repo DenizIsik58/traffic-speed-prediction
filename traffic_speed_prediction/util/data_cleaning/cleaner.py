@@ -85,11 +85,11 @@ class Condition:
         return True
 
 
-def clean(data: List[dict], condition):
-    cleaned_data = []
-    for jObj in data:
+    def clean(data: List[dict], condition):
+        cleaned_data = []
+        for jObj in data:
 
-        if condition.apply(jObj):
-            cleaned_data.append(jObj)
+            if condition.apply(jObj):
+                cleaned_data.append(jObj)
 
-    return cleaned_data
+        return cleaned_data
