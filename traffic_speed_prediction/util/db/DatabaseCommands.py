@@ -48,15 +48,16 @@ class DatabaseCommands:
 
     @staticmethod
     def extract_data_and_write_to_csv():
-        with open("data.csv", "w") as file:
+        with open("BigData.csv", "w") as file:
             csv_writer = csv.writer(file)
 
-            header = ['road_number', 'road_temperature', 'daylight', 'roadMaintenanceClass', 'freeflowspeed', 'average_speed']
+            header = ['road_number', 'road_temperature', 'daylight', 'weather_symbol', 'roadMaintenanceClass', 'freeflowspeed', 'average_speed']
             csv_writer.writerow(header)
             for road_section in Road_section.objects.all():
                 data = []
                 data.append(road_section.road.Road_number)
                 data.append(str(road_section.roadTemperature).replace("+", ""))
+                data.append(int(road_section.daylight))
                 data.append(str(str(road_section.weatherSymbol)[1:]))
                 data.append(road_section.roadMaintenanceClass)
                 data.append( road_section.freeFlowSpeed1)
