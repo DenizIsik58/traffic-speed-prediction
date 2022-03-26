@@ -18,3 +18,7 @@
     width: 120%;
     font-size: 20px;
 }
+
+#map {
+    margin: 0 auto 0 auto;
+}

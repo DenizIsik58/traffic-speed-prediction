@@ -13,7 +13,7 @@
     </div>
 
 
-    <div id='map' style='width: 400px; height: 300px;'></div>
+    <div id='map' style='width: 800px; height: 500px;'></div>
 
     
 
@@ -22,8 +22,16 @@
     <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoidnNvbi1zb2xpdGEiLCJhIjoiY2wxNmlqcG5jMDdyMjNkcGt1N241bTV3eSJ9.R4IzYACNR4PEWDAoBlTkYw';
     var map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/streets-v11'
+        container: 'map',
+        style: 'mapbox://styles/mapbox/satellite-streets-v11',
+        center: [26, 62.3], // starting position
+        zoom: 5, // starting zoom
+    });
+
+    //log coordinates of mouse
+    map.on('mousemove', (e) => {
+        console.log(JSON.stringify(e.point));
+        console.log(JSON.stringify(e.lngLat.wrap()));
     });
     </script>
 {% endblock %}
