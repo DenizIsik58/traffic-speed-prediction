@@ -4,6 +4,9 @@ import boto3
 from util.config.ReadConfig import Config
 from util.scraping.scraper import Scraper
 from api.models import Road, Road_section, TMS_station
+import math
+from traffic_speed_prediction.auto_ml import auto_ml
+
 
 class DatabaseCommands:
     # TODO: Make a class with commands for the DB
@@ -39,19 +42,17 @@ class DatabaseCommands:
             }
         )
 
-
     @staticmethod
     def load_database():
-        Scraper.get_road_ids()
-
-
+        Scraper.load_data()
 
     @staticmethod
     def extract_data_and_write_to_csv():
         with open("BigData.csv", "w") as file:
             csv_writer = csv.writer(file)
 
-            header = ['road_number', 'road_temperature', 'daylight', 'weather_symbol', 'roadMaintenanceClass', 'freeflowspeed', 'average_speed']
+            header = ['road_number', 'road_temperature', 'daylight', 'weather_symbol', 'roadMaintenanceClass',
+                      'freeflowspeed', 'average_speed']
             csv_writer.writerow(header)
             for road_section in Road_section.objects.all():
                 data = []
@@ -66,3 +67,32 @@ class DatabaseCommands:
 
             file.close()
 
+    @staticmethod
+    def getNearestCoordsAndPredictions(lat, lon):
+
+        nearest_distance = float(100000000)
+        road_sect = []
+        la = 0
+        lo = 0
+
+        for road_section in Road_section.objects.all():
+            temp_distance = math.sqrt(
+                math.pow(road_section.lat - lat, 2) + math.pow(road_section.lon - lon, 2))
+            print(temp_distance)
+            print(nearest_distance)
+            if nearest_distance > temp_distance:
+                la = road_section.lat
+                lo = road_section.lon
+                road_sect.clear()
+                nearest_distance = temp_distance
+                road_sect.append(road_section.road.Road_number)
+                road_sect.append(float(str((road_section.roadTemperature).replace("+", ""))))
+                road_sect.append(str(road_section.weatherSymbol)[1:])
+                road_sect.append(int(road_section.daylight))
+                road_sect.append(road_section.roadMaintenanceClass)
+                road_sect.append(float((road_section.freeFlowSpeed1)))
+                #print(road_section.road.Road_number)
+        print(road_sect)
+        print("NEAREST: " + str(nearest_distance))
+        print("LAT: " + str(la) + " LON: " + str(lo))
+        print(auto_ml.predict(road_sect))
