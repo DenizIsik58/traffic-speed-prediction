@@ -8,7 +8,8 @@ class auto_ml:
 
 
     @staticmethod
-    def predict(road_section):
+    def train():
+        global model
         dataset = pd.read_csv('BigData.csv')
 
         x = dataset.drop(columns=['average_speed'])
@@ -32,6 +33,8 @@ class auto_ml:
         #print(road_section[0], road_section[1], road_section[2], road_section[3], road_section[4], road_section[5])
         #print(model.predict([road_section[0], road_section[1], road_section[2], road_section[3], road_section[4], road_section[5]]))
 
+    @staticmethod
+    def predict(road_section):
         return model.predict([[road_section[0], road_section[1], road_section[2], road_section[3], road_section[4], road_section[5]]])
 
     @staticmethod
