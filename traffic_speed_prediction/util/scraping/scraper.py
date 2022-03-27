@@ -101,7 +101,7 @@ class Scraper:
                                                         average_speed=avg_speed)
                                     sect.save()
                                     TMS_station(tms_station=road_station_ids[i], roadSection=sect).save()
-                                    print(cleaned_station[0]["id"])
+                                    #print(cleaned_station[0]["id"])
                                     break
                         except:
                             break

@@ -9,7 +9,7 @@ class auto_ml:
 
     @staticmethod
     def predict(road_section):
-        dataset = pd.read_csv('traffic_speed_prediction/BigData.csv')
+        dataset = pd.read_csv('BigData.csv')
 
         x = dataset.drop(columns=['average_speed'])
         y = dataset['average_speed']
