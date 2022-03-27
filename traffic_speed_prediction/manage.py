@@ -23,7 +23,7 @@ if __name__ == '__main__':
     from util.db.database_commands import DatabaseCommands
     #DatabaseCommands.load_database()
     #DatabaseCommands.extract_data_and_write_to_csv()
-    #DatabaseCommands.getNearestCoords(25.759138, 62.24248)
-    DatabaseCommands.getNearestCoordsAndPredictions(30.622457, 62.171684)
+    DatabaseCommands.getNearestCoordsAndPredictions(25.759138, 62.24248)
+    #DatabaseCommands.getNearestCoordsAndPredictions(30.622457, 62.171684)
 
 
