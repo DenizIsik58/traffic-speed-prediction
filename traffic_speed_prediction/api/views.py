@@ -1,7 +1,6 @@
 from http.client import HTTP_PORT
 from django.shortcuts import render
 from django.http import HttpResponse
-import traffic_speed_prediction.model
 
 from .serializers import RoadSectionSerializer
 from rest_framework import viewsets
