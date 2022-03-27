@@ -235,6 +235,9 @@ class CleanerTests(unittest.TestCase):
     def test_condition_for_road_number_given_acceptable_data_returns_the_data(self):
         data = [{
             "id": 1,
+            "geometry": {
+                "coordinates": [25.312312, 65.42112]
+            },
             "properties": {
                 "roadStationId": 1,
                 "tmsNumber": 1,
@@ -247,6 +250,22 @@ class CleanerTests(unittest.TestCase):
             }
         }]
         self.assertEqual(data, clean_and_repair(data, conditions_for_roadNumber))
+
+    def test_condition_for_road_number_given_unacceptable_data_returns_none(self):
+        data = [{
+            "id": 1,
+            "properties": {
+                "roadStationId": 1,
+                "tmsNumber": 1,
+                "freeFlowSpeed1": 1,
+                "roadAddress": {
+                    "roadNumber": 1,
+                    "roadSection": 1,
+                    "roadMaintenanceClass": "1"
+                }
+            }
+        }]
+        self.assertEqual([], clean_and_repair(data, conditions_for_roadNumber))
 
     def test_condition_for_road_conditions_given_acceptable_data_returns_the_data(self):
         data = [{
