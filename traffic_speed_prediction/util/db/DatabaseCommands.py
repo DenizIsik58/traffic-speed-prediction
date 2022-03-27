@@ -56,11 +56,11 @@ class DatabaseCommands:
             for road_section in Road_section.objects.all():
                 data = []
                 data.append(road_section.road.Road_number)
-                data.append(str(road_section.roadTemperature).replace("+", ""))
-                data.append(str(str(road_section.weatherSymbol)[1:]))
+                data.append(float(str("{:.1f}".format(road_section.roadTemperature).replace("+", ""))))
+                data.append(str(road_section.weatherSymbol)[1:])
                 data.append(road_section.roadMaintenanceClass)
-                data.append( road_section.freeFlowSpeed1)
-                data.append(road_section.average_speed)
+                data.append(float("{:.1f}".format(road_section.freeFlowSpeed1)))
+                data.append(float("{:.1f}".format(road_section.average_speed)))
                 csv_writer.writerow(data)
 
             file.close()
