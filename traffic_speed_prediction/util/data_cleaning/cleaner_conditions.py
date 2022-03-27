@@ -5,6 +5,9 @@ conditions_for_roadNumber = Condition({
     "id": [
         Rule(NOT_NONE, None)
     ],
+    "geometry": [
+    Rule(NOT_NONE, None),
+    ],
     "properties": [
         Rule(NOT_NONE, None),
         Rule(SUB_RULES, Condition({

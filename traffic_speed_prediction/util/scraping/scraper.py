@@ -46,6 +46,8 @@ class Scraper:
             road_maintenance_classes = []
             free_flow_speed1s = []
             road_station_ids = []
+            lat = []
+            lon = []
 
             # Save road to database
 
@@ -66,6 +68,8 @@ class Scraper:
                     road_maintenance_classes.append(main[0]["properties"]["roadAddress"]["roadMaintenanceClass"])
                     free_flow_speed1s.append(main[0]["properties"]["freeFlowSpeed1"])
                     road_station_ids.append(main[0]["properties"]["roadStationId"])
+                    lat.append(main[0]["geometry"]["coordinates"][0])
+                    lon.append(main[0]["geometry"]["coordinates"][1])
                     # print(str([main[0]["properties"]["roadAddress"]["roadSection"]][0]))
                     # print("ROAD SECTION: " + str(main[0]["properties"]["roadAddress"]["roadSection"]))
                     # print("FREE FLOW SPEED: " + str(main[0]["properties"]["freeFlowSpeed1"]))
@@ -89,7 +93,7 @@ class Scraper:
                             for censor in cleaned_station[0]["sensorValues"]:
                                 if str(censor["id"]) == "5122":
                                     avg_speed = censor["sensorValue"]
-                                    sect = Road_section(road_section_number=section, road=road, roadTemperature=road_temp,
+                                    sect = Road_section(road_section_number=section, road=road, roadTemperature=road_temp, lat=lat[i], lon=lon[i],
                                                         daylight=daylight,
                                                         weatherSymbol=weather_symbol,
                                                         roadMaintenanceClass=road_maintenance_classes[i],
@@ -97,7 +101,7 @@ class Scraper:
                                                         average_speed=avg_speed)
                                     sect.save()
                                     TMS_station(tms_station=road_station_ids[i], roadSection=sect).save()
-                                    #print(cleaned_station[0]["id"])
+                                    print(cleaned_station[0]["id"])
                                     break
                         except:
                             break
