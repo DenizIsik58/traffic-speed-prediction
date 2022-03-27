@@ -17,6 +17,8 @@ class auto_ml:
 
         model = DecisionTreeRegressor()
         model.fit(x_train, y_train)
+        print(x_train.describe())
+        print(y_train.describe())
 
         print("SCORE:")
         print("______________________________________________________________ ")
@@ -33,9 +35,10 @@ class auto_ml:
         print()
 
         print("RESULTS:")
-        print(model.predict([road_section[0], road_section[1], road_section[2], road_section[3], road_section[4], road_section[5]]))
+        #print(road_section[0], road_section[1], road_section[2], road_section[3], road_section[4], road_section[5])
+        #print(model.predict([road_section[0], road_section[1], road_section[2], road_section[3], road_section[4], road_section[5]]))
 
-        return model.predict([road_section[0], road_section[1], road_section[2], road_section[3], road_section[4], road_section[5], ])
+        return model.predict([[road_section[0], road_section[1], road_section[2], road_section[3], road_section[4], road_section[5]]])
 
     @staticmethod
     def print_model():
