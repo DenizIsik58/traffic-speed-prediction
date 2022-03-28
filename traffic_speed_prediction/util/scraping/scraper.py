@@ -1,5 +1,6 @@
 import string
 import time
+import traceback
 
 import requests
 import ujson
@@ -7,6 +8,8 @@ import ujson
 from util.config.ReadConfig import Config
 
 from api.models import Road, Road_section, TMS_station
+from util.data_cleaning.cleaner import *
+from util.data_cleaning.cleaner_conditions import *
 
 
 class Scraper:
@@ -21,24 +24,33 @@ class Scraper:
         pass
 
     @staticmethod
-    def get_road_ids():
+    def load_data():
         # Find all the ids related to road stations and road number
         print("begin scraping")
-        for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)['weatherData']:
+        for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)[
+            'weatherData']:
             # Check if this is the start of the roadsection, only part concerning us
-            if str(road_condition["id"]).split("_")[2] != "00000":
+            # print("raw: " + str(road_condition))
+            cleaned_road_condition = clean_and_repair([road_condition], conditions_for_roadConditions)
+            # print("cleaned " + str(cleaned_road_condition))
+
+            if str(cleaned_road_condition[0]["id"]).split("_")[2] != "00000" and cleaned_road_condition[0][
+                "roadConditions"] != []:
                 continue
-            
-            road_temp = road_condition["roadConditions"][0]["roadTemperature"]
-            daylight = road_condition["roadConditions"][0]["daylight"]
-            weather_symbol = road_condition["roadConditions"][0]["weatherSymbol"]
-            road_number = str(road_condition["id"]).split("_")[0]
+
+            daylight = cleaned_road_condition[0]["roadConditions"][0]["daylight"]
+            road_temp = cleaned_road_condition[0]["roadConditions"][0]["roadTemperature"]
+            weather_symbol = cleaned_road_condition[0]["roadConditions"][0]["weatherSymbol"]
+            road_number = str(cleaned_road_condition[0]["id"]).split("_")[0]
             road_sections = []
             road_maintenance_classes = []
             free_flow_speed1s = []
             road_station_ids = []
+            lat = []
+            lon = []
 
             # Save road to database
+
             road = Road(Road_number=road_number)
             road.save()
 
@@ -47,16 +59,24 @@ class Scraper:
                     ujson.loads(
                         requests.get(Config.read_config()["urls"]["road_number"]["base_url"] + road_number).text)[
                         "features"]:
-                road_sections.append(feature["properties"]["roadAddress"]["roadSection"])
-                
+
                 # not all roads have maintanence classes. In this case set it to 0.
                 try:
-                    road_maintenance_classes.append(feature["properties"]["roadAddress"]["roadMaintenanceClass"])
+                    main = clean_and_repair([feature], conditions_for_roadNumber)
+                    #print("FEATURE: " + str(feature) + " " + str(i))
+                    road_sections.append(main[0]["properties"]["roadAddress"]["roadSection"])
+                    road_maintenance_classes.append(main[0]["properties"]["roadAddress"]["roadMaintenanceClass"])
+                    free_flow_speed1s.append(main[0]["properties"]["freeFlowSpeed1"])
+                    road_station_ids.append(main[0]["properties"]["roadStationId"])
+                    lat.append(main[0]["geometry"]["coordinates"][0])
+                    lon.append(main[0]["geometry"]["coordinates"][1])
+                    # print(str([main[0]["properties"]["roadAddress"]["roadSection"]][0]))
+                    # print("ROAD SECTION: " + str(main[0]["properties"]["roadAddress"]["roadSection"]))
+                    # print("FREE FLOW SPEED: " + str(main[0]["properties"]["freeFlowSpeed1"]))
+                    # print("ROAD STATION ID : " + str(main[0]["properties"]["roadStationId"]))
                 except:
-                    road_maintenance_classes.append(0)
-                free_flow_speed1s.append(feature["properties"]["freeFlowSpeed1"])
-                road_station_ids.append(feature["properties"]["roadStationId"])
-
+                    traceback.print_exc()
+                    break
             i = -1
             for section in road_sections:
 
@@ -66,14 +86,22 @@ class Scraper:
                 for station in ujson.loads(requests.get(
                         Config.read_config()["urls"]["tms_station"]["base_url"] + str(road_station_ids[i])).text)[
                     "tmsStations"]:
-                    for censor in station["sensorValues"]:
-                        if str(censor["id"]) == "5122":
-                            avg_speed = censor["sensorValue"]
-                            sect = Road_section(road_section_number=section, road=road, roadTemperature=road_temp,
-                                        daylight=daylight,
-                                        weatherSymbol=weather_symbol, roadMaintenanceClass=road_maintenance_classes[i],
-                                        freeFlowSpeed1=free_flow_speed1s[i],
-                                        average_speed=avg_speed)
-                            sect.save()
-                            TMS_station(tms_station=road_station_ids[i], roadSection=sect).save()
+
+                        cleaned_station = clean_and_repair([station], conditions_for_tmsData)
+                        #print(station)
+                        try:
+                            for censor in cleaned_station[0]["sensorValues"]:
+                                if str(censor["id"]) == "5122":
+                                    avg_speed = censor["sensorValue"]
+                                    sect = Road_section(road_section_number=section, road=road, roadTemperature=road_temp, lat=lat[i], lon=lon[i],
+                                                        daylight=daylight,
+                                                        weatherSymbol=weather_symbol,
+                                                        roadMaintenanceClass=road_maintenance_classes[i],
+                                                        freeFlowSpeed1=free_flow_speed1s[i],
+                                                        average_speed=avg_speed)
+                                    sect.save()
+                                    TMS_station(tms_station=road_station_ids[i], roadSection=sect).save()
+                                    #print(cleaned_station[0]["id"])
+                                    break
+                        except:
                             break

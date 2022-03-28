@@ -36,7 +36,7 @@ ENTITY3 = {  # measuredTime is too short
     },
     "roadSpeedLimit": 50,
     "roadAverageSpeed": 48,
-    "features": [  #perfect
+    "features": [  # perfect
         {
             "schools": 5,
             "sand": True,
@@ -57,7 +57,7 @@ ENTITY4 = {  # roadAverageSpeed is greater than roadSpeedLimit
     },
     "roadSpeedLimit": 80,
     "roadAverageSpeed": 81,
-    "features": [  #missing schools in second entry
+    "features": [  # missing schools in second entry
         {
             "schools": 3,
             "sand": True,
@@ -265,4 +265,43 @@ class CleanerTests(unittest.TestCase):
 
         self.assertEqual(cleaned, [ENTITY4])
 
+    def test_Rule_ForAll_filters_an_underlying_list_and_returns_edite_2_3_4_5(self):
+        con = Condition({
+            "roadStationId": [],
+            "sensorId": [],
+            "features": [Rule(FOR_ALL, Condition({
+                "schools": [Rule(LESS_THAN, 4)],
+                "sand": []
+            }))],
+            "roadSpeedLimit": [Rule(EQUALS, 50)]
+        })
 
+        cleaned = clean_and_repair(self.data, con)
+
+        entity2 = {
+            "roadStationId": 4052,
+            "sensorId": 126,
+            "roadSpeedLimit": 50,
+            "features": []
+        }
+        entity3 = {
+            "roadStationId": 4053,
+            "sensorId": 125,
+            "roadSpeedLimit": 50,
+            "features": [
+                {
+                    "schools": 2,
+                    "sand": False},
+            ]
+        }
+        entity5 = {
+            "roadStationId": 4055,
+            "sensorId": 92,
+            "roadSpeedLimit": 50,
+            "features": [
+                {
+                    "schools": 3,
+                    "sand": False},
+            ]
+        }
+        self.assertEqual(cleaned, [entity2, entity3, entity5])
