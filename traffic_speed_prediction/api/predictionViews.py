@@ -37,3 +37,4 @@ class GetPredictionWithRoadIdAndSections(APIView):
 
 
 
+
