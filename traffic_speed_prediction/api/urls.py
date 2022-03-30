@@ -14,8 +14,7 @@ urlpatterns = [
     path('create-whd', CreateWeatherHistoryData.as_view()),
     path('get-whd', GetWeatherHistoryData.as_view()),
     path('put-whd', UpdateWeatherHistoryData.as_view()),
-    path('delete-whd/<str:pk>/', DeleteWeatherHistoryData.as_view()),
+    path('delete-whd/<int:pk>/', DeleteWeatherHistoryData.as_view()),
 
-    path('get-pred&roadId=<int:roadId>', GetPredictionWithRoadId.as_view()),
-    path('get-pred&roadId=<int:roadId>&onGoing=<int:onGoing>&offGoing=<int:offGoing>', GetPredictionWithRoadIdAndSections.as_view())
+    path('get-pred&lat=<str:lat>&lon=<str:lon>', GetPrediction.as_view()),
 ]

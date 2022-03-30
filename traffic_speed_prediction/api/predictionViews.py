@@ -1,39 +1,23 @@
-from django.db.migrations import serializer
-from django.shortcuts import render
 from rest_framework import generics, status
-from .serializers import PredictionRequestSerializer, PredictionResponseSerializer
-from .models import PredictionRequest, PredictionResponse
+from .serializers import PredictionResponseSerializer
+from .models import PredictionResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.renderers import JSONRenderer
+from util.db.database_commands import DatabaseCommands
+from traffic_speed_prediction.auto_ml import auto_ml
 
 
-class GetPredictionWithRoadId(APIView):
-    serializer_class = PredictionRequestSerializer
+class GetPrediction(APIView):
+    serializer_class = PredictionResponseSerializer
 
-    def get(self, request, roadId=None):
-        predictedSpeed = 33.7  # predictedSpeed = AutoML.makePrediction(roadId)
-        speedLimit = 50  # speedLimit = database.getSpeedLimitFor(roadId)
-        prediction = PredictionResponse(roadId=roadId, onGoingSectionId=None, offGoingSectionId=None, speedLimit=speedLimit, predictedSpeed=predictedSpeed)
+    def get(self, request, lat=None, lon=None):
+        auto_ml.train()
+        dataToPredict = DatabaseCommands.getInfoForPredictionByLatAndLon(float(lat), float(lon))
+        predictedSpeed = auto_ml.predict(dataToPredict)
+        prediction = PredictionResponse(roadId=dataToPredict[0], predictedSpeed=predictedSpeed)
         prediction.save()
         data = PredictionResponseSerializer(prediction).data
         return Response(data, status=status.HTTP_200_OK)
-
-
-class GetPredictionWithRoadIdAndSections(APIView):
-    serializer_class = PredictionRequestSerializer
-
-    def get(self, request, roadId=None, onGoing=None, offGoing=None):
-        predictedSpeed = 33.7  # predictedSpeed = AutoML.makePrediction(roadId)
-        speedLimit = 50  # speedLimit = database.getSpeedLimitFor(roadId)
-        prediction = PredictionResponse(roadId=roadId, onGoingSectionId=onGoing, offGoingSectionId=offGoing, speedLimit=speedLimit, predictedSpeed=predictedSpeed)
-        prediction.save()
-        data = PredictionResponseSerializer(prediction).data
-        return Response(data, status=status.HTTP_200_OK)
-
-
-
-
 
 
 
