@@ -1,4 +1,5 @@
 from django.db.migrations import serializer
+from http.client import HTTP_PORT
 from django.shortcuts import render
 from rest_framework import generics, status
 from .serializers import WeatherHistoryDataSerializer
@@ -8,6 +9,10 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 
 from.webscraper import tryGet
+from .serializers import RoadSectionSerializer
+from rest_framework import viewsets
+from .models import Road_section
+
 
 class WeatherHistoryDataView(generics.ListAPIView):
     queryset = WeatherHistoryData.objects.all()
@@ -104,3 +109,7 @@ class DeleteWeatherHistoryData(APIView):
         instance = WeatherHistoryData.objects.get(roadStationId=pk)
         instance.delete()
         return Response(WeatherHistoryDataSerializer.data, status=status.HTTP_200_OK)
+class HeroViewSet(viewsets.ModelViewSet):
+    queryset = Road_section.objects.all().order_by('road')
+    serializer_class = RoadSectionSerializer
+

@@ -16,6 +16,8 @@ class Road_section(models.Model):
     road_section_number = models.IntegerField()
     road = models.ForeignKey('Road', on_delete=models.CASCADE)
     roadTemperature = models.TextField()
+    lat = models.FloatField()
+    lon = models.FloatField()
     daylight = models.BooleanField()
     weatherSymbol = models.TextField()
     roadMaintenanceClass = models.TextField()

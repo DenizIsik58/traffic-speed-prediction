@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="/static/css/finmap.css"/>
+{% endblock %}
+
+{% block content %}
+    
+
+    <div id="titleContainer">
+        <h1>FinMap</h1>
+        <p>traffic speed prediction</p>
+    </div>
+
+
+    <div id='map' style='width: 800px; height: 500px;'></div>
+
+    
+    <button onclick="hello_world()">
+        Print Hello World!
+    </button>
+
+    <div id="textfield">
+        Here is the prediction
+    </div>
+
+
+    <!--Map methods-->
+    <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidnNvbi1zb2xpdGEiLCJhIjoiY2wxNmlqcG5jMDdyMjNkcGt1N241bTV3eSJ9.R4IzYACNR4PEWDAoBlTkYw';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/satellite-streets-v11',
+        center: [26, 62.3], // starting position
+        zoom: 5, // starting zoom
+    });
+
+    //log coordinates of mouse
+    map.on('mousemove', (e) => {
+        console.log(JSON.stringify(e.point));
+        console.log(JSON.stringify(e.lngLat.wrap()));
+    });
+    </script>
+
+    <!--Button methods-->
+    <script>
+        function hello_world() 
+        {
+            field = document.getElementById("textfield").innerHTML = "Hello World";
+        }
+    </script>
+{% endblock %}
