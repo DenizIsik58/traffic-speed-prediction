@@ -89,23 +89,57 @@ class DatabaseCommands:
                 road_sect.append(int(str(road_section.weatherSymbol)[1:]))
                 road_sect.append(int(road_section.roadMaintenanceClass))
                 road_sect.append(float((road_section.freeFlowSpeed1)))
-                #print(road_section.road.Road_number)
+                print(road_section.road.Road_number)
         print(road_sect)
         print("NEAREST: " + str(nearest_distance))
         print("LAT: " + str(la) + " LON: " + str(lo))
         print("PREDICTIONS: " + str(auto_ml.predict(road_sect)))
 
     @staticmethod
-    def getInfoForPredictionByLatAndLon(lat, lon):
+    def getInfoForPredictionByLatAndLon(lat2, lon2):
 
         nearest_distance = 10000
         road_sect = []
         la = 0
         lo = 0
 
+        print("recieved lat:")
+        print(lat2)
+        print("recieved long")
+        print(lon2)
+
+        counter = 0;
+
+        #for road_section in Road_section.objects.all():
+          #  if(road_section.lat > 0 and road_section.lon > 0):
+            #    counter = counter + 1
+
+        print(counter)
+
         for road_section in Road_section.objects.all():
-            temp_distance = math.sqrt(
-                math.pow(road_section.lat - lat, 2) + math.pow(road_section.lon - lon, 2))
+            lat1 = road_section.lat
+            lon1 = road_section.lon
+            
+            #Using euclidean is faster, but is super imprecise. always gets the same result
+            #temp_distance = math.sqrt(
+            #    math.pow(lat1 - lat2, 2) + math.pow(lon1 - lon2, 2)
+            #)
+
+            #print("recieved lat:")
+            #print(lat2)
+            #print("recieved long")
+            #print(lon2)
+
+            # Haversine distance between coordinaates
+            dlon = lon2 - lon1 
+            dlat = lat2 - lat1 
+            a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+            c = 2 * math.asin(math.sqrt(a)) 
+            r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
+
+            temp_distance=r*c
+
+            #print(meters)
             if nearest_distance > temp_distance:
                 la = road_section.lat
                 lo = road_section.lon
@@ -117,7 +151,8 @@ class DatabaseCommands:
                 road_sect.append(int(str(road_section.weatherSymbol)[1:]))
                 road_sect.append(int(road_section.roadMaintenanceClass))
                 road_sect.append(float((road_section.freeFlowSpeed1)))
-                #print(road_section.road.Road_number)
+                print("found new closest road: ")
+                print(road_section.road.Road_number)
         return road_sect
 
 
