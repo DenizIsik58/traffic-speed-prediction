@@ -94,3 +94,32 @@ class DatabaseCommands:
         print("NEAREST: " + str(nearest_distance))
         print("LAT: " + str(la) + " LON: " + str(lo))
         print("PREDICTIONS: " + str(auto_ml.predict(road_sect)))
+
+    @staticmethod
+    def getInfoForPredictionByLatAndLon(lat, lon):
+
+        nearest_distance = 10000
+        road_sect = []
+        la = 0
+        lo = 0
+
+        for road_section in Road_section.objects.all():
+            temp_distance = math.sqrt(
+                math.pow(road_section.lat - lat, 2) + math.pow(road_section.lon - lon, 2))
+            if nearest_distance > temp_distance:
+                la = road_section.lat
+                lo = road_section.lon
+                road_sect.clear()
+                nearest_distance = temp_distance
+                road_sect.append(road_section.road.Road_number)
+                road_sect.append(float(str((road_section.roadTemperature).replace("+", ""))))
+                road_sect.append(int(road_section.daylight))
+                road_sect.append(int(str(road_section.weatherSymbol)[1:]))
+                road_sect.append(int(road_section.roadMaintenanceClass))
+                road_sect.append(float((road_section.freeFlowSpeed1)))
+                #print(road_section.road.Road_number)
+        return road_sect
+
+
+
+
