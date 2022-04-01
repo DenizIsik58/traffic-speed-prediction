@@ -1,0 +1,38 @@
+
+    <script>
+        function getPrediction() {
+            let lat = document.getElementById("latInput").value
+            let lon = document.getElementById(("lonInput")).value
+            let label = document.getElementById("predictionLabel")
+
+            label.innerHTML = "Latitude is " + lat + "Longitude is " + lon
+            console.log("Latitude is " + lat + "Longitude is " + lon)
+
+            method = "api/get-pred" + "&lat=" + lat + "&lon="+ lon
+
+
+            const request = {
+                method: "GET",
+                headers: {"Content-Type": "application/jason"},
+            }
+            fetch(method, request)
+                .then((response) => {
+                    if (response.ok) {
+                        label.innerHTML = "GOT A NICE RESPONSE:\n" + response + "\n_=_=_="
+                    } else {
+                        label.innerHTML = "ERROR:\n" + response + "\n_!_!_!"
+                    }
+                })
+        }
+    </script>
+
+<form action ="">
+    <label>Latitude</label>
+    <input id ="latInput" type="text">
+     <label>Longitude</label>
+    <input id="lonInput" type ="text">
+
+    <button onclick="event.preventDefault(); getPrediction();">Get a prediction!</button>
+    <label id="predictionLabel">Hola perra</label>
+</form>
+
