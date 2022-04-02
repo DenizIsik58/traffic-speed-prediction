@@ -1,5 +1,6 @@
 import csv
 import json
+import requests
 import boto3
 from util.config.ReadConfig import Config
 from util.scraping.scraper import Scraper
@@ -154,6 +155,17 @@ class DatabaseCommands:
                 print("found new closest road: ")
                 print(road_section.road.Road_number)
         return road_sect
+    
+
+    # This doesn't really have anything to do with the database, should be moved
+    def getGeoJsonForRoadSection(roadNumber, roadSectionId):
+        apiPath = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/" + roadNumber;
+
+        response = requests.get(apiPath).json()
+
+        print(roadSectionId)
+        
+        return response
 
 
 

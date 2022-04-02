@@ -16,7 +16,7 @@
         mapboxgl.accessToken = 'pk.eyJ1IjoidnNvbi1zb2xpdGEiLCJhIjoiY2wxNmlqcG5jMDdyMjNkcGt1N241bTV3eSJ9.R4IzYACNR4PEWDAoBlTkYw';
         var map = new mapboxgl.Map({
             container: 'map',
-            style: 'mapbox://styles/mapbox/satellite-streets-v11',
+            style: 'mapbox://styles/mapbox/light-v10',
             center: [26, 62.3], // starting position
             zoom: 5, // starting zoom
         });
@@ -101,6 +101,7 @@
             const marker_name = source_name + "_marker"
             const prediction_formatted = prediction + " km/h"
 
+            //add markers (kilometer prediction) source
             map.addSource(marker_source, {
                 'type': 'geojson',
                 'data': {
@@ -136,6 +137,7 @@
                 }
             });
 
+            //add markers (kilometer prediction) text layer
             map.addLayer({
                 'id': marker_name,
                 'type': 'symbol',
@@ -152,7 +154,7 @@
                     'text-anchor': 'top'
                 },
                 paint: {
-                    "text-color": "#ffffff"
+                    "text-color": "black"
                 }
             });
 

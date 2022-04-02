@@ -18,6 +18,14 @@ class GetPrediction(APIView):
         prediction.save()
         data = PredictionResponseSerializer(prediction).data
         return Response(data, status=status.HTTP_200_OK)
+    
+
+class GetGeoJson(APIView):
+    def get(self, request, roadNumber, roadSectionId):
+        geodata = DatabaseCommands.getGeoJsonForRoadSection(roadNumber, roadSectionId)
+        if(geodata is None): 
+            return Response(geodata, status=status.HTTP_404_NOT_FOUND)
+        return Response(geodata, status=status.HTTP_200_OK)
 
 
 
