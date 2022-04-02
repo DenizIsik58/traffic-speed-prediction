@@ -1,4 +1,4 @@
-name: TSP Image CI/CD
+name: tsp Image CI/CD
 
 on:
   release:
@@ -16,10 +16,10 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
-      - name: Build and Push TSP Image
+      - name: Build and Push tsp Image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
           tags: |
-            ghcr.io/denizisik58/TSP:latest
+            ghcr.io/denizisik58/tsp:latest
