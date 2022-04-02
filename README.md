@@ -5,7 +5,6 @@
 ![GitHub branch status check](https://img.shields.io/github/checks-status/denizisik58/traffic-speed-prediction/main?logo=GitHub&style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/denizisik58/traffic-speed-prediction?style=for-the-badge)
 
-## Prerequisites
 Everything in this repository is currently under development. The following information provided is used to boot up the application for development purposes or deploying the docker stack.
 ##Development
 
