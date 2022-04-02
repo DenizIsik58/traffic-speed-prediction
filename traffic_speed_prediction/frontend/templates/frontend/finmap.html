@@ -40,14 +40,16 @@
             //handle the road object fetched from the coordinates
             promise.then(function(result) {
                 const closestRoad = result.roadId;
+                const closestRoadSection = result.roadSectionId;
                 const predition = result.predictedSpeed;
 
-                console.log(result)
+                //console.log(result)
 
                 //get the full coordinates of this road
-                const newPromise = fetch_coordinates(closestRoad)
+                //const newPromise = fetch_coordinates(closestRoad)
+                const geodataPromise = fetch_geodata(closestRoad, closestRoadSection)
 
-                newPromise.then(function(newResult) {
+                geodataPromise.then(function(geodata) {
                     // Bit of a tricky path, just the way the json is formatted
                     //const finalCoords = newResult.features[0].geometry.coordinates//JSON.stringify(newResult.features)
 
@@ -57,16 +59,19 @@
                     //    numberOfRoads++;
                     //});
 
-                    const finalCoords = newResult.features
+                    //const finalCoords = newResult.features
 
-                    for (let index = 0; index <30; index++) {
-                        const element = finalCoords[index].geometry.coordinates;
-                        load_road_from_geojson(predition, numberOfRoads.toString(), numberOfRoads.toString(), element)
-                        numberOfRoads++;
-                    }
+                    //for (let index = 0; index <30; index++) {
+                    //    const element = finalCoords[index].geometry.coordinates;
+                    //    load_road_from_geojson(predition, numberOfRoads.toString(), numberOfRoads.toString(), element)
+                    //    numberOfRoads++;
+                    //}
 
                     //load_road_from_geojson(numberOfRoads.toString(), numberOfRoads.toString(), finalCoords)
                     //numberOfRoads++;
+
+                    load_road_from_geojson(predition, numberOfRoads.toString(), numberOfRoads.toString(), geodata)
+                    numberOfRoads++;
 
                     if(debug) 
                     {
@@ -198,12 +203,21 @@
         async function fetch_coordinates(roadId)
         {
             var apiPath = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/" + roadId;
-
             const response = await fetch(apiPath)
-
             const coords = await response.json();
             
             return coords;
+        }
+
+        async function fetch_geodata(roadNumber, roadSectionId)
+        {
+            // API call to the server
+            // Get the geodata of the road section
+            const apiPath = "http://127.0.0.1:8000/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId 
+            const response = await fetch(apiPath)
+            const geodata = await response.json();
+            
+            return geodata;
         }
 
         function switch_language(language) 

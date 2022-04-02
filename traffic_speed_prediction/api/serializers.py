@@ -12,7 +12,7 @@ class WeatherHistoryDataSerializer(serializers.ModelSerializer):
 class PredictionResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = PredictionResponse
-        fields = ('id', 'roadId', 'predictedSpeed')
+        fields = ('id', 'roadId', 'roadSectionId','predictedSpeed')
 
 
 class RoadSectionSerializer(serializers.HyperlinkedModelSerializer):

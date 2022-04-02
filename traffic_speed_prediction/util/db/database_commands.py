@@ -1,6 +1,7 @@
 import csv
 import json
 import requests
+import ujson
 import boto3
 from util.config.ReadConfig import Config
 from util.scraping.scraper import Scraper
@@ -104,18 +105,7 @@ class DatabaseCommands:
         la = 0
         lo = 0
 
-        print("recieved lat:")
-        print(lat2)
-        print("recieved long")
-        print(lon2)
-
-        counter = 0;
-
-        #for road_section in Road_section.objects.all():
-          #  if(road_section.lat > 0 and road_section.lon > 0):
-            #    counter = counter + 1
-
-        print(counter)
+        r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
 
         for road_section in Road_section.objects.all():
             lat1 = road_section.lat
@@ -136,7 +126,6 @@ class DatabaseCommands:
             dlat = lat2 - lat1 
             a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
             c = 2 * math.asin(math.sqrt(a)) 
-            r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
 
             temp_distance=r*c
 
@@ -152,20 +141,36 @@ class DatabaseCommands:
                 road_sect.append(int(str(road_section.weatherSymbol)[1:]))
                 road_sect.append(int(road_section.roadMaintenanceClass))
                 road_sect.append(float((road_section.freeFlowSpeed1)))
+                road_sect.append(int((road_section.road_section_number)))
                 print("found new closest road: ")
                 print(road_section.road.Road_number)
         return road_sect
     
 
     # This doesn't really have anything to do with the database, should be moved
+    # Possible improvement: Include ALL the geodata for the same road section. 
+    # Right now we only take from the first part of the road section
     def getGeoJsonForRoadSection(roadNumber, roadSectionId):
         apiPath = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/" + roadNumber;
 
-        response = requests.get(apiPath).json()
+        response = requests.get(apiPath).text
 
-        print(roadSectionId)
+        # Iterate over evert road section in the recieved json
+        for road_section in ujson.loads(response)["features"]:
+            #print("Printing debug: " + str(road_section["id"]))
+
+            #Get the total id, split it, and find just the road section id
+            index_roadID = road_section["properties"]["id"];
+            index_roadSectionId = index_roadID.split("_")[1]
+
+            #print(index_roadID, index_roadSectionId)
+
+            # If we find the correct road section, return its list of points
+            if(int(index_roadSectionId) == int(roadSectionId)):
+                return road_section["geometry"]["coordinates"]
         
-        return response
+        # If nothing is found, return none
+        return None
 
 
 
