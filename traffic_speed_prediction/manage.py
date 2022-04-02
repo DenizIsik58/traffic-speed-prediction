@@ -20,8 +20,6 @@ def main():
 
 if __name__ == '__main__':
     main()
-    from util.db.database_commands import DatabaseCommands
-    from traffic_speed_prediction.auto_ml import auto_ml
 
 
 
