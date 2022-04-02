@@ -9,7 +9,9 @@
 {% block content %}
     <!-- Css applied in a different file do not seem to apply. Must be written in header -->
     <div id='map' style='width: 100%; height: 100%; position: relative'>
-    
+        <div>
+            <p id="text">HEJ</p>
+        </div>
     </div>
 
     <script>
@@ -32,10 +34,17 @@
             map.getCanvas().style.cursor = 'pointer';
         });
 
+        map.on('mousemove', (e) => {
+            document.getElementById('footer').innerHTML = JSON.stringify(e.lngLat.wrap());
+            
+        });
+
         map.on('click', (e) => {
             mouseCoords = e.lngLat.wrap()
 
             promise = fetch_prediction(mouseCoords)
+
+            document.getElementById('footer').innerHTML = JSON.stringify(e.lngLat.wrap());
 
             //handle the road object fetched from the coordinates
             promise.then(function(result) {

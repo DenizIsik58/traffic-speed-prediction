@@ -98,7 +98,7 @@ class DatabaseCommands:
         print("PREDICTIONS: " + str(auto_ml.predict(road_sect)))
 
     @staticmethod
-    def getInfoForPredictionByLatAndLon(lat2, lon2):
+    def getInfoForPredictionByLatAndLon(lon2, lat2):
 
         nearest_distance = 10000
         road_sect = []
@@ -107,13 +107,20 @@ class DatabaseCommands:
 
         r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
 
+        print("Query points:")
+        print("Lat:", lat2)
+        print("Lon:", lon2)
+
         for road_section in Road_section.objects.all():
             lat1 = road_section.lat
             lon1 = road_section.lon
+
+            deltaLon = lat1 - lat2
+            deltaLat = lon1 - lon2
             
             #Using euclidean is faster, but is super imprecise. always gets the same result
             #temp_distance = math.sqrt(
-            #    math.pow(lat1 - lat2, 2) + math.pow(lon1 - lon2, 2)
+            #    deltaLon*deltaLon+ deltaLat*deltaLat
             #)
 
             #print("recieved lat:")
@@ -131,6 +138,7 @@ class DatabaseCommands:
 
             #print(meters)
             if nearest_distance > temp_distance:
+                print(temp_distance)
                 la = road_section.lat
                 lo = road_section.lon
                 road_sect.clear()
@@ -143,7 +151,9 @@ class DatabaseCommands:
                 road_sect.append(float((road_section.freeFlowSpeed1)))
                 road_sect.append(int((road_section.road_section_number)))
                 print("found new closest road: ")
-                print(road_section.road.Road_number)
+                print(road_section.road.Road_number, road_section.road_section_number)
+
+        print("lat, long of closest road: ", la, lo)
         return road_sect
     
 
