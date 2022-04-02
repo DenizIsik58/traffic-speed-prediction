@@ -2,19 +2,13 @@ version: '3.9'
 
 volumes:
   db_data:
-  grafana-storage:
-  setup:
-  elasticsearch:
-  postgres_data:
 
 services:
 
   app:
-    container_name: ghrc.io/denizisik58/tsp:latest
+    image: ghcr.io/denizisik58/tsp:latest
     volumes:
       - .:/app
-    env_file:
-      - ./.env
     restart: always
     ports:
       - "8000:8000"
@@ -23,14 +17,12 @@ services:
       && python3 traffic_speed_prediction/manage.py migrate
       && python3 traffic_speed_prediction/manage.py runserver 0.0.0.0:8000"
     depends_on:
-      db:
-        condition: service_healthy
+      - db
 
   db:
     image: postgres
-    container_name: db
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - db_data:/var/lib/postgresql/data/
     restart: always
     env_file:
       - ./.env
@@ -48,10 +40,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       IMAGE_AUTOCLEAN_LIMIT: 3
-      IGNORELIST_SERVICES: 'shepherd db'
+      IGNORELIST_SERVICES: 'tsp_shepherd tsp_db'
       TZ: Europe/Copenhagen
     deploy:
       placement:
         constraints:
           - node.role == manager
-
