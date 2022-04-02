@@ -25,7 +25,7 @@
 
         //just for getting things rolling
         var numberOfRoads = 0;
-        var debug = true;
+        var debug = false;
 
         //would be very cool to save this to localStorage
         var selectedRoads = []
@@ -87,7 +87,7 @@
                         console.log("THE ROAD WE ARE LOOKING FOR HAS ID: " + result.toadId)
                         console.log("Coords at mouse: " + mouseCoords);
                         console.log("closestRoad: " + closestRoad)
-                        console.log("Coords of road: " + newResult.features[0].geometry.coordinates)
+                        //console.log("Coords of road: " + newResult.features[0].geometry.coordinates)
                     }
                 })
             })

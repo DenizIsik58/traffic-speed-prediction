@@ -158,12 +158,11 @@ class DatabaseCommands:
     
 
     # This doesn't really have anything to do with the database, should be moved
-    # Possible improvement: Include ALL the geodata for the same road section. 
-    # Right now we only take from the first part of the road section
     def getGeoJsonForRoadSection(roadNumber, roadSectionId):
         apiPath = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/" + roadNumber;
 
         response = requests.get(apiPath).text
+        allSectionsData = []
 
         # Iterate over evert road section in the recieved json
         for road_section in ujson.loads(response)["features"]:
@@ -177,8 +176,13 @@ class DatabaseCommands:
 
             # If we find the correct road section, return its list of points
             if(int(index_roadSectionId) == int(roadSectionId)):
-                return road_section["geometry"]["coordinates"]
+                for element in road_section["geometry"]["coordinates"]:
+                    allSectionsData.append(element)
+                #allSectionsData.append(road_section["geometry"]["coordinates"])
+                #return road_section["geometry"]["coordinates"]
         
+        return allSectionsData
+
         # If nothing is found, return none
         return None
 
