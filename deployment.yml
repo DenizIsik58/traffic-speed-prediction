@@ -25,14 +25,9 @@ services:
       - db_data:/var/lib/postgresql/data/
     restart: always
     env_file:
-      - ./.env
+      - .env
     ports:
       - "5432:5432"
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
-      interval: 5s
-      timeout: 5s
-      retries: 5
 
   shepherd:
     image: mazzolino/shepherd
