@@ -16,8 +16,8 @@ services:
       && python3 traffic_speed_prediction/manage.py migrate
       && python3 traffic_speed_prediction/manage.py runserver 0.0.0.0:8000"
     depends_on:
-      db:
-        condition: service_healthy
+      - db
+
   db:
     image: postgres
     container_name: db
