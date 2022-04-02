@@ -31,13 +31,11 @@ You should now be able to visit https://localhost:8000
 ## .ENV
 A .env file can be found in the source code in the following format:
 ```
-POSTGRES_USER="postgres"
-POSTGRES_PASSWORD="<password>"
-POSTGRES_DB="<dbname>"
-POSTGRES_HOST="db"
-ConnectionString_TSP:"Server=db;Database=<dbname>;UserId=postgres;Password=<password>"
+POSTGRES_USER=<username>
+POSTGRES_PASSWORD=<password>
+POSTGRES_DB=<dbname>
+POSTGRES_HOST=db
 ```
-Make sure to change the credentials inside the `traffic_speed_prediction/settings.py` file so they match.
 
 ## Contributors
 - Adrian Bay Dorph
