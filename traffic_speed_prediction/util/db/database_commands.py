@@ -119,9 +119,9 @@ class DatabaseCommands:
             deltaLat = lon1 - lon2
             
             #Using euclidean is faster, but is super imprecise. always gets the same result
-            #temp_distance = math.sqrt(
-            #    deltaLon*deltaLon+ deltaLat*deltaLat
-            #)
+            temp_distance = math.sqrt(
+                deltaLon*deltaLon+ deltaLat*deltaLat
+            )
 
             #print("recieved lat:")
             #print(lat2)
@@ -129,12 +129,12 @@ class DatabaseCommands:
             #print(lon2)
 
             # Haversine distance between coordinaates
-            dlon = lon2 - lon1 
-            dlat = lat2 - lat1 
-            a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
-            c = 2 * math.asin(math.sqrt(a)) 
+            #dlon = lon2 - lon1 
+            #dlat = lat2 - lat1 
+            #a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+            #c = 2 * math.asin(math.sqrt(a)) 
 
-            temp_distance=r*c
+            #temp_distance=r*c
 
             #print(meters)
             if nearest_distance > temp_distance:
