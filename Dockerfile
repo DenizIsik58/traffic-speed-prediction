@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM ubuntu:latest
 
 # Make and set the directorties and copy all our files into the docker container
 RUN mkdir /app
@@ -6,17 +6,23 @@ WORKDIR /app
 COPY . .
 
 # Update the packagemanager and add python3 + pip3
-RUN apk add --update
-RUN apk add python3
-RUN python3 -m ensurepip
+RUN apt-get update \
+  && apt-get install -y python3-pip python3-dev \
+  && apt-get install -y postgresql-server-dev-all \
+  && cd /usr/local/bin \
+  && ln -s /usr/bin/python3 python \
+  && pip3 install --upgrade pip \
+  && cd ~ \
+  && cd /app
 
-RUN pip3 install pip --upgrade
+ENV DEBIAN_FRONTEND noninteractive
+RUN pip3 install -U scikit-learn
+RUN apt update && apt install -y tcl
 
-
-RUN apk update
-RUN apk add postgresql-dev gcc python3-dev musl-dev
-
+RUN apt-get update
+RUN apt-get install -y python3-numpy python3-scipy python3-matplotlib python3-pandas python3-sympy python3-nose
 RUN pip3 install -r requirements.txt
+RUN apt-get install -y bash
 
 # Expose port 8000 for the container
 EXPOSE 8000
