@@ -70,46 +70,11 @@ class DatabaseCommands:
             file.close()
 
     @staticmethod
-    def getNearestCoordsAndPredictions(lat, lon):
-
-        nearest_distance = 10000
-        road_sect = []
-        la = 0
-        lo = 0
-
-        for road_section in Road_section.objects.all():
-            temp_distance = math.sqrt(
-                math.pow(road_section.lat - lat, 2) + math.pow(road_section.lon - lon, 2))
-            if nearest_distance > temp_distance:
-                la = road_section.lat
-                lo = road_section.lon
-                road_sect.clear()
-                nearest_distance = temp_distance
-                road_sect.append(road_section.road.Road_number)
-                road_sect.append(float(str((road_section.roadTemperature).replace("+", ""))))
-                road_sect.append(int(road_section.daylight))
-                road_sect.append(int(str(road_section.weatherSymbol)[1:]))
-                road_sect.append(int(road_section.roadMaintenanceClass))
-                road_sect.append(float((road_section.freeFlowSpeed1)))
-                print(road_section.road.Road_number)
-        print(road_sect)
-        print("NEAREST: " + str(nearest_distance))
-        print("LAT: " + str(la) + " LON: " + str(lo))
-        print("PREDICTIONS: " + str(auto_ml.predict(road_sect)))
-
-    @staticmethod
     def getInfoForPredictionByLatAndLon(lon2, lat2):
-
         nearest_distance = 10000
         road_sect = []
-        la = 0
-        lo = 0
 
-        r = 6371 # Radius of earth in kilometers. Use 3956 for miles. Determines return value units.
-
-        print("Query points:")
-        print("Lat:", lat2)
-        print("Lon:", lon2)
+        usingHaversine = False;
 
         for road_section in Road_section.objects.all():
             lat1 = road_section.lat
@@ -118,29 +83,22 @@ class DatabaseCommands:
             deltaLon = lat1 - lat2
             deltaLat = lon1 - lon2
             
-            #Using euclidean is faster, but is super imprecise. always gets the same result
-            temp_distance = math.sqrt(
-                deltaLon*deltaLon+ deltaLat*deltaLat
-            )
+            if(usingHaversine):
+                # Haversine distance between coordinaates
+                dlon = lon2 - lon1 
+                dlat = lat2 - lat1 
+                a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+                c = 2 * math.asin(math.sqrt(a)) 
 
-            #print("recieved lat:")
-            #print(lat2)
-            #print("recieved long")
-            #print(lon2)
+                #6371 is in kilometers. Multiply with 1000 for meters
+                temp_distance = c*6371
+            else:
+                #Using euclidean is faster, but not as accurtae. Works without problem on area as small as Finland
+                temp_distance = math.sqrt(
+                    deltaLon*deltaLon+ deltaLat*deltaLat
+                )
 
-            # Haversine distance between coordinaates
-            #dlon = lon2 - lon1 
-            #dlat = lat2 - lat1 
-            #a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
-            #c = 2 * math.asin(math.sqrt(a)) 
-
-            #temp_distance=r*c
-
-            #print(meters)
             if nearest_distance > temp_distance:
-                print(temp_distance)
-                la = road_section.lat
-                lo = road_section.lon
                 road_sect.clear()
                 nearest_distance = temp_distance
                 road_sect.append(road_section.road.Road_number)
@@ -150,10 +108,7 @@ class DatabaseCommands:
                 road_sect.append(int(road_section.roadMaintenanceClass))
                 road_sect.append(float((road_section.freeFlowSpeed1)))
                 road_sect.append(int((road_section.road_section_number)))
-                print("found new closest road: ")
-                print(road_section.road.Road_number, road_section.road_section_number)
 
-        print("lat, long of closest road: ", la, lo)
         return road_sect
     
 
@@ -166,20 +121,15 @@ class DatabaseCommands:
 
         # Iterate over evert road section in the recieved json
         for road_section in ujson.loads(response)["features"]:
-            #print("Printing debug: " + str(road_section["id"]))
 
             #Get the total id, split it, and find just the road section id
             index_roadID = road_section["properties"]["id"];
             index_roadSectionId = index_roadID.split("_")[1]
 
-            #print(index_roadID, index_roadSectionId)
-
             # If we find the correct road section, return its list of points
             if(int(index_roadSectionId) == int(roadSectionId)):
                 for element in road_section["geometry"]["coordinates"]:
                     allSectionsData.append(element)
-                #allSectionsData.append(road_section["geometry"]["coordinates"])
-                #return road_section["geometry"]["coordinates"]
         
         # If nothing is found, return none
         if(len(allSectionsData) > 0):
