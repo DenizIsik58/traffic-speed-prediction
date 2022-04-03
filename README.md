@@ -6,6 +6,7 @@
 ![GitHub](https://img.shields.io/github/license/denizisik58/traffic-speed-prediction?style=for-the-badge)
 
 Everything in this repository is currently under development. The following information provided is used to boot up the application for development purposes or deploying the docker stack.
+
 ##Development
 
 ### Prerequisites
