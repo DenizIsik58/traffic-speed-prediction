@@ -181,10 +181,11 @@ class DatabaseCommands:
                 #allSectionsData.append(road_section["geometry"]["coordinates"])
                 #return road_section["geometry"]["coordinates"]
         
-        return allSectionsData
-
         # If nothing is found, return none
-        return None
+        if(len(allSectionsData) > 0):
+            return allSectionsData
+        else:
+             return None
 
 
 
