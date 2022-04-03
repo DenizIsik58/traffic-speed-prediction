@@ -6,7 +6,8 @@
 ![GitHub](https://img.shields.io/github/license/denizisik58/traffic-speed-prediction?style=for-the-badge)
 
 Everything in this repository is currently under development. The following information provided is used to boot up the application for development purposes or deploying the docker stack.
-##Development
+
+## Development
 
 ### Prerequisites
 Make sure to have the following software installed before running the application:
@@ -18,7 +19,7 @@ In order to run the application manually, use the following command:
 
 ```docker-compose up -d```
 
-Please keep in mind that docker doesn't provide docker-compose binary in some operating systems and could therefore be a reason for the command to fail. In that case you need to manually install it.
+Please keep in mind that docker doesn't provide docker-compose binary for some operating systems, and could therefore be a reason for the command to fail. In that case, you'll need to manually install it.
 
 ### Installation via scripts
 
@@ -41,10 +42,10 @@ POSTGRES_HOST=db
 
 ## Continuous deployment
 
-Everytime the development team has published a released, a new docker image for the application will be built and pushed to GitHub package registry using GitHub actions. The docker stack is managed by shepherd which will check for new package version every 5 minutes. 
+Every time the development team publishes a release, a new docker image for the application will be built and pushed to **GitHub package registry** using GitHub actions. The docker stack is managed by **shepherd**, which will check for new package version every 5 minutes and update the application on the host machine. 
 
 
-###Deploying the stack
+### Deploying the stack
 
 `sudo docker swarm init`
 
