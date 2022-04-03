@@ -17,4 +17,5 @@ urlpatterns = [
     path('delete-whd/<int:pk>/', DeleteWeatherHistoryData.as_view()),
 
     path('get-pred&lat=<str:lat>&lon=<str:lon>', GetPrediction.as_view()),
+    path('get-geojson&roadNumber=<str:roadNumber>&roadSectionId=<str:roadSectionId>', GetGeoJson.as_view()),
 ]

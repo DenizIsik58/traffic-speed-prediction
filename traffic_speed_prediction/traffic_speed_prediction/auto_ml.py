@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
@@ -9,7 +10,8 @@ class auto_ml:
     @staticmethod
     def train():
         global model
-        dataset = pd.read_csv('../BigData.csv')
+            
+        dataset = pd.read_csv("BigData.csv")
 
         x = dataset.drop(columns=['average_speed'])
         y = dataset['average_speed']

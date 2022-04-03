@@ -1,5 +1,7 @@
 import csv
 import json
+import requests
+import ujson
 import boto3
 from util.config.ReadConfig import Config
 from util.scraping.scraper import Scraper
@@ -9,38 +11,6 @@ from traffic_speed_prediction.auto_ml import auto_ml
 
 
 class DatabaseCommands:
-    # TODO: Make a class with commands for the DB
-
-    # Put item in table
-    def __init__(self):
-        pass
-
-    @staticmethod
-    def insert_to_database(object: json, table_name: str):
-        if table_name == "roads":
-            table_name = Config.read_secrets()["secrets"]["table_names"]["road_table"]
-        elif table_name == "tms":
-            table_name = Config.read_secrets()["secrets"]["table_names"]["station_table"]
-        # global keyword can be used here to look for variables out of scope
-        resource_db = boto3.resource(
-            service_name='dynamodb',
-            aws_access_key_id=Config.read_secrets()["secrets"]["aws_access_key_id"],
-            aws_secret_access_key=Config.read_secrets()["secrets"]["aws_secret_access_key"],
-            region_name=Config.read_secrets()["secrets"]["region_name"]
-        )
-
-        # Dynamodb table
-        table = resource_db.Table(table_name)
-        table.put_item(
-            # Data to be inserted
-            Item={
-                'Id': object["id"],
-                'roadstation_id': object["roadStationId"],
-                'average_speed': object["sensorValue"],
-                'date': object["date"],
-                'time': object["time"],
-            }
-        )
 
     @staticmethod
     def load_database():
@@ -68,19 +38,35 @@ class DatabaseCommands:
             file.close()
 
     @staticmethod
-    def getNearestCoordsAndPredictions(lat, lon):
-
+    def getInfoForPredictionByLatAndLon(lon2, lat2):
         nearest_distance = 10000
         road_sect = []
-        la = 0
-        lo = 0
+
+        usingHaversine = False;
 
         for road_section in Road_section.objects.all():
-            temp_distance = math.sqrt(
-                math.pow(road_section.lat - lat, 2) + math.pow(road_section.lon - lon, 2))
+            lat1 = road_section.lat
+            lon1 = road_section.lon
+
+            deltaLon = lat1 - lat2
+            deltaLat = lon1 - lon2
+            
+            if(usingHaversine):
+                # Haversine distance between coordinaates
+                dlon = lon2 - lon1 
+                dlat = lat2 - lat1 
+                a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
+                c = 2 * math.asin(math.sqrt(a)) 
+
+                #6371 is in kilometers. Multiply with 1000 for meters
+                temp_distance = c*6371
+            else:
+                #Using euclidean is faster, but not as accurtae. Works without problem on area as small as Finland
+                temp_distance = math.sqrt(
+                    deltaLon*deltaLon+ deltaLat*deltaLat
+                )
+
             if nearest_distance > temp_distance:
-                la = road_section.lat
-                lo = road_section.lon
                 road_sect.clear()
                 nearest_distance = temp_distance
                 road_sect.append(road_section.road.Road_number)
@@ -89,37 +75,6 @@ class DatabaseCommands:
                 road_sect.append(int(str(road_section.weatherSymbol)[1:]))
                 road_sect.append(int(road_section.roadMaintenanceClass))
                 road_sect.append(float((road_section.freeFlowSpeed1)))
-                #print(road_section.road.Road_number)
-        print(road_sect)
-        print("NEAREST: " + str(nearest_distance))
-        print("LAT: " + str(la) + " LON: " + str(lo))
-        print("PREDICTIONS: " + str(auto_ml.predict(road_sect)))
+                road_sect.append(int((road_section.road_section_number)))
 
-    @staticmethod
-    def getInfoForPredictionByLatAndLon(lat, lon):
-
-        nearest_distance = 10000
-        road_sect = []
-        la = 0
-        lo = 0
-
-        for road_section in Road_section.objects.all():
-            temp_distance = math.sqrt(
-                math.pow(road_section.lat - lat, 2) + math.pow(road_section.lon - lon, 2))
-            if nearest_distance > temp_distance:
-                la = road_section.lat
-                lo = road_section.lon
-                road_sect.clear()
-                nearest_distance = temp_distance
-                road_sect.append(road_section.road.Road_number)
-                road_sect.append(float(str((road_section.roadTemperature).replace("+", ""))))
-                road_sect.append(int(road_section.daylight))
-                road_sect.append(int(str(road_section.weatherSymbol)[1:]))
-                road_sect.append(int(road_section.roadMaintenanceClass))
-                road_sect.append(float((road_section.freeFlowSpeed1)))
-                #print(road_section.road.Road_number)
         return road_sect
-
-
-
-
