@@ -76,9 +76,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'traffic_speed_prediction.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 DATABASES = {
 
@@ -86,13 +89,13 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': "testdb",
+        'NAME': os.getenv('POSTGRES_DB'),
 
-        'USER': 'postgres',
+        'USER': os.getenv('POSTGRES_USER'),
 
-        'PASSWORD': '1234',
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
 
-        'HOST': 'localhost',
+        'HOST': os.getenv('POSTGRES_HOST'),
 
         'PORT': '5432',
 
