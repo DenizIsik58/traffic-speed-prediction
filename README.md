@@ -19,7 +19,7 @@ In order to run the application manually, use the following command:
 
 ```docker-compose up -d```
 
-Please keep in mind that docker doesn't provide docker-compose binary in some operating systems and could therefore be a reason for the command to fail. In that case you need to manually install it.
+Please keep in mind that docker doesn't provide docker-compose binary for some operating systems, and could therefore be a reason for the command to fail. In that case, you'll need to manually install it.
 
 ### Installation via scripts
 
@@ -42,7 +42,7 @@ POSTGRES_HOST=db
 
 ## Continuous deployment
 
-Every time the development team publishes a release, a new docker image for the application will be built and pushed to **GitHub package registry** using GitHub actions. The docker stack is managed by **shepherd** which will check for new package version every 5 minutes and update the application on the host machine. 
+Every time the development team publishes a release, a new docker image for the application will be built and pushed to **GitHub package registry** using GitHub actions. The docker stack is managed by **shepherd**, which will check for new package version every 5 minutes and update the application on the host machine. 
 
 
 ### Deploying the stack
