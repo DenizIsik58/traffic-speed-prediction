@@ -7,7 +7,7 @@
 
 Everything in this repository is currently under development. The following information provided is used to boot up the application for development purposes or deploying the docker stack.
 
-##Development
+## Development
 
 ### Prerequisites
 Make sure to have the following software installed before running the application:
@@ -45,7 +45,7 @@ POSTGRES_HOST=db
 Everytime the development team has published a released, a new docker image for the application will be built and pushed to GitHub package registry using GitHub actions. The docker stack is managed by shepherd which will check for new package version every 5 minutes. 
 
 
-###Deploying the stack
+### Deploying the stack
 
 `sudo docker swarm init`
 
