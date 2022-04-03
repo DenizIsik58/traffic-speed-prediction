@@ -105,3 +105,30 @@ class Scraper:
                                     break
                         except:
                             break
+    
+    @staticmethod
+    def getGeoJsonForRoadSection(roadNumber, roadSectionId):
+        apiPath = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/" + roadNumber;
+
+        response = requests.get(apiPath).text
+        allSectionsData = []
+
+        # Iterate over evert road section in the recieved json
+        for road_section in ujson.loads(response)["features"]:
+
+            #Get the total id, split it, and find just the road section id
+            index_roadID = road_section["properties"]["id"]
+            index_roadSectionId = index_roadID.split("_")[1]
+
+            # If we find the correct road section, return its list of points
+            # A road section can appear multiple times, as it is split into smaller segments
+            # We ignore this, and just find the entire road section
+            if(int(index_roadSectionId) == int(roadSectionId)):
+                for element in road_section["geometry"]["coordinates"]:
+                    allSectionsData.append(element)
+        
+        # If nothing is found, return none
+        if(len(allSectionsData) > 0):
+            return allSectionsData
+        else:
+             return None

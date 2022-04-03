@@ -1,4 +1,6 @@
 from rest_framework import generics, status
+
+from util.scraping.scraper import Scraper
 from .serializers import PredictionResponseSerializer
 from .models import PredictionResponse, Road_section
 from rest_framework.views import APIView
@@ -22,7 +24,7 @@ class GetPrediction(APIView):
 
 class GetGeoJson(APIView):
     def get(self, request, roadNumber, roadSectionId):
-        geodata = DatabaseCommands.getGeoJsonForRoadSection(roadNumber, roadSectionId)
+        geodata = Scraper.getGeoJsonForRoadSection(roadNumber, roadSectionId)
 
         # geodata is only none if the road section couldn't be found for the roadNumber
         if(geodata is None): 
