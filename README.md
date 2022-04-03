@@ -42,7 +42,7 @@ POSTGRES_HOST=db
 
 ## Continuous deployment
 
-Everytime the development team has published a released, a new docker image for the application will be built and pushed to GitHub package registry using GitHub actions. The docker stack is managed by shepherd which will check for new package version every 5 minutes. 
+Every time the development team publishes a release, a new docker image for the application will be built and pushed to **GitHub package registry** using GitHub actions. The docker stack is managed by **shepherd** which will check for new package version every 5 minutes and update the application on the host machine. 
 
 
 ### Deploying the stack
