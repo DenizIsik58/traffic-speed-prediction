@@ -21,6 +21,8 @@ def main():
 if __name__ == '__main__':
     main()
     from traffic_speed_prediction.auto_ml import auto_ml
+    from traffic_speed_prediction.util.db.database_commands import DatabaseCommands
+    DatabaseCommands.load_database()
     print("STARTING TO TRAIN MODEL!!!!!!!!")
     auto_ml.train()
 
