@@ -20,5 +20,11 @@ def main():
 
 if __name__ == '__main__':
     main()
+    from traffic_speed_prediction.auto_ml import auto_ml
+    auto_ml.train()
+
+
+
+
 
 
