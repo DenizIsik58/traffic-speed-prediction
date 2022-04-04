@@ -21,6 +21,7 @@ def main():
 if __name__ == '__main__':
     main()
     from traffic_speed_prediction.auto_ml import auto_ml
+    print("STARTING TO TRAIN MODEL!!!!!!!!")
     auto_ml.train()
 
 
