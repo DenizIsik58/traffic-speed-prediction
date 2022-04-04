@@ -5,23 +5,35 @@
             let lon = document.getElementById(("lonInput")).value
             let label = document.getElementById("predictionLabel")
 
-            label.innerHTML = "Latitude is " + lat + "Longitude is " + lon
-            console.log("Latitude is " + lat + "Longitude is " + lon)
-
-            method = "api/get-pred" + "&lat=" + lat + "&lon="+ lon
-
+            let host = "http://localhost:8000"
+            let method = `api/get-pred`
+            let params = `lat=${lat}&lon=${lon}`
+            let url = host + "/" + method + "&" + params
 
             const request = {
                 method: "GET",
-                headers: {"Content-Type": "application/jason"},
+                headers: {"Content-Type": "application/json"},
             }
-            fetch(method, request)
-                .then((response) => {
+
+            fetch(url, request)
+                .then(response => {
                     if (response.ok) {
-                        label.innerHTML = "GOT A NICE RESPONSE:\n" + response + "\n_=_=_="
+                        response.json().then(data => {
+                        console.log(data)
+                        label.innerHTML =
+                            `On road with id: ${data.roadId}<br>
+                             You can drive ${data.predictedSpeed} km/h`
+                        })
                     } else {
-                        label.innerHTML = "ERROR:\n" + response + "\n_!_!_!"
+                        label.innerHTML = "BAD REQUEST"
                     }
+                })
+                .catch((err) => {
+                    console.log(err)
+                    console.log("Could not send:")
+                    console.log(request)
+                    console.log("To: " + url)
+                    label.innerHTML = "SOMETHING WENT WRONG... PLEASE TRY AGAIN"
                 })
         }
     </script>
@@ -33,6 +45,6 @@
     <input id="lonInput" type ="text">
 
     <button onclick="event.preventDefault(); getPrediction();">Get a prediction!</button>
-    <label id="predictionLabel">Hola perra</label>
+    <p id="predictionLabel"></p>
 </form>
 
