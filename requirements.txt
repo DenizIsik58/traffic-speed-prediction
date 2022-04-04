@@ -57,3 +57,4 @@ yarl==1.7.2
 scikit-learn~=1.0.2
 python-dotenv~=0.20.0
 auto-sklearn==0.14.6
+django-cors-headers==3.11.0
