@@ -25,7 +25,7 @@
 
         //just for getting things rolling
         var numberOfRoads = 0;
-        var debug = false;
+        var debug = true;
 
         //would be very cool to save this to localStorage
         var selectedRoads = []
@@ -58,11 +58,15 @@
                     load_road_from_geojson(predition, numberOfRoads.toString(), numberOfRoads.toString(), geodata)
                     numberOfRoads++;
 
+                    const newRoad = [closestRoad, closestRoadSection]
+                    selectedRoads.push(newRoad)
+
                     if(debug) 
                     {
                         console.log("THE ROAD WE ARE LOOKING FOR HAS ID: " + result.toadId)
                         console.log("Coords at mouse: " + mouseCoords);
                         console.log("closestRoad: " + closestRoad)
+                        console.log("" + selectedRoads)
                     }
                 })
             })
@@ -169,7 +173,7 @@
             }
             
             //this would be cleaner with string formatting, but I couldnt get it to work
-            const apiPath = "https://tsp.hostanything.org/api/get-pred&lat=" + lat + "&lon=" + lon 
+            const apiPath = "http://localhost:8000/api/get-pred&lat=" + lat + "&lon=" + lon 
 
             const response = await fetch(apiPath)
                 
@@ -192,7 +196,7 @@
         {
             // API call to the server
             // Get the geodata of the road section
-            const apiPath = "https://tsp.hostanything.org/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId 
+            const apiPath = "http://localhost:8000/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId 
             const response = await fetch(apiPath)
             const geodata = await response.json();
             
