@@ -5,7 +5,7 @@ class Config:
 
     @staticmethod
     def read_config():
-        with open("traffic_speed_prediction/data.json") as file:
+        with open("traffic_speed_prediction/data.json", "r") as file:
             return ujson.load(file)
 
     @staticmethod
