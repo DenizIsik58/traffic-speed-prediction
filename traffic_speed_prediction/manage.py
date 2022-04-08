@@ -20,5 +20,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+    from traffic_speed_prediction.auto_ml import auto_ml
+    auto_ml.train()
+    #road_section = [847, 2.1, 1, 400, 2, 75.0]
+    #print(auto_ml.predict(road_section))
 
 
