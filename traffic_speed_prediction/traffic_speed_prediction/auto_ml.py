@@ -15,8 +15,7 @@ class auto_ml:
     @staticmethod
     def train():
         global model
-            
-        dataset = pd.read_csv("BigData.csv")
+        dataset = pd.read_csv('traffic_speed_prediction/BigData.csv')
 
         x = dataset.drop(columns=['average_speed'])
         y = dataset['average_speed']

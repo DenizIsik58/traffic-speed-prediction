@@ -25,4 +25,12 @@ if __name__ == '__main__':
     #road_section = [847, 2.1, 1, 400, 2, 75.0]
     #print(auto_ml.predict(road_section))
 
+   #from util.db.database_commands import DatabaseCommands
+    #from traffic_speed_prediction.auto_ml import auto_ml
+    #DatabaseCommands.load_database()
+    #DatabaseCommands.extract_data_and_write_to_csv()
+    #auto_ml.train()
+    #DatabaseCommands.getNearestCoordsAndPredictions(25.759138, 62.24248)
+    #DatabaseCommands.getNearestCoordsAndPredictions(30.622457, 62.171684)
+
 
