@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import aboutUs, index, finmap, apiSite, itu, solita
+from .views import *
 
 urlpatterns = [
     path('', finmap, name="index"),
@@ -8,4 +8,5 @@ urlpatterns = [
     path('solita/', solita, name="solita"),
     path('itu/', itu, name="itu"),
     path('about/', aboutUs, name="aboutUs"),
+    path('predictions/', predictions, name="predictions"),
 ]
