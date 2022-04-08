@@ -37,7 +37,3 @@ class PredictionResponse(models.Model):
     predictedSpeed = models.FloatField(default=0)
 
 
-
-
-
-
