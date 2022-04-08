@@ -5,9 +5,6 @@ class Config:
 
     @staticmethod
     def read_config():
-
-        import pathlib
-
         with open("traffic_speed_prediction/data.json") as file:
             return ujson.load(file)
 
