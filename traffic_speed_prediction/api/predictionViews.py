@@ -13,7 +13,9 @@ class GetPrediction(APIView):
     def get(self, request, lat=None, lon=None):
         auto_ml.train()
         dataToPredict = DatabaseCommands.getInfoForPredictionByLatAndLon(float(lat), float(lon))
+        print("The value of dataToPredict is" + str(dataToPredict))
         predictedSpeed = auto_ml.predict(dataToPredict)
+        print(predictedSpeed)
         prediction = PredictionResponse(roadId=dataToPredict[0], predictedSpeed=predictedSpeed)
         prediction.save()
         data = PredictionResponseSerializer(prediction).data
