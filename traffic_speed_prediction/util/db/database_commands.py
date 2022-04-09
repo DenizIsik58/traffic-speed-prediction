@@ -40,9 +40,10 @@ class DatabaseCommands:
     @staticmethod
     def getInfoForPredictionByLatAndLon(lon2, lat2):
         nearest_distance = 10000
-        road_sect = []
+        road_section_id = -1
+        road_number = -1
 
-        usingHaversine = False;
+        usingHaversine = False
 
         for road_section in Road_section.objects.all():
             lat1 = road_section.lat
@@ -53,7 +54,7 @@ class DatabaseCommands:
             
             if(usingHaversine):
                 # Haversine distance between coordinaates
-                dlon = lon2 - lon1 
+                dlon = lon2 - lon1
                 dlat = lat2 - lat1 
                 a = math.sin(dlat/2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlon/2)**2
                 c = 2 * math.asin(math.sqrt(a)) 
@@ -63,48 +64,13 @@ class DatabaseCommands:
             else:
                 #Using euclidean is faster, but not as accurtae. Works without problem on area as small as Finland
                 temp_distance = math.sqrt(
-                    deltaLon*deltaLon+ deltaLat*deltaLat
+                    deltaLon*deltaLon + deltaLat*deltaLat
                 )
 
             if nearest_distance > temp_distance:
-                road_sect.clear()
-                nearest_distance = temp_distance
-                road_sect.append(road_section.road.Road_number)
-                road_sect.append(float(str((road_section.roadTemperature).replace("+", ""))))
-                road_sect.append(int(road_section.daylight))
-                road_sect.append(int(str(road_section.weatherSymbol)[1:]))
-                road_sect.append(int(road_section.roadMaintenanceClass))
-                road_sect.append(float((road_section.freeFlowSpeed1)))
-                #print(road_section.road.Road_number)
-        print(road_sect)
-        print("NEAREST: " + str(nearest_distance))
-        print("LAT: " + str(la) + " LON: " + str(lo))
-        print("PREDICTIONS: " + str(auto_ml.predict(road_sect)))
+                road_section_id = road_section.road_section_number
+            return (road_number, road_section_id)
 
-    @staticmethod
-    def getInfoForPredictionByLatAndLon(lat, lon):
-
-        nearest_distance = 10000
-        road_sect = []
-        la = 0
-        lo = 0
-
-        for road_section in Road_section.objects.all():
-            temp_distance = math.sqrt(
-                math.pow(road_section.lat - lat, 2) + math.pow(road_section.lon - lon, 2))
-            if nearest_distance > temp_distance:
-                la = road_section.lat
-                lo = road_section.lon
-                road_sect.clear()
-                nearest_distance = temp_distance
-                road_sect.append(road_section.road.Road_number)
-                road_sect.append(float(str((road_section.roadTemperature).replace("+", ""))))
-                road_sect.append(int(road_section.daylight))
-                road_sect.append(int(str(road_section.weatherSymbol)[1:]))
-                road_sect.append(int(road_section.roadMaintenanceClass))
-                road_sect.append(float((road_section.freeFlowSpeed1)))
-                #print(road_section.road.Road_number)
-        return road_sect
 
 
 

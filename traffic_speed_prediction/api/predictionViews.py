@@ -13,10 +13,11 @@ class GetPrediction(APIView):
     serializer_class = PredictionResponseSerializer
 
     def get(self, request, lat=None, lon=None):
-        auto_ml.train()
-        dataToPredict = DatabaseCommands.getInfoForPredictionByLatAndLon(float(lat), float(lon))
-        predictedSpeed = auto_ml.predict(dataToPredict)
-        prediction = PredictionResponse(roadId=dataToPredict[0], roadSectionId=dataToPredict[6], predictedSpeed=predictedSpeed)
+        road_data = DatabaseCommands.getInfoForPredictionByLatAndLon(float(lat), float(lon))
+        # Fetch live data and make prediction based on that
+        data_to_predict = Scraper.get_road_section_info_by_id(road_data[0], road_data[1])
+        predictedSpeed = auto_ml.predict(data_to_predict)
+        prediction = PredictionResponse(roadId=data_to_predict[0], roadSectionId=data_to_predict[6], predictedSpeed=predictedSpeed)
         prediction.save()
         data = PredictionResponseSerializer(prediction).data
         return Response(data, status=status.HTTP_200_OK)
