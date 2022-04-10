@@ -101,9 +101,7 @@ class Scraper:
                         break
 
     @staticmethod
-    def get_live_road_section_info_by_id(road_number: string, road_section_id: string):
-        print("STARTING TO GET DATA FOR ROAD NUMBER " + road_number + " TIME: " + str(datetime.datetime.now()))
-
+    def get_live_road_section_info_by_id(road_number, road_section_id):
         road_section = []
 
         for road_condition in \
