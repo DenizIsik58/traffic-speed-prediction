@@ -38,6 +38,7 @@ POSTGRES_USER=<username>
 POSTGRES_PASSWORD=<password>
 POSTGRES_DB=<dbname>
 POSTGRES_HOST=db
+SECRET_KEY=<a strong auto generated key (should be 100+ characters long)>
 ```
 
 ## Continuous deployment
