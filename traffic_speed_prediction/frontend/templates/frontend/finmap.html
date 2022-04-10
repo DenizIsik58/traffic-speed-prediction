@@ -169,7 +169,7 @@ l
             }
             
             //this would be cleaner with string formatting, but I couldnt get it to work
-            const apiPath = "https://tsp.hostanything.org/api/get-pred&lat=" + lat + "&lon=" + lon 
+            const apiPath = "http://localhost:8000/api/get-pred&lat=" + lat + "&lon=" + lon
 
             const response = await fetch(apiPath)
                 
@@ -192,7 +192,7 @@ l
         {
             // API call to the server
             // Get the geodata of the road section
-            const apiPath = "https://tsp.hostanything.org/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId 
+            const apiPath = "http://localhost:8000/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
             const response = await fetch(apiPath)
             const geodata = await response.json();
             
