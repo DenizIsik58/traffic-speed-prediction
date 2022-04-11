@@ -17,7 +17,6 @@ def get_weather_station_data(id) :
     for item in data['weatherStations'][0]['sensorValues']:
         sid = item['id']
         sname = item['name']
-        print(sid, sname)
 
 
 get_weather_station_data(2023)

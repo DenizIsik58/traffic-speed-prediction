@@ -51,7 +51,6 @@ class CreateWeatherHistoryData(APIView):
             queryset = WeatherHistoryData.objects.filter(roadStationId = roadStationId)
 
             js = tryGet()
-            print(js)
             for d in js:
                 roadStationId = d['roadStationId']
                 sensorId = d['sensorId']

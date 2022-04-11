@@ -26,7 +26,6 @@ class Scraper:
     @staticmethod
     def load_data():
         # Find all the ids related to road stations and road number
-        print("begin scraping")
         for road_condition in ujson.loads(requests.get(Config.read_config()["urls"]["road_sections"]["base_url"]).text)[
             'weatherData']:
             # Check if this is the start of the roadsection, only part concerning us
@@ -81,7 +80,6 @@ class Scraper:
                     "tmsStations"]:
 
                     cleaned_station = clean_and_repair([station], conditions_for_tmsData)
-                    # print(station)
                     try:
                         for censor in cleaned_station[0]["sensorValues"]:
                             if str(censor["id"]) == "5122":
@@ -95,7 +93,6 @@ class Scraper:
                                                     average_speed=avg_speed)
                                 sect.save()
                                 TMS_station(tms_station=road_station_ids[i], roadSection=sect).save()
-                                # print(cleaned_station[0]["id"])
                                 break
                     except:
                         break
