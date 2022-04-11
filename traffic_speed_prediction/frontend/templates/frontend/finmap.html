@@ -84,7 +84,7 @@ l
 
             const marker_source = source_name + "_marker"
             const marker_name = source_name + "_marker"
-            const prediction_formatted = prediction + " km/h"
+            const prediction_formatted = prediction.toFixed(0) + " km/h"
 
             //add markers (kilometer prediction) source
             map.addSource(marker_source, {
