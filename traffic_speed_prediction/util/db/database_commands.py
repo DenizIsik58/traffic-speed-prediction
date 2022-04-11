@@ -68,9 +68,10 @@ class DatabaseCommands:
                 )
 
             if nearest_distance > temp_distance:
+                nearest_distance = temp_distance
                 road_section_id = road_section.road_section_number
                 road_number = road_section.road.Road_number
-            return (str(road_number), str(road_section_id))
+        return (str(road_number), str(road_section_id))
 
 
 
