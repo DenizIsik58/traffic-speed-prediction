@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {Route, Router} from "react-router-dom";
 import Navbar from "./layout/header";
 import {Switch} from "@mui/material";
+import Body from "./layout/body.js"
 import Home from "./pages/home";
 import About from "./pages/about_us";
 import Contact from "./pages/contact_us";
@@ -14,7 +15,15 @@ export default class App extends Component {
 
     render() {
         return(
-      <Navbar />
+            <div>
+            <div>
+         <Navbar />
+                </div>
+                <div>
+                <Body />
+                    </div>
+
+                </div>
   );
     }
 }

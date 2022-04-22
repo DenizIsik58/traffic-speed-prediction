@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logo from '../logos/logo-solita-trans.webp'
 
-const pages = ['FinMap', 'About Us', 'our vision', 'Contact Us'];
+const pages = ['FinMap', 'About Us', 'Our Vision', 'Contact Us'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const ResponsiveAppBar = () => {
@@ -43,7 +43,7 @@ const ResponsiveAppBar = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex', my:2}, width: 60, height: 60, objectFit: "cover"}}
+            sx={{ mr: 2, display: { xs: 'none', md: 'flex', my:2}, width: 60, height: 60, objectFit: "cover", position: "fixed"}}
           >
             <img src={logo} className="" alt="logo" />
           </Typography>
@@ -88,7 +88,7 @@ const ResponsiveAppBar = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{display: { xs: 'flex', md: 'none' }, bgcolor:"black" }}
+            sx={{display: { xs: 'flex', md: 'none' }, width: 60, height: 60, objectFit: "cover", position: "fixed"}}
           >
             <img src={logo} className="" alt="logo" />
           </Typography>
