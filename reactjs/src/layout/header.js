@@ -12,8 +12,10 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logo from '../logos/logo-solita-trans.webp'
+import SettingsIcon from '@mui/icons-material/Settings';
 
-const pages = ['FinMap', 'About Us', 'Our Vision', 'Contact Us'];
+const pages = ['FinMap', 'About Us', 'our vision', 'Contact Us'];
+const pathToPages = ['/finmap', 'about', 'vision', 'contact']
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const ResponsiveAppBar = () => {
@@ -43,7 +45,7 @@ const ResponsiveAppBar = () => {
             variant="h6"
             noWrap
             component="div"
-            sx={{ mr: 2, display: { xs: 'none', md: 'flex', my:2}, width: 60, height: 60, objectFit: "cover", position: "fixed"}}
+            sx={{ mr: 2, display: { xs: 'none', md: 'flex', my:2}, width: 60, height: 60, objectFit: "cover"}}
           >
             <img src={logo} className="" alt="logo" />
           </Typography>
@@ -93,6 +95,7 @@ const ResponsiveAppBar = () => {
             <img src={logo} className="" alt="logo" />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: "center", alignItems:"center" }}>
+
             {pages.map((page) => (
               <Button
                 key={page}
@@ -106,9 +109,9 @@ const ResponsiveAppBar = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <SettingsIcon onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
+              </SettingsIcon>
             </Tooltip>
             <Menu
               sx={{ mt: '45px' }}
