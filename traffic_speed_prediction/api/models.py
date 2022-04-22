@@ -35,5 +35,4 @@ class PredictionResponse(models.Model):
     roadId = models.IntegerField(default=0)
     roadSectionId = models.IntegerField(default=0)
     predictedSpeed = models.FloatField(default=0)
-
-
+    selectedRoads = models.TextField(default="")

@@ -7,7 +7,8 @@ from sklearn.ensemble import RandomForestRegressor
 #from autosklearn.classification import AutoSklearnClassifier
 import autosklearn.regression
 from sklearn.tree import DecisionTreeRegressor
-
+from sklearn.metrics import mean_squared_error as mse
+import autosklearn.regression
 
 class auto_ml:
 
@@ -15,7 +16,8 @@ class auto_ml:
     @staticmethod
     def train():
         global model
-        dataset = pd.read_csv('traffic_speed_prediction/BigData.csv')
+            
+        dataset = pd.read_csv("traffic_speed_prediction/BigData.csv")
 
         x = dataset.drop(columns=['average_speed'])
         y = dataset['average_speed']
@@ -24,6 +26,7 @@ class auto_ml:
         model = autosklearn.regression.AutoSklearnRegressor(time_left_for_this_task=30, per_run_time_limit=1)
 
         model.fit(x_train, y_train)
+
         #print(x_train.describe())
         #print(y_train.describe())
 
@@ -33,7 +36,6 @@ class auto_ml:
         y_test_predict = model.predict(x_test)
         print(mse(y_test, y_test_predict) ** 0.5)
         print("______________________________________________________________ ")
-
     @staticmethod
     def predict(road_section):
         return model.predict(np.array([[road_section[0], road_section[1], road_section[2], road_section[3], road_section[4], road_section[5]]]))[0]

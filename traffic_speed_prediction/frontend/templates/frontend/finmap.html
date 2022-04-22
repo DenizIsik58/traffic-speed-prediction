@@ -25,7 +25,7 @@ l
 
         //just for getting things rolling
         var numberOfRoads = 0;
-        var debug = false;
+        var debug = true;
 
         //would be very cool to save this to localStorage
         var selectedRoads = []
@@ -39,13 +39,19 @@ l
         });
 
         map.on('click', (e) => {
+            draw_road(e)
+        });
+
+        function draw_road(e)
+        {
+            
             mouseCoords = e.lngLat.wrap()
 
             promise = fetch_prediction(mouseCoords)
 
             document.getElementById('footer').innerHTML = JSON.stringify(e.lngLat.wrap());
-
-            //handle the road object fetched from the coordinates
+            
+                //handle the road object fetched from the coordinates
             promise.then(function(result) {
                 const closestRoad = result.roadId;
                 const closestRoadSection = result.roadSectionId;
@@ -58,15 +64,20 @@ l
                     load_road_from_geojson(predition, numberOfRoads.toString(), numberOfRoads.toString(), geodata)
                     numberOfRoads++;
 
+                    selectedRoads.push(closestRoad)
+                    selectedRoads.push(closestRoadSection)
+
                     if(debug) 
                     {
                         console.log("THE ROAD WE ARE LOOKING FOR HAS ID: " + result.toadId)
                         console.log("Coords at mouse: " + mouseCoords);
                         console.log("closestRoad: " + closestRoad)
+                        console.log("Selected roads (roadId, roadSectionId, ...)" + selectedRoads)
                     }
                 })
             })
-        });
+        }
+        
 
         function load_road_from_geojson(prediction, source_name, layer_name, multiLineString)
         {
@@ -147,8 +158,8 @@ l
             //console.log(multiLineString[0][0])
 
             map.flyTo({
-                zoom: 12,
-                center: multiLineString[0][0]
+                //zoom: 12,
+                //center: multiLineString[0][0]
             });
         }
 
@@ -167,9 +178,19 @@ l
                 console.log("Latitude:")
                 console.log(lat)
             }
-            
+            var roadsParameter;
+
+            if(selectedRoads.length == 0)
+            {
+                roadsParameter = 0;
+            }
+            else
+            {
+                roadsParameter = selectedRoads
+            }
+
             //this would be cleaner with string formatting, but I couldnt get it to work
-            const apiPath = "https://tsp.hostanything.org/api/get-pred&lat=" + lat + "&lon=" + lon 
+            const apiPath = "http://localhost:8000/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=" + roadsParameter
 
             const response = await fetch(apiPath)
                 
@@ -192,7 +213,7 @@ l
         {
             // API call to the server
             // Get the geodata of the road section
-            const apiPath = "https://tsp.hostanything.org/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId 
+            const apiPath = "http://localhost:8000/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
             const response = await fetch(apiPath)
             const geodata = await response.json();
             

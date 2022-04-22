@@ -12,11 +12,13 @@ from traffic_speed_prediction.auto_ml import auto_ml
 class GetPrediction(APIView):
     serializer_class = PredictionResponseSerializer
 
-    def get(self, request, lat=None, lon=None):
-        auto_ml.train()
-        dataToPredict = DatabaseCommands.getInfoForPredictionByLatAndLon(float(lat), float(lon))
+    #Existing roads are recieved as a string of format: x1, y1, x2, y2, x3, y3, ...
+    def get(self, request, lat=None, lon=None, existingRoads=None):
+        print(existingRoads)
+        #auto_ml.train()
+        dataToPredict = DatabaseCommands.getInfoForPredictionByLatAndLon(float(lat), float(lon), str(existingRoads))
         predictedSpeed = auto_ml.predict(dataToPredict)
-        prediction = PredictionResponse(roadId=dataToPredict[0], roadSectionId=dataToPredict[6], predictedSpeed=predictedSpeed)
+        prediction = PredictionResponse(roadId=dataToPredict[0], roadSectionId=dataToPredict[6], predictedSpeed=predictedSpeed, selectedRoads=existingRoads)
         prediction.save()
         data = PredictionResponseSerializer(prediction).data
         return Response(data, status=status.HTTP_200_OK)

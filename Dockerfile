@@ -21,8 +21,10 @@ RUN apt update && apt install -y tcl
 
 RUN apt-get update
 RUN apt-get install -y python3-numpy python3-scipy python3-matplotlib python3-pandas python3-sympy python3-nose
-RUN pip3 install -r requirements.txt
 RUN apt-get install -y bash
+RUN apt-get install -y build-essential swig python3-dev
+RUN pip3 install -r requirements.txt
+
 
 # Expose port 8000 for the container
 EXPOSE 8000
