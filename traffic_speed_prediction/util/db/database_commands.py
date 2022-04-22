@@ -78,10 +78,10 @@ class DatabaseCommands:
                 temp_distance = math.sqrt(
                     deltaLon*deltaLon+ deltaLat*deltaLat
                 )
-
-            if nearest_distance > temp_distance:
+            
+            if (nearest_distance > temp_distance):
                 possibleRoad = [str(road_section.road.Road_number), str(road_section.road_section_number)]
-                if(possibleRoad not in roads):
+                if((possibleRoad not in roads)):
                     road_sect.clear()
                     nearest_distance = temp_distance
                     road_sect.append(road_section.road.Road_number)
@@ -91,6 +91,8 @@ class DatabaseCommands:
                     road_sect.append(int(road_section.roadMaintenanceClass))
                     road_sect.append(float((road_section.freeFlowSpeed1)))
                     road_sect.append(int((road_section.road_section_number)))
+
+        return road_sect
                 
 
 
