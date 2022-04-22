@@ -10,7 +10,7 @@ class Footer extends Component {
     render() {
         return (
     <div className="footer">
-      <footer className="py-5 bg-dark fixed-bottom">
+      <footer className="py-5 bg-dark fixed-bottom justify-content-center align-items-center">
         <div className="container">
           <p className="m-0 text-center text-white">
             Copyright &copy; SOLITA - FINMAP 2022

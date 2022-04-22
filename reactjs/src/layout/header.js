@@ -16,7 +16,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 
 const pages = ['FinMap', 'About Us', 'our vision', 'Contact Us'];
 const pathToPages = ['/finmap', 'about', 'vision', 'contact']
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Dark Mode', 'Light Mode', 'Enable Localstorage'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -47,7 +47,7 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex', my:2}, width: 60, height: 60, objectFit: "cover"}}
           >
-            <img src={logo} className="" alt="logo" />
+            <img onClick='/' src={logo} className="" alt="logo" />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } , justifyContent : "center"} }>
@@ -110,7 +110,6 @@ const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <SettingsIcon onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </SettingsIcon>
             </Tooltip>
             <Menu
