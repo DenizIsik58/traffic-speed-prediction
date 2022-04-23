@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -7,20 +7,23 @@ import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
+import About from '../pages/about'
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logo from '../logos/logo-solita-trans.webp'
 import SettingsIcon from '@mui/icons-material/Settings';
+import {NavLink, Route, Router, useHistory, useNavigate}  from "react-router-dom";
 
-const pages = ['FinMap', 'About Us', 'our vision', 'Contact Us'];
-const pathToPages = ['/finmap', 'about', 'vision', 'contact']
+import {Link, Switch} from "@mui/material";
+
+const pages = ['FinMap', 'About Us', 'FAQ', 'Contact Us'];
 const settings = ['Dark Mode', 'Light Mode', 'Enable Localstorage'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -28,6 +31,8 @@ const ResponsiveAppBar = () => {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
+
+
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
@@ -37,8 +42,13 @@ const ResponsiveAppBar = () => {
     setAnchorElUser(null);
   };
 
+  const handleClick = (PATH) => {
+        navigate("/" + PATH);
+    }
+
+
   return (
-    <AppBar color="transparent" elevation={0} position="static" >
+    <AppBar sx={{bgcolor: "grey"}} color="transparent" elevation={0} position="static" >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -53,7 +63,6 @@ const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } , justifyContent : "center"} }>
             <IconButton
               size="large"
-              aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -81,7 +90,9 @@ const ResponsiveAppBar = () => {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+
+                  <Typography onClick={() => handleClick(page)}  textAlign="center">{page}</Typography>
+
                 </MenuItem>
               ))}
             </Menu>
@@ -94,12 +105,13 @@ const ResponsiveAppBar = () => {
           >
             <img src={logo} className="" alt="logo" />
           </Typography>
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: "center", alignItems:"center" }}>
 
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={() => handleClick(page)}
                 sx={{ marginLeft: 10, my: 2, color: 'black', display: 'block' }}
               >
                 {page}
