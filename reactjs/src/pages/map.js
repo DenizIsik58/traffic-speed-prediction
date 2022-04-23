@@ -207,7 +207,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
         }
 
 
-  return <div onClick={() => onMouseClick(this)} className="map-container" ref={mapContainerRef} style={{ width: "100%", height: "85vh" }} />;
+  return <div style={{cursor: "pointer"} }><div  onClick={() => onMouseClick(this)} className="map-container" ref={mapContainerRef} style={{ width: "100%", height: "85vh" }} /></div>;
 };
 
 export default Map;
