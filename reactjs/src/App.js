@@ -15,7 +15,7 @@ export default class App extends Component {
     render() {
         return(
                       <Router>
-            <div>
+            <div >
                 <div>
                     <Navbar />
                 </div>
@@ -30,7 +30,7 @@ export default class App extends Component {
                 </div>
                 <div>
                     <Footer />
-                </div>
+                </div >
 
                 </div>
                     </Router>
