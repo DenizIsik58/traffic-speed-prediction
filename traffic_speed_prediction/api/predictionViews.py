@@ -35,5 +35,13 @@ class GetGeoJson(APIView):
         return Response(geodata, status=status.HTTP_200_OK)
 
 
+class GetRoadName(APIView):
+    def get(self, request, roadNumber, roadSectionId):
+        data = Scraper.get_live_road_section_info_by_id(roadNumber, roadSectionId)
+        roadName = data[6]
+        if (data is None):
+            return Response(roadName, status=status.HTTP_404_NOT_FOUND)
+        return Response(roadName, status=status.HTTP_200_OK)
+
 
 

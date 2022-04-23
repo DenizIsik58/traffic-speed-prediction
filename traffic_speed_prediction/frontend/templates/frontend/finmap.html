@@ -220,6 +220,16 @@ l
             return geodata;
         }
 
+        async function fetch_roadname(roadNumber, roadSectionId){
+            // API call to the server
+            // Get the roadname of the road section
+            const apiPath ="http://localhost:8000/api/get-roadname&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
+            const response = await fetch(apiPath)
+            const roadname = await response.json();
+            return roadname;
+
+        }
+
         function switch_language(language) 
         {
             map.setLayoutProperty('country-label', 'text-field', [

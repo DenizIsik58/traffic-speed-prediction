@@ -23,6 +23,7 @@ class Road_section(models.Model):
     roadMaintenanceClass = models.TextField()
     freeFlowSpeed1 = models.TextField()
     average_speed = models.FloatField(default=0)
+    roadName = models.TextField()
 
 
 class TMS_station(models.Model):
