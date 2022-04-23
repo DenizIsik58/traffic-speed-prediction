@@ -22,7 +22,7 @@ class DatabaseCommands:
             csv_writer = csv.writer(file)
 
             header = ['road_number', 'road_temperature', 'daylight', 'weather_symbol', 'roadMaintenanceClass',
-                      'freeflowspeed', 'average_speed']
+                      'freeflowspeed', 'average_speed', 'roadname']
             csv_writer.writerow(header)
             for road_section in Road_section.objects.all():
                 data = []
@@ -33,6 +33,7 @@ class DatabaseCommands:
                 data.append(road_section.roadMaintenanceClass)
                 data.append(float((road_section.freeFlowSpeed1)))
                 data.append(float((road_section.average_speed)))
+                data.append(str(road_section.roadName))
                 csv_writer.writerow(data)
 
             file.close()
