@@ -1,9 +1,19 @@
 import React, {Component, useEffect, useRef, useState} from "react";
 import { render } from "react-dom";
 import mapboxgl from "mapbox-gl";
+import { Alert } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 mapboxgl.accessToken = "pk.eyJ1IjoidnNvbi1zb2xpdGEiLCJhIjoiY2wxNmlqcG5jMDdyMjNkcGt1N241bTV3eSJ9.R4IzYACNR4PEWDAoBlTkYw";
 
+export function darkMode(){
+        return new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/navigation-night-v1',
+            center: [26, 62.3], // starting position
+            zoom: 5, // starting zoom
+        });
+  }
 
 const Map = () => {
   const mapContainerRef = useRef(null);
@@ -15,8 +25,10 @@ const Map = () => {
     const [lng, setLng] = useState(26);
     const [lat, setLat] = useState(62.3);
     const [zoom, setZoom] = useState(5);
-
-
+    const [roadName, setRoadName] = useState(null);
+    const [speed, setSpeed] = useState(null);
+    const [speedLimit, setSpeedLimit] = useState(null);
+    const [isDarkMode, setDarkMode] = useState(false);
 
 
   // initialize map when component mounts
@@ -25,43 +37,36 @@ const Map = () => {
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
     container: mapContainerRef.current,
-    style: 'mapbox://styles/mapbox/light-v10',
+    style: 'mapbox://styles/mapbox/navigation-day-v1',
       center: [lng, lat], // starting position
             zoom: zoom,
     });
 
+    map.current.on('move', () => {
+    setLng(map.current.getCenter().lng.toFixed(2));
+    setLat(map.current.getCenter().lat.toFixed(2));
+    setZoom(map.current.getZoom().toFixed(2));
+    });
 
+    map.current.on('click', () => {
+          const newLng = map.current.getCenter().lng;
+          const newLat = map.current.getCenter().lat;
+          predict(newLng, newLat);
+
+        });
 
 
   }, []);
      // eslint-disable-line react-hooks/exhaustive-deps
 
-    useEffect(() => {
-    if (!map.current) return; // wait for map to initialize
-    map.current.on('move', () => {
-    setLng(map.current.getCenter().lng.toFixed(4));
-    setLat(map.current.getCenter().lat.toFixed(4));
-    setZoom(map.current.getZoom().toFixed(2));
-    });
-    }, []);
-
-    useEffect(() => {
-        map.current.on('click', () => {
-            const newLng = map.current.getCenter().lng;
-          const newLat = map.current.getCenter().lat;
-          setLng(newLng);
-          setLat(newLat);
-          predict(newLat, newLng);
-        });
-    }, []);
-
 
     function predict(latitude, longitude){
-            const promise = fetch_prediction(latitude, longitude)
+
             console.log(latitude + " " + longitude)
 
             //handle the road object fetched from the coordinates
-            promise.then(function(result) {
+            fetch_prediction(latitude, longitude).then(function(result) {
+
                 const closestRoad = result.roadId;
                 const closestRoadSection = result.roadSectionId;
                 const predition = result.predictedSpeed;
@@ -73,12 +78,6 @@ const Map = () => {
                     load_road_from_geojson(predition, numberOfRoads.toString(), numberOfRoads.toString(), geodata)
                     numberOfRoads++;
 
-                    if(debug)
-                    {
-                        console.log("THE ROAD WE ARE LOOKING FOR HAS ID: " + result.toadId)
-
-                        console.log("closestRoad: " + closestRoad)
-                    }
                 })
             })
         }
@@ -104,27 +103,9 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             const marker_source = source_name + "_marker"
             const marker_name = source_name + "_marker"
             const prediction_formatted = prediction.toFixed(0) + " km/h"
-
+            setSpeed(prediction_formatted)
             //add markers (kilometer prediction) source
-             map.current.addSource(marker_source, {
-                'type': 'geojson',
-                'data': {
-                    'type': 'FeatureCollection',
-                    'features': [
-                    {
-                        // feature for Mapbox DC
-                        'type': 'Feature',
-                        'geometry': {
-                        'type': 'Point',
-                            'coordinates': [multiLineString[0][0][0], multiLineString[0][0][1]]
-                        },
-                        'properties': {
-                            'title': prediction_formatted
-                        }
-                    },
-                    ]
-                }
-            });
+
 
 
              map.current.addLayer({
@@ -136,7 +117,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
                     'line-cap': 'round'
                 },
                 'paint': {
-                    'line-color': 'red',
+                    'line-color': isDarkMode ? 'white' : "black",
                     'line-width': 4
                 }
             });
@@ -171,10 +152,10 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             });
         }
 
-        async function fetch_prediction(givenLat, givenLon)
+        async function fetch_prediction(givenLon, givenLat)
         {
-            const lon = JSON.stringify(givenLat)
-            const lat = JSON.stringify(givenLon)
+            const lon = JSON.stringify(givenLon)
+            const lat = JSON.stringify(givenLat)
 
             if(debug)
             {
@@ -236,6 +217,9 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
     return <div  style={{cursor: "pointer"} }><div  className="map-container" ref={mapContainerRef} style={{ width: "100%", height: "85vh" }}>
         <div className="sidebar">
 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+</div>
+        <div className="roadInfo">
+Road Name: {roadName} | Speed: {speed} | Speed Limit: {speedLimit}
 </div>
     </div></div>;
 };

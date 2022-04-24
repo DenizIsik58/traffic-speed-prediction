@@ -16,14 +16,17 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import Map from '../pages/map'
 import {NavLink, Route, Router, useHistory, useNavigate}  from "react-router-dom";
 
+
 import {Checkbox, FormControlLabel, Link, Switch} from "@mui/material";
 import mapboxgl from "mapbox-gl";
+
 
 const pages = ['FinMap', 'About Us', 'FAQ', 'Contact Us'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+
   const navigate = useNavigate();
 
   const handleOpenNavMenu = (event) => {
@@ -44,15 +47,6 @@ const ResponsiveAppBar = () => {
   const handleClick = (PATH) => {
         navigate("/" + PATH);
     }
-
-    function lightMode(){
-    return new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/dark-v10',
-            center: [26, 62.3], // starting position
-            zoom: 5, // starting zoom
-        });
-  }
 
 
   return (
@@ -150,7 +144,6 @@ const ResponsiveAppBar = () => {
             >
                 <MenuItem key="f" onClick={handleCloseUserMenu}>
                   <FormControlLabel
-                      onClick={lightMode}
                   value="Dark Mode"
                   control={<Checkbox />}
                   label="Dark Mode"
@@ -159,7 +152,6 @@ const ResponsiveAppBar = () => {
                 </MenuItem>
               <MenuItem key="f" onClick={handleCloseUserMenu}>
                  <FormControlLabel
-                     onClick={() => lightMode()}
                   value="Light Mode"
                   control={<Checkbox />}
                   label="Light Mode"
