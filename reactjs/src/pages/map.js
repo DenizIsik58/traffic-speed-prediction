@@ -4,34 +4,25 @@ import mapboxgl from "mapbox-gl";
 
 mapboxgl.accessToken = "pk.eyJ1IjoidnNvbi1zb2xpdGEiLCJhIjoiY2wxNmlqcG5jMDdyMjNkcGt1N241bTV3eSJ9.R4IzYACNR4PEWDAoBlTkYw";
 
+
 const Map = () => {
   const mapContainerRef = useRef(null);
     var numberOfRoads = 0;
     var debug = false;
-  // initialize map when component mounts
-  useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current,
-      // See style options here: https://docs.mapbox.com/api/maps/#styles
-      style: 'mapbox://styles/mapbox/light-v10',
-      center: [26, 62.3], // starting position
-            zoom: 5,
-    });
 
-    
-    // add navigation control (the +/- zoom buttons)
-    map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
-    // clean up on unmount
-    return () => map.remove();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    const map = useRef(null);
+    const [lng, setLng] = useState(26);
+    const [lat, setLat] = useState(62.3);
+    const [zoom, setZoom] = useState(5);
 
-    function onMouseClick (e) {
-            const mouseCoords = e.lngLat.wrap()
 
-            const promise = fetch_prediction(mouseCoords)
 
-            document.getElementById('footer').innerHTML = JSON.stringify(e.lngLat.wrap());
+    function predict(){
+
+
+            const promise = fetch_prediction(lat, lng)
+            console.log(lat + " " + lng)
 
             //handle the road object fetched from the coordinates
             promise.then(function(result) {
@@ -49,25 +40,52 @@ const Map = () => {
                     if(debug)
                     {
                         console.log("THE ROAD WE ARE LOOKING FOR HAS ID: " + result.toadId)
-                        console.log("Coords at mouse: " + mouseCoords);
+
                         console.log("closestRoad: " + closestRoad)
                     }
                 })
             })
         }
 
-  function lightMode(){
-    return new mapboxgl.Map({
-            container: 'map',
-            style: 'mapbox://styles/mapbox/dark-v10',
-            center: [26, 62.3], // starting position
-            zoom: 5, // starting zoom
-        });
-  }
+  // initialize map when component mounts
+  useEffect(() => {
+
+    if (map.current) return; // initialize map only once
+    map.current = new mapboxgl.Map({
+    container: mapContainerRef.current,
+    style: 'mapbox://styles/mapbox/light-v10',
+      center: [lng, lat], // starting position
+            zoom: zoom,
+});
+
+
+
+
+  }, []);
+     // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+    if (!map.current) return; // wait for map to initialize
+    map.current.on('move', () => {
+    setLng(map.current.getCenter().lng.toFixed(4));
+    setLat(map.current.getCenter().lat.toFixed(4));
+    setZoom(map.current.getZoom().toFixed(2));
+    });
+
+    map.current.on('click', () => {
+    predict()
+    });
+
+
+    });
+
+
+
 
 function load_road_from_geojson(prediction, source_name, layer_name, multiLineString)
         {
-             this.map.addSource(source_name, {
+
+             map.current.addSource(source_name, {
                 'type': 'geojson',
                 'data': {
                     'type': 'Feature',
@@ -84,7 +102,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             const prediction_formatted = prediction.toFixed(0) + " km/h"
 
             //add markers (kilometer prediction) source
-             this.map.addSource(marker_source, {
+             map.current.addSource(marker_source, {
                 'type': 'geojson',
                 'data': {
                     'type': 'FeatureCollection',
@@ -105,7 +123,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             });
 
 
-             this.map.addLayer({
+             map.current.addLayer({
                 'id': layer_name,
                 'type': 'line',
                 'source': source_name,
@@ -120,7 +138,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             });
 
             //add markers (kilometer prediction) text layer
-            this.map.addLayer({
+            map.current.addLayer({
                 'id': marker_name,
                 'type': 'symbol',
                 'source': marker_source,
@@ -143,21 +161,21 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             //console.log("added road")
             //console.log(multiLineString[0][0])
 
-            this.map.flyTo({
+            map.current.flyTo({
                 zoom: 12,
                 center: multiLineString[0][0]
             });
         }
 
-        async function fetch_prediction(coords)
+        async function fetch_prediction(givenLat, givenLon)
         {
-            const lon = JSON.stringify(coords.lng)
-            const lat = JSON.stringify(coords.lat)
+            const lon = JSON.stringify(givenLat)
+            const lat = JSON.stringify(givenLon)
 
             if(debug)
             {
                 console.log("Recieved coords:")
-                console.log(coords)
+
 
                 console.log("Longitude:")
                 console.log(lon)
@@ -200,14 +218,22 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
 
         function switch_language(language)
         {
-             this.map.setLayoutProperty('country-label', 'text-field', [
+             map.current.setLayoutProperty('country-label', 'text-field', [
                 "get",
                 `name_${language}`
             ]);
         }
 
 
-  return <div style={{cursor: "pointer"} }><div  onClick={() => onMouseClick(this)} className="map-container" ref={mapContainerRef} style={{ width: "100%", height: "85vh" }} /></div>;
+
+
+
+
+    return <div  style={{cursor: "pointer"} }><div  className="map-container" ref={mapContainerRef} style={{ width: "100%", height: "85vh" }}>
+        <div className="sidebar">
+Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+</div>
+    </div></div>;
 };
 
 export default Map;

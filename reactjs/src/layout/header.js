@@ -13,12 +13,13 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import logo from '../logos/logo-solita-trans.webp'
 import SettingsIcon from '@mui/icons-material/Settings';
+import Map from '../pages/map'
 import {NavLink, Route, Router, useHistory, useNavigate}  from "react-router-dom";
 
-import {Link, Switch} from "@mui/material";
+import {Checkbox, FormControlLabel, Link, Switch} from "@mui/material";
+import mapboxgl from "mapbox-gl";
 
 const pages = ['FinMap', 'About Us', 'FAQ', 'Contact Us'];
-const settings = ['Dark Mode', 'Light Mode', 'Enable Localstorage'];
 
 const ResponsiveAppBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -32,8 +33,6 @@ const ResponsiveAppBar = () => {
     setAnchorElUser(event.currentTarget);
   };
 
-
-
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
@@ -46,6 +45,15 @@ const ResponsiveAppBar = () => {
         navigate("/" + PATH);
     }
 
+    function lightMode(){
+    return new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/mapbox/dark-v10',
+            center: [26, 62.3], // starting position
+            zoom: 5, // starting zoom
+        });
+  }
+
 
   return (
     <AppBar sx={{bgcolor: "grey"}} color="transparent" elevation={0} position="static" >
@@ -57,7 +65,7 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex', my:2}, width: 60, height: 60, objectFit: "cover"}}
           >
-            <img onClick='/' src={logo} className="" alt="logo" />
+            <img style={{cursor:"pointer"}} onClick={()=> window.location.href='/'} src={logo} className="" alt="logo" />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } , justifyContent : "center"} }>
@@ -140,11 +148,32 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key="f" onClick={handleCloseUserMenu}>
+                  <FormControlLabel
+                      onClick={lightMode}
+                  value="Dark Mode"
+                  control={<Checkbox />}
+                  label="Dark Mode"
+                  labelPlacement="end"
+                />
                 </MenuItem>
-              ))}
+              <MenuItem key="f" onClick={handleCloseUserMenu}>
+                 <FormControlLabel
+                     onClick={() => lightMode()}
+                  value="Light Mode"
+                  control={<Checkbox />}
+                  label="Light Mode"
+                  labelPlacement="end"
+                />
+                </MenuItem>
+              <MenuItem key="f" onClick={handleCloseUserMenu}>
+                  <FormControlLabel
+                  value="Enable Localstorage"
+                  control={<Checkbox />}
+                  label="Enable Localstorage"
+                  labelPlacement="end"
+                />
+                </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
