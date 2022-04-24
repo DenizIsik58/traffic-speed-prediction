@@ -18,11 +18,47 @@ const Map = () => {
 
 
 
-    function predict(){
+
+  // initialize map when component mounts
+  useEffect(() => {
+
+    if (map.current) return; // initialize map only once
+    map.current = new mapboxgl.Map({
+    container: mapContainerRef.current,
+    style: 'mapbox://styles/mapbox/light-v10',
+      center: [lng, lat], // starting position
+            zoom: zoom,
+    });
 
 
-            const promise = fetch_prediction(lat, lng)
-            console.log(lat + " " + lng)
+
+
+  }, []);
+     // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+    if (!map.current) return; // wait for map to initialize
+    map.current.on('move', () => {
+    setLng(map.current.getCenter().lng.toFixed(4));
+    setLat(map.current.getCenter().lat.toFixed(4));
+    setZoom(map.current.getZoom().toFixed(2));
+    });
+    }, []);
+
+    useEffect(() => {
+        map.current.on('click', () => {
+            const newLng = map.current.getCenter().lng;
+          const newLat = map.current.getCenter().lat;
+          setLng(newLng);
+          setLat(newLat);
+          predict(newLat, newLng);
+        });
+    }, []);
+
+
+    function predict(latitude, longitude){
+            const promise = fetch_prediction(latitude, longitude)
+            console.log(latitude + " " + longitude)
 
             //handle the road object fetched from the coordinates
             promise.then(function(result) {
@@ -46,38 +82,6 @@ const Map = () => {
                 })
             })
         }
-
-  // initialize map when component mounts
-  useEffect(() => {
-
-    if (map.current) return; // initialize map only once
-    map.current = new mapboxgl.Map({
-    container: mapContainerRef.current,
-    style: 'mapbox://styles/mapbox/light-v10',
-      center: [lng, lat], // starting position
-            zoom: zoom,
-});
-
-
-
-
-  }, []);
-     // eslint-disable-line react-hooks/exhaustive-deps
-
-    useEffect(() => {
-    if (!map.current) return; // wait for map to initialize
-    map.current.on('move', () => {
-    setLng(map.current.getCenter().lng.toFixed(4));
-    setLat(map.current.getCenter().lat.toFixed(4));
-    setZoom(map.current.getZoom().toFixed(2));
-    });
-
-    map.current.on('click', () => {
-    predict()
-    });
-
-
-    });
 
 
 

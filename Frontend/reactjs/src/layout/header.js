@@ -65,7 +65,7 @@ const ResponsiveAppBar = () => {
             component="div"
             sx={{ mr: 2, display: { xs: 'none', md: 'flex', my:2}, width: 60, height: 60, objectFit: "cover"}}
           >
-            <img style={{cursor:"pointer"}} onClick={()=> window.location.href='/'} src={logo} className="" alt="logo" />
+            <img style={{cursor:"pointer"}} onClick={()=> window.location.href='/ '} src={logo} className="" alt="logo" />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } , justifyContent : "center"} }>
