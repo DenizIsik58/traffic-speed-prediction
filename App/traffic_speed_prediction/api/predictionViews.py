@@ -20,6 +20,9 @@ class GetPrediction(APIView):
         predictedSpeed = auto_ml.predict(dataToPredict)
         prediction = PredictionResponse(roadId=dataToPredict[0], roadSectionId=dataToPredict[6], roadName=dataToPredict[7], predictedSpeed=predictedSpeed, selectedRoads=existingRoads)
         prediction.save()
+
+        print(prediction.roadName)
+
         data = PredictionResponseSerializer(prediction).data
         return Response(data, status=status.HTTP_200_OK)
     

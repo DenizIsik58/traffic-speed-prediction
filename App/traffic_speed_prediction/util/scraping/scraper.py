@@ -45,6 +45,7 @@ class Scraper:
             road_station_ids = []
             lat = []
             lon = []
+            roadName = ""
 
             # Save road to database
 
@@ -66,6 +67,8 @@ class Scraper:
                     road_station_ids.append(main[0]["properties"]["roadStationId"])
                     lat.append(main[0]["geometry"]["coordinates"][0])
                     lon.append(main[0]["geometry"]["coordinates"][1])
+                    roadName = str(main[0]["properties"]["names"]["fi"])
+                    print(main[0]["properties"]["names"]["fi"])
                 except:
                     traceback.print_exc()
                     break
@@ -90,7 +93,8 @@ class Scraper:
                                                     weatherSymbol=weather_symbol,
                                                     roadMaintenanceClass=road_maintenance_classes[i],
                                                     freeFlowSpeed1=free_flow_speed1s[i],
-                                                    average_speed=avg_speed)
+                                                    average_speed=avg_speed,
+                                                    roadName=roadName)
                                 sect.save()
                                 TMS_station(tms_station=road_station_ids[i], roadSection=sect).save()
                                 break
@@ -124,7 +128,6 @@ class Scraper:
                 if str(main[0]['properties']['roadAddress']['roadSection']) == str(road_section_id):
                     road_section.append(main[0]["properties"]["roadAddress"]["roadMaintenanceClass"])
                     road_section.append(main[0]["properties"]["freeFlowSpeed1"])
-                    road_section.append(main[0]["properties"]["names"]["fi"])
                     return road_section
             except:
                 traceback.print_exc()

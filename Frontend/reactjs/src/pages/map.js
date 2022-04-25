@@ -69,6 +69,11 @@ const Map = () => {
                 const closestRoad = result.roadId;
                 const closestRoadSection = result.roadSectionId;
                 const predition = result.predictedSpeed;
+                setRoadName(result.roadName);
+
+                console.log(roadName);
+                console.log(result);
+                console.log(result.roadName);
 
                 //get the geodata of the entire road section
                 const geodataPromise = fetch_geodata(closestRoad, closestRoadSection)
@@ -165,7 +170,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             }
 
             //this would be cleaner with string formatting, but I couldnt get it to work
-            const apiPath = "http://localhost:8000/api/get-pred&lat=" + lat + "&lon=" + lon
+            const apiPath = "http://localhost:8000/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
 
             const response = await fetch(apiPath)
 
@@ -211,7 +216,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
 </div>
         <div className="roadInfo">
-Road Name: Helsinki | Speed: {speed} | Speed Limit: 80 km/h
+Road Name: { roadName } | Speed: {speed} | Speed Limit: 80 km/h
 </div>
     </div></div>;
 };

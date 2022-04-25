@@ -33,7 +33,7 @@ class DatabaseCommands:
                 data.append(road_section.roadMaintenanceClass)
                 data.append(float((road_section.freeFlowSpeed1)))
                 data.append(float((road_section.average_speed)))
-                data.append(str(road_section.roadName))
+                data.append(str("THIS IS A NAME"))
                 csv_writer.writerow(data)
 
             file.close()
@@ -55,6 +55,7 @@ class DatabaseCommands:
             roads.append([newRoadNumber, newRoadSectionNumber])
         
         for road_section in Road_section.objects.all():
+            print(road_section.roadName)
             lat1 = road_section.lat
             lon1 = road_section.lon
 

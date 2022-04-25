@@ -5,10 +5,10 @@ from sklearn.metrics import mean_squared_error as mse
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 #from autosklearn.classification import AutoSklearnClassifier
-import autosklearn.regression
+#import autosklearn.regression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import mean_squared_error as mse
-import autosklearn.regression
+#import autosklearn.regression
 
 class auto_ml:
 
@@ -21,7 +21,7 @@ class auto_ml:
         x = dataset.drop(columns=['average_speed'])
         y = dataset['average_speed']
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
-        model = autosklearn.regression.AutoSklearnRegressor(time_left_for_this_task=30, per_run_time_limit=1)
+        #model = autosklearn.regression.AutoSklearnRegressor(time_left_for_this_task=30, per_run_time_limit=1)
 
         model.fit(x_train, y_train)
 
