@@ -18,7 +18,7 @@ class GetPrediction(APIView):
         #auto_ml.train()
         dataToPredict = DatabaseCommands.getInfoForPredictionByLatAndLon(float(lat), float(lon), str(existingRoads))
         predictedSpeed = auto_ml.predict(dataToPredict)
-        prediction = PredictionResponse(roadId=dataToPredict[0], roadSectionId=dataToPredict[6], predictedSpeed=predictedSpeed, selectedRoads=existingRoads)
+        prediction = PredictionResponse(roadId=dataToPredict[0], roadSectionId=dataToPredict[6], roadName=dataToPredict[7], predictedSpeed=predictedSpeed, selectedRoads=existingRoads)
         prediction.save()
         data = PredictionResponseSerializer(prediction).data
         return Response(data, status=status.HTTP_200_OK)
@@ -35,13 +35,6 @@ class GetGeoJson(APIView):
         return Response(geodata, status=status.HTTP_200_OK)
 
 
-class GetRoadName(APIView):
-    def get(self, request, roadNumber, roadSectionId):
-        data = Scraper.get_live_road_section_info_by_id(roadNumber, roadSectionId)
-        roadName = data[6]
-        if (data is None):
-            return Response(roadName, status=status.HTTP_404_NOT_FOUND)
-        return Response(roadName, status=status.HTTP_200_OK)
 
 
 

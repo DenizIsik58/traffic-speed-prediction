@@ -40,12 +40,9 @@ class DatabaseCommands:
 
     @staticmethod
     def getInfoForPredictionByLatAndLon(lon2, lat2, existingRoadsString):
-        class mockRoad():
-            def __init__(self, roadNumber, roadSectionNumber):
-                self.roadNumber = roadNumber
-                self.roadSectionNumber = roadSectionNumber
     
         nearest_distance = 10000
+        road_name=""
         usingHaversine = False;
         road_sect = []
 
@@ -92,6 +89,7 @@ class DatabaseCommands:
                     road_sect.append(int(road_section.roadMaintenanceClass))
                     road_sect.append(float((road_section.freeFlowSpeed1)))
                     road_sect.append(int((road_section.road_section_number)))
+                    road_sect.append(str(road_section.roadName))
 
         return road_sect
                 
