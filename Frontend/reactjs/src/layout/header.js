@@ -11,7 +11,7 @@ import About from '../pages/about'
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import logo from '../logos/logo-solita-trans.webp'
+import logo from '../logos/logo-solita-trans_white.png'
 import SettingsIcon from '@mui/icons-material/Settings';
 import Map from '../pages/map'
 import {NavLink, Route, Router, useHistory, useNavigate}  from "react-router-dom";
@@ -50,7 +50,7 @@ const ResponsiveAppBar = () => {
 
 
   return (
-    <AppBar sx={{bgcolor: "grey"}} color="transparent" elevation={0} position="static" >
+    <AppBar sx={{bgcolor: "black"}} elevation={0} position="static" >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
@@ -114,7 +114,7 @@ const ResponsiveAppBar = () => {
               <Button
                 key={page}
                 onClick={() => handleClick(page)}
-                sx={{ marginLeft: 10, my: 2, color: 'black', display: 'block' }}
+                sx={{ marginLeft: 10, my: 2, color: 'white', display: 'block' }}
               >
                 {page}
               </Button>
@@ -147,14 +147,6 @@ const ResponsiveAppBar = () => {
                   value="Dark Mode"
                   control={<Checkbox />}
                   label="Dark Mode"
-                  labelPlacement="end"
-                />
-                </MenuItem>
-              <MenuItem key="f" onClick={handleCloseUserMenu}>
-                 <FormControlLabel
-                  value="Light Mode"
-                  control={<Checkbox />}
-                  label="Light Mode"
                   labelPlacement="end"
                 />
                 </MenuItem>

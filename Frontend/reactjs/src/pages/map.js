@@ -69,7 +69,8 @@ const Map = () => {
                 const closestRoad = result.roadId;
                 const closestRoadSection = result.roadSectionId;
                 const predition = result.predictedSpeed;
-                setRoadName(result.roadName);
+                const roadN = result.roadName
+                setRoadName(roadN);
 
                 console.log(roadName);
                 console.log(result);
