@@ -190,7 +190,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             // API call to the server
             // Get the geodata of the road section
             const currentLoc = window.location.href.replace("3000", "8000").replace("/FinMap", "")
-            const apiPath = currentLoc + "/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
+            const apiPath = currentLoc + "api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
             console.log(apiPath)
             const response = await fetch(apiPath)
             const geodata = await response.json();
