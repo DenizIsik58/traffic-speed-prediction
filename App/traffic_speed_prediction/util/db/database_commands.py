@@ -42,8 +42,6 @@ class DatabaseCommands:
         nearest_distance = 10000
         road_section_id = -1
         road_number = -1
-        print(lat2)
-        print(lon2)
         usingHaversine = False
 
         for road_section in Road_section.objects.all():
@@ -69,12 +67,10 @@ class DatabaseCommands:
                 )
 
             if nearest_distance > temp_distance:
-                print("NEAREST: " + str(nearest_distance))
-                print("TEMP: " + str(temp_distance))
                 nearest_distance = temp_distance
                 road_section_id = road_section.road_section_number
                 road_number = road_section.road.Road_number
-        print("im stoppuing now")
+
         return (str(road_number), str(road_section_id))
 
 
