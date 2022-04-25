@@ -5,10 +5,13 @@
             let lon = document.getElementById(("lonInput")).value
             let label = document.getElementById("predictionLabel")
 
-            let host = "http://localhost:8000"
+            let host = window.location.href
+            host = host.replace("/predictions/", "")
             let method = `api/get-pred`
             let params = `lat=${lat}&lon=${lon}`
             let url = host + "/" + method + "&" + params
+
+            console.log("sending request to: " + url)
 
             const request = {
                 method: "GET",
