@@ -4,6 +4,15 @@ volumes:
   db_data:
 
 services:
+  frontend:
+    image: ghcr.io/denizisik58/frontend:latest
+    restart: always
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "npm start"
+    depends_on:
+      - db
 
   app:
     image: ghcr.io/denizisik58/tsp:latest
