@@ -105,7 +105,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+App/.env
 .venv
 env/
 venv/
@@ -135,4 +135,4 @@ dmypy.json
 
 traffic_speed_prediction/secrets.json
 .DS_Store
-.env
+App/.env
