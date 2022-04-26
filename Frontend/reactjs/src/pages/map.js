@@ -19,7 +19,7 @@ const Map = () => {
   const mapContainerRef = useRef(null);
     var numberOfRoads = 0;
     var debug = false;
-
+    var isProduction = false;
 
     const map = useRef(null);
     const [lng, setLng] = useState(26);
@@ -171,7 +171,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             }
 
             //this would be cleaner with string formatting, but I couldnt get it to work
-            const apiPath = "http://localhost:8000/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
+            const apiPath = process.env.PRODUCTION === "production" ? process.env.BACKEND_PRODUCTION_URL : process.env.BACKEND_DEVELOPMENT_URL + "/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
 
             const response = await fetch(apiPath)
 
