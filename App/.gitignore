@@ -6,7 +6,7 @@ __pycache__/
 # C extensions
 *.so
 migrations
-
+node_modules
 # Distribution / packaging
 .Python
 build/
@@ -52,7 +52,7 @@ coverage.xml
 *.cover
 *.py,cover
 .hypothesis/
-.pytest_cache/
+App/.pytest_cache/
 
 # Translations
 *.mo
@@ -105,7 +105,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-App/.env
+.env
 .venv
 env/
 venv/
@@ -133,6 +133,5 @@ dmypy.json
 
 .vagrant
 
-traffic_speed_prediction/secrets.json
 .DS_Store
-App/.env
+.env
