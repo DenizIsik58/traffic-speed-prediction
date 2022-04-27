@@ -1,8 +1,5 @@
-import React, {Component, useEffect, useRef, useState} from "react";
-import { render } from "react-dom";
+import React, {useEffect, useRef, useState} from "react";
 import mapboxgl from "mapbox-gl";
-import { Alert } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
 
 mapboxgl.accessToken = "pk.eyJ1IjoidnNvbi1zb2xpdGEiLCJhIjoiY2wxNmlqcG5jMDdyMjNkcGt1N241bTV3eSJ9.R4IzYACNR4PEWDAoBlTkYw";
 
@@ -19,7 +16,6 @@ const Map = () => {
   const mapContainerRef = useRef(null);
     var numberOfRoads = 0;
     var debug = false;
-    var isProduction = false;
 
     const map = useRef(null);
     const [lng, setLng] = useState(26);
@@ -145,9 +141,6 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
                 }
             });
 
-            //console.log("added road")
-            //console.log(multiLineString[0][0])
-
             map.current.flyTo({
                 zoom: 12,
                 center: multiLineString[0][0]
@@ -175,20 +168,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
 
             const response = await fetch(apiPath)
 
-            const road = await response.json();
-            const road1 = JSON.stringify(road)
-
-            return road;
-        }
-
-
-        async function fetch_coordinates(roadId)
-        {
-            var apiPath = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/" + roadId;
-            const response = await fetch(apiPath)
-            const coords = await response.json();
-
-            return coords;
+            return await response.json();
         }
 
         async function fetch_geodata(roadNumber, roadSectionId)
@@ -197,11 +177,8 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             // Get the geodata of the road section
             const currentLoc = window.location.href.replace("3000", "8000").replace("/FinMap", "")
             const apiPath = currentLoc + "api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
-            console.log(apiPath)
             const response = await fetch(apiPath)
-            const geodata = await response.json();
-
-            return geodata;
+            return await response.json();
         }
 
         function switch_language(language)
