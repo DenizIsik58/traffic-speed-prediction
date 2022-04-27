@@ -58,8 +58,6 @@ const Map = () => {
 
     function predict(latitude, longitude){
 
-            console.log(latitude + " " + longitude)
-
             //handle the road object fetched from the coordinates
             fetch_prediction(latitude, longitude).then(function(result) {
 
@@ -68,10 +66,6 @@ const Map = () => {
                 const predition = result.predictedSpeed;
                 const roadN = result.roadName
                 setRoadName(roadN);
-
-                console.log(roadName);
-                console.log(result);
-                console.log(result.roadName);
 
                 //get the geodata of the entire road section
                 const geodataPromise = fetch_geodata(closestRoad, closestRoadSection)

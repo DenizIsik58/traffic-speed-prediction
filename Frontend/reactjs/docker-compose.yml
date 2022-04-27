@@ -1,7 +1,7 @@
 version: '3.9'
 
 services:
-  app:
+  frontend:
     build: .
     container_name: React
     restart: always
