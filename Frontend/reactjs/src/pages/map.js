@@ -1,7 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import mapboxgl from "mapbox-gl";
+import * as process from "process";
 
-mapboxgl.accessToken = "pk.eyJ1IjoidnNvbi1zb2xpdGEiLCJhIjoiY2wxNmlqcG5jMDdyMjNkcGt1N241bTV3eSJ9.R4IzYACNR4PEWDAoBlTkYw";
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_SECRET_KEY;
 
 export function darkMode(){
     return new mapboxgl.Map({
@@ -164,8 +165,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             }
 
             //this would be cleaner with string formatting, but I couldnt get it to work
-            const apiPath = process.env.PRODUCTION === "production" ? process.env.BACKEND_PRODUCTION_URL : process.env.BACKEND_DEVELOPMENT_URL + "/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
-
+            const apiPath = (process.env.REACT_APP_ENVIRONMENT === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
             const response = await fetch(apiPath)
 
             return await response.json();
@@ -175,8 +175,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
         {
             // API call to the server
             // Get the geodata of the road section
-            const currentLoc = window.location.href.replace("3000", "8000").replace("/FinMap", "")
-            const apiPath = currentLoc + "api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
+            const apiPath = (process.env.REACT_APP_ENVIRONMENT === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
             const response = await fetch(apiPath)
             return await response.json();
         }
@@ -194,7 +193,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
 </div>
         <div className="roadInfo">
-Road Name: { roadName } | Speed: {speed} | Speed Limit: 80 km/h
+Road Name: { roadName } | Speed: {speed} | Speed Limit: N/A
 </div>
     </div></div>;
 };
