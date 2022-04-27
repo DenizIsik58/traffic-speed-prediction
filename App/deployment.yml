@@ -18,11 +18,13 @@ services:
     ports:
       - "8000:8000"
     command: >
-      sh -c "python3 traffic_speed_prediction/manage.py makemigrations
-      && python3 traffic_speed_prediction/manage.py migrate
+      sh -c "python3 traffic_speed_prediction/manage.py migrate
       && python3 traffic_speed_prediction/manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
+    deploy:
+        mode: replicated
+        replicas: 3
 
   db:
     image: postgres
@@ -36,9 +38,11 @@ services:
 
   shepherd:
     image: mazzolino/shepherd
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
+      SLEEP_TIME: 3600
       IMAGE_AUTOCLEAN_LIMIT: 3
       IGNORELIST_SERVICES: 'tsp_shepherd tsp_db'
       TZ: Europe/Copenhagen
