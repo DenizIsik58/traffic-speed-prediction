@@ -5,6 +5,8 @@ services:
     build: .
     container_name: React
     restart: always
+    volumes:
+      - .:/frontend
     ports:
       - "3000:3000"
     command: >
