@@ -18,6 +18,7 @@
     "@testing-library/user-event": "^13.5.0",
     "flowbite": "^1.4.2",
     "mapbox-gl": "^1.13.2",
+    "process": "^0.11.10",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-mapbox-gl": "^5.1.1",
