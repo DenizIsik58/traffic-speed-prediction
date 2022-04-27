@@ -8,7 +8,7 @@ updates:
   - package-ecosystem: "pip" 
     directory: "/" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
       # Check for updates at 9 in the morning just before we start working
       time: "08:00"
       # Use Copenhagen Standard Time (UTC +09:00)

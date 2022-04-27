@@ -11,8 +11,6 @@ services:
       - "3000:3000"
     command: >
       sh -c "npm start"
-    depends_on:
-      - db
 
   app:
     image: ghcr.io/denizisik58/tsp:latest

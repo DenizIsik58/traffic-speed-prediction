@@ -16,10 +16,10 @@ jobs:
           registry: ghcr.io
           username: ${{ REPOSITORY_OWNER }}
           password: ${{ PACKAGES_ACCESS_TOKEN }}
-      - name: Build and Push tsp Image
+      - name: Build and Push frontend Image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: Frontend/reactjs/Dockerfile
           push: true
           tags: |
             ghcr.io/denizisik58/frontend:latest

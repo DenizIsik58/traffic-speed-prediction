@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    container_name: React
+    restart: always
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "npm start"
+    
+
+
