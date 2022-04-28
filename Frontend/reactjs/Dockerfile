@@ -10,10 +10,11 @@ ARG NODE_ENV=production
 
 
 RUN npm install -g npm@8.7.0
+RUN npm install -g serve
 RUN npm install --force
 
 COPY .. .
 
 EXPOSE 3000
 
-CMD [ "serve", "build" ]
+CMD [ "serve", "-s" , "build" ]
