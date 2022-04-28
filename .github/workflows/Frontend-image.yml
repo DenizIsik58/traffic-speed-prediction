@@ -1,4 +1,5 @@
 name: Frontend Image Continous Deployment
+
 on:
   release:
     types: [published]
@@ -15,6 +16,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
+
       - name: Build and Push frontend Image
         uses: docker/build-push-action@v2
         with:
