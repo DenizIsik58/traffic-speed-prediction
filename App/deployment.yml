@@ -1,7 +1,7 @@
 version: '3.9'
 
 volumes:
-  db_data:
+  postgres_data:
 
 services:
   frontend:
@@ -15,6 +15,10 @@ services:
   app:
     image: ghcr.io/denizisik58/tsp:latest
     restart: always
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
     ports:
       - "8000:8000"
     command: >
@@ -22,14 +26,11 @@ services:
       && python3 traffic_speed_prediction/manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
-    deploy:
-        mode: replicated
-        replicas: 3
 
   db:
     image: postgres
     volumes:
-      - db_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
     restart: always
     env_file:
       - .env
@@ -44,7 +45,7 @@ services:
     environment:
       SLEEP_TIME: 3600
       IMAGE_AUTOCLEAN_LIMIT: 3
-      IGNORELIST_SERVICES: 'tsp_shepherd tsp_db'
+      IGNORELIST_SERVICES: 'frontend_shepherd_1 frontend_db_1'
       TZ: Europe/Copenhagen
     deploy:
       placement:
