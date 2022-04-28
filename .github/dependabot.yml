@@ -6,9 +6,9 @@
 version: 2
 updates:
   - package-ecosystem: "pip" 
-    directory: "/" # Location of package manifests
+    directory: "../../App" # Location of package manifests
     schedule:
-      interval: "daily"
+      interval: "weekly"
       # Check for updates at 9 in the morning just before we start working
       time: "08:00"
       # Use Copenhagen Standard Time (UTC +09:00)
@@ -23,9 +23,9 @@ updates:
       
       
   - package-ecosystem: "npm"
-    directory: "/traffic_speed_prediction/frontend"
+    directory: "/Frontend/reactjs"
     schedule:
-      interval: "daily"
+      interval: "weekly"
       # Check for updates at 9 in the morning just before we start working
       time: "08:00"
       # Use Copenhagen Standard Time (UTC +09:00)

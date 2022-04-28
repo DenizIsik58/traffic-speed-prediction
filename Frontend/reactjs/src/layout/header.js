@@ -142,7 +142,7 @@ const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-                <MenuItem key="f" onClick={handleCloseUserMenu}>
+                <MenuItem key="Dark Mode" onClick={handleCloseUserMenu}>
                   <FormControlLabel
                   value="Dark Mode"
                   control={<Checkbox />}
@@ -150,7 +150,7 @@ const ResponsiveAppBar = () => {
                   labelPlacement="end"
                 />
                 </MenuItem>
-              <MenuItem key="f" onClick={handleCloseUserMenu}>
+              <MenuItem key="Enable Localstorage" onClick={handleCloseUserMenu}>
                   <FormControlLabel
                   value="Enable Localstorage"
                   control={<Checkbox />}

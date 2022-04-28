@@ -1,10 +1,8 @@
-import React, {Component, useEffect, useRef, useState} from "react";
-import { render } from "react-dom";
+import React, {useEffect, useRef, useState} from "react";
 import mapboxgl from "mapbox-gl";
-import { Alert } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
+import * as process from "process";
 
-mapboxgl.accessToken = "pk.eyJ1IjoidnNvbi1zb2xpdGEiLCJhIjoiY2wxNmlqcG5jMDdyMjNkcGt1N241bTV3eSJ9.R4IzYACNR4PEWDAoBlTkYw";
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_SECRET_KEY;
 
 export function darkMode(){
     return new mapboxgl.Map({
@@ -19,7 +17,6 @@ const Map = () => {
   const mapContainerRef = useRef(null);
     var numberOfRoads = 0;
     var debug = false;
-    var isProduction = false;
 
     const map = useRef(null);
     const [lng, setLng] = useState(26);
@@ -61,8 +58,6 @@ const Map = () => {
 
     function predict(latitude, longitude){
 
-            console.log(latitude + " " + longitude)
-
             //handle the road object fetched from the coordinates
             fetch_prediction(latitude, longitude).then(function(result) {
 
@@ -71,10 +66,6 @@ const Map = () => {
                 const predition = result.predictedSpeed;
                 const roadN = result.roadName
                 setRoadName(roadN);
-
-                console.log(roadName);
-                console.log(result);
-                console.log(result.roadName);
 
                 //get the geodata of the entire road section
                 const geodataPromise = fetch_geodata(closestRoad, closestRoadSection)
@@ -145,9 +136,6 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
                 }
             });
 
-            //console.log("added road")
-            //console.log(multiLineString[0][0])
-
             map.current.flyTo({
                 zoom: 12,
                 center: multiLineString[0][0]
@@ -171,37 +159,19 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             }
 
             //this would be cleaner with string formatting, but I couldnt get it to work
-            const apiPath = process.env.PRODUCTION === "production" ? process.env.BACKEND_PRODUCTION_URL : process.env.BACKEND_DEVELOPMENT_URL + "/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
-
+            const apiPath = (process.env.REACT_APP_ENVIRONMENT === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
             const response = await fetch(apiPath)
 
-            const road = await response.json();
-            const road1 = JSON.stringify(road)
-
-            return road;
-        }
-
-
-        async function fetch_coordinates(roadId)
-        {
-            var apiPath = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/" + roadId;
-            const response = await fetch(apiPath)
-            const coords = await response.json();
-
-            return coords;
+            return await response.json();
         }
 
         async function fetch_geodata(roadNumber, roadSectionId)
         {
             // API call to the server
             // Get the geodata of the road section
-            const currentLoc = window.location.href.replace("3000", "8000").replace("/FinMap", "")
-            const apiPath = currentLoc + "api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
-            console.log(apiPath)
+            const apiPath = (process.env.REACT_APP_ENVIRONMENT === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
             const response = await fetch(apiPath)
-            const geodata = await response.json();
-
-            return geodata;
+            return await response.json();
         }
 
         function switch_language(language)
@@ -217,7 +187,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
 </div>
         <div className="roadInfo">
-Road Name: { roadName } | Speed: {speed} | Speed Limit: 80 km/h
+Road Name: { roadName } | Speed: {speed} | Speed Limit: N/A
 </div>
     </div></div>;
 };

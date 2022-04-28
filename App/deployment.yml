@@ -1,7 +1,7 @@
 version: '3.9'
 
 volumes:
-  db_data:
+  postgres_data:
 
 services:
   frontend:
@@ -11,17 +11,18 @@ services:
       - "3000:3000"
     command: >
       sh -c "npm start"
-    depends_on:
-      - db
 
   app:
     image: ghcr.io/denizisik58/tsp:latest
     restart: always
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
     ports:
       - "8000:8000"
     command: >
-      sh -c "python3 traffic_speed_prediction/manage.py makemigrations
-      && python3 traffic_speed_prediction/manage.py migrate
+      sh -c "python3 traffic_speed_prediction/manage.py migrate
       && python3 traffic_speed_prediction/manage.py runserver 0.0.0.0:8000"
     depends_on:
       - db
@@ -29,7 +30,7 @@ services:
   db:
     image: postgres
     volumes:
-      - db_data:/var/lib/postgresql/data/
+      - postgres_data:/var/lib/postgresql/data/
     restart: always
     env_file:
       - .env
@@ -38,11 +39,13 @@ services:
 
   shepherd:
     image: mazzolino/shepherd
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
+      SLEEP_TIME: 3600
       IMAGE_AUTOCLEAN_LIMIT: 3
-      IGNORELIST_SERVICES: 'tsp_shepherd tsp_db'
+      IGNORELIST_SERVICES: 'frontend_shepherd_1 frontend_db_1'
       TZ: Europe/Copenhagen
     deploy:
       placement:

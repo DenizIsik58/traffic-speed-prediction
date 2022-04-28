@@ -19,7 +19,7 @@ jobs:
       - name: Build and Push tsp Image
         uses: docker/build-push-action@v2
         with:
-          context: .
+          context: App/Dockerfile
           push: true
           tags: |
-            ghcr.io/denizisik58/frontend:latest
+            ghcr.io/denizisik58/tsp:latest
