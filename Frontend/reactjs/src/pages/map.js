@@ -158,7 +158,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             }
 
             //this would be cleaner with string formatting, but I couldnt get it to work
-            const apiPath = (process.env.REACT_APP_ENVIRONMENT === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
+            const apiPath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
             console.log(process.env.NODE_ENV)
             const response = await fetch(apiPath)
 
@@ -169,7 +169,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
         {
             // API call to the server
             // Get the geodata of the road section
-            const apiPath = (process.env.REACT_APP_ENVIRONMENT === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
+            const apiPath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
             const response = await fetch(apiPath)
             return await response.json();
         }

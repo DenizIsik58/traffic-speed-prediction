@@ -25,6 +25,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "reactstrap": "^9.0.2",
+    "serve": "^13.0.2",
     "styled-components": "^5.3.5",
     "web-vitals": "^2.1.4"
   },
