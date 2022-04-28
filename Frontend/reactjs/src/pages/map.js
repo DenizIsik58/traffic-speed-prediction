@@ -1,6 +1,5 @@
 import React, {useEffect, useRef, useState} from "react";
 import mapboxgl from "mapbox-gl";
-import * as process from "process";
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_SECRET_KEY;
 
@@ -160,6 +159,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
 
             //this would be cleaner with string formatting, but I couldnt get it to work
             const apiPath = (process.env.REACT_APP_ENVIRONMENT === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
+            console.log(process.env.NODE_ENV)
             const response = await fetch(apiPath)
 
             return await response.json();

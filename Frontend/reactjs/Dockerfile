@@ -5,6 +5,9 @@ RUN apk add --update --no-cache tzdata
 WORKDIR /frontend
 COPY package.json ./
 
+ENV NODE_ENV=production
+ARG NODE_ENV=production
+
 
 RUN npm install -g npm@8.7.0
 RUN npm install --force
