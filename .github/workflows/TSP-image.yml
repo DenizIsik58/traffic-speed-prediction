@@ -1,4 +1,4 @@
-name: tsp Image CI/CD
+name: TSP Image Continous Deployment
 
 on:
   release:

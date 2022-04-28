@@ -1,5 +1,4 @@
-name: tsp Image CI/CD
-
+name: Frontend Image Continous Deployment
 on:
   release:
     types: [published]
