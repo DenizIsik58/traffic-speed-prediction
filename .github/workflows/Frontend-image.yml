@@ -1,4 +1,4 @@
-name: tsp Image CI/CD
+name: Frontend Image Continous Deployment
 
 on:
   release:
@@ -14,8 +14,9 @@ jobs:
         uses: docker/login-action@v1
         with:
           registry: ghcr.io
-          username: ${{ REPOSITORY_OWNER }}
-          password: ${{ PACKAGES_ACCESS_TOKEN }}
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.PACKAGES_ACCESS_TOKEN }}
+
       - name: Build and Push frontend Image
         uses: docker/build-push-action@v2
         with:
