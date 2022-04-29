@@ -44,11 +44,10 @@ const Map = () => {
     setZoom(map.current.getZoom().toFixed(2));
     });
 
-    map.current.on('click', () => {
-          const newLng = map.current.getCenter().lng;
-          const newLat = map.current.getCenter().lat;
+    map.current.on('click', (e) => {
+          const newLng = JSON.stringify(e.lngLat.wrap().lng);
+          const newLat = JSON.stringify(e.lngLat.wrap().lat);
           predict(newLng, newLat);
-
         });
 
   }, []);
@@ -143,22 +142,15 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
 
         async function fetch_prediction(givenLon, givenLat)
         {
-            const lon = JSON.stringify(givenLon)
-            const lat = JSON.stringify(givenLat)
 
             if(debug)
             {
                 console.log("Recieved coords:")
 
-
-                console.log("Longitude:")
-                console.log(lon)
-                console.log("Latitude:")
-                console.log(lat)
             }
 
             //this would be cleaner with string formatting, but I couldnt get it to work
-            const apiPath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
+            const apiPath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-pred&lat=" + givenLat + "&lon=" + givenLon + "&existingRoads=''"
             const response = await fetch(apiPath)
 
             return await response.json();
