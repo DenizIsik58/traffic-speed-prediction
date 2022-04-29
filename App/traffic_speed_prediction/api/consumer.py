@@ -5,6 +5,8 @@ import string
 import requests
 from urllib.request import urlopen
 
+#Do we actually use this?
+
 
 
 def get_weather_station_data(id) :

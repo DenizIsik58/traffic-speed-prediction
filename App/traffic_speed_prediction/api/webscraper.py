@@ -1,4 +1,6 @@
 import requests
+
+#Whats this?
 from json import *
 
 url = "https://tie.digitraffic.fi/api/beta/weather-history-data/4057"

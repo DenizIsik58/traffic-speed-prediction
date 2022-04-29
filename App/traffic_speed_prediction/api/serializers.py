@@ -1,3 +1,5 @@
+#The class containing the serializers which we use to convert
+# the values to and from JSON when retrieving and inserting data in/from the database
 from rest_framework import serializers
 from .models import *
 from .models import Road_section
