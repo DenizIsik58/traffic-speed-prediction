@@ -1,4 +1,5 @@
 from rest_framework import generics, status
+from rest_framework.decorators import api_view
 
 from util.scraping.scraper import Scraper
 from .serializers import PredictionResponseSerializer
@@ -11,6 +12,8 @@ from traffic_speed_prediction.auto_ml import auto_ml
 
 class GetPrediction(APIView):
     serializer_class = PredictionResponseSerializer
+
+
 
     #Existing roads are recieved as a string of format: x1, y1, x2, y2, x3, y3, ...
     def get(self, request, lat=None, lon=None, existingRoads=None):
@@ -25,6 +28,21 @@ class GetPrediction(APIView):
 
         data = PredictionResponseSerializer(prediction).data
         return Response(data, status=status.HTTP_200_OK)
+
+class ModelTrainer(APIView):
+    global auto
+    auto = auto_ml(False, False)
+
+
+    def get(self, request):
+        if auto_ml.isBeingTrained(auto):
+            return Response({"message": "model is being trained right now"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if auto_ml.isTrained(auto):
+            return Response({"message": "model has already been trained"}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            auto_ml.train(auto)
+            return Response({"message": "model has been trained! Ready to predict"}, status=status.HTTP_200_OK)
     
 
 class GetGeoJson(APIView):
