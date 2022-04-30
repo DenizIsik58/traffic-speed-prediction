@@ -34,16 +34,9 @@ class auto_ml:
             self.isBeingTrained = False
 
         self.isTrained = True
+        self.isBeingTrained = False
         print("model has been trained and ready to predict")
-        # print(x_train.describe())
-        # print(y_train.describe())
 
-        print("SCORE:")
-        print("______________________________________________________________ ")
-        print(model.score(x_test, y_test))
-        y_test_predict = model.predict(x_test)
-        print(mse(y_test, y_test_predict) ** 0.5)
-        print("______________________________________________________________ ")
 
     def predict(road_section):
         return model.predict(np.array(
