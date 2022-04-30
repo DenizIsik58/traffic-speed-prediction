@@ -39,12 +39,18 @@ class GetPrediction(APIView):
 class ModelTrainer(APIView):
 
     def get(self, request):
+
+        if auto_ml.isTrained(auto):
+            return Response({"message": "model has already been trained"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if auto_ml.isBeingTrained(auto) or auto_ml.isTrained(auto):
+            return Response({"message": "model is being trained right now. Please wait."}, status=status.HTTP_400_BAD_REQUEST)
+
         if not auto_ml.isBeingTrained(auto) or not auto_ml.isTrained(auto):
             auto_ml.train(auto)
             return Response({"message": "model is being trained right now"}, status=status.HTTP_400_BAD_REQUEST)
 
-        if auto_ml.isTrained(auto):
-            return Response({"message": "model has already been trained"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class GetGeoJson(APIView):
