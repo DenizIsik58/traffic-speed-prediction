@@ -13,49 +13,46 @@ from traffic_speed_prediction.auto_ml import auto_ml
 class GetPrediction(APIView):
     serializer_class = PredictionResponseSerializer
 
+    global auto
+    auto = auto_ml(False, False)
 
-
-    #Existing roads are recieved as a string of format: x1, y1, x2, y2, x3, y3, ...
+    # Existing roads are recieved as a string of format: x1, y1, x2, y2, x3, y3, ...
     def get(self, request, lat=None, lon=None, existingRoads=None):
-        print(existingRoads)
-        #auto_ml.train()
+        if auto_ml.isBeingTrained(auto):
+            return Response({"message": "Model is currently being trained! Please wait!"},
+                            status=status.HTTP_226_IM_USED)
+
+        if not auto_ml.isTrained(auto):
+            return Response({"message": "Model has not been trained yet!"},
+                            status=status.HTTP_400_BAD_REQUEST)
         dataToPredict = DatabaseCommands.getInfoForPredictionByLatAndLon(float(lat), float(lon), str(existingRoads))
         predictedSpeed = auto_ml.predict(dataToPredict)
-        prediction = PredictionResponse(roadId=dataToPredict[0], roadSectionId=dataToPredict[6], roadName=dataToPredict[7], predictedSpeed=predictedSpeed, selectedRoads=existingRoads)
+        prediction = PredictionResponse(roadId=dataToPredict[0], roadSectionId=dataToPredict[6],
+                                        roadName=dataToPredict[7], predictedSpeed=predictedSpeed,
+                                        selectedRoads=existingRoads)
         prediction.save()
-
-        print(prediction.roadName)
 
         data = PredictionResponseSerializer(prediction).data
         return Response(data, status=status.HTTP_200_OK)
 
-class ModelTrainer(APIView):
-    global auto
-    auto = auto_ml(False, False)
 
+class ModelTrainer(APIView):
 
     def get(self, request):
-        if auto_ml.isBeingTrained(auto):
+        if not auto_ml.isBeingTrained(auto) or not auto_ml.isTrained(auto):
+            auto_ml.train(auto)
             return Response({"message": "model is being trained right now"}, status=status.HTTP_400_BAD_REQUEST)
 
         if auto_ml.isTrained(auto):
             return Response({"message": "model has already been trained"}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            auto_ml.train(auto)
-            return Response({"message": "model has been trained! Ready to predict"}, status=status.HTTP_200_OK)
-    
+
 
 class GetGeoJson(APIView):
     def get(self, request, roadNumber, roadSectionId):
         geodata = Scraper.getGeoJsonForRoadSection(roadNumber, roadSectionId)
 
         # geodata is only none if the road section couldn't be found for the roadNumber
-        if(geodata is None): 
+        if (geodata is None):
             return Response(geodata, status=status.HTTP_404_NOT_FOUND)
-        
+
         return Response(geodata, status=status.HTTP_200_OK)
-
-
-
-
-

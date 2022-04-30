@@ -152,6 +152,11 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             //this would be cleaner with string formatting, but I couldnt get it to work
             const apiPath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-pred&lat=" + givenLat + "&lon=" + givenLon + "&existingRoads=''"
             const response = await fetch(apiPath)
+            if (response.status === 400) {
+                alert("Model has not been trained yet! Please contact the development team!")
+            }else if (response.status === 226) {
+                alert("Model is currently being trained! It will be ready in maximum 2 hours.")
+            }
 
             return await response.json();
         }
