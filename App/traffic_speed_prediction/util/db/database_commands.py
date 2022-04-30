@@ -55,7 +55,6 @@ class DatabaseCommands:
             roads.append([newRoadNumber, newRoadSectionNumber])
         
         for road_section in Road_section.objects.all():
-            print(road_section.roadName)
             lat1 = road_section.lat
             lon1 = road_section.lon
 
