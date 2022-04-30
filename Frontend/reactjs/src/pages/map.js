@@ -154,8 +154,10 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             const response = await fetch(apiPath)
             if (response.status === 400) {
                 alert("Model has not been trained yet! Please contact the development team!")
+                return
             }else if (response.status === 226) {
                 alert("Model is currently being trained! It will be ready in maximum 2 hours.")
+                return
             }
 
             return await response.json();
