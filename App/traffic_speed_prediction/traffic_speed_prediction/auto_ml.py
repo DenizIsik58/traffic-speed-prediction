@@ -19,7 +19,7 @@ class auto_ml:
 
     def train(self):
         global model
-        if self.isBeingTrained:
+        if self.isBeingTrained or self.isTrained:
             return
         self.isBeingTrained = True
         try:
