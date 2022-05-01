@@ -1,4 +1,6 @@
 import os
+import traceback
+
 import pandas as pd
 import numpy as np
 from sklearn.metrics import mean_squared_error as mse
@@ -27,16 +29,29 @@ class auto_ml:
             x = dataset.drop(columns=['average_speed'])
             y = dataset['average_speed']
             x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
-            model = autosklearn.regression.AutoSklearnRegressor(time_left_for_this_task=30, per_run_time_limit=1)
+            model = autosklearn.regression.AutoSklearnRegressor(n_jobs=-1)
             model.fit(x_train, y_train)
         except:
             print("Exception occured")
+            traceback.print_exc()
             self.isBeingTrained = False
             return
 
         self.isTrained = True
         self.isBeingTrained = False
         print("model has been trained and ready to predict")
+
+        # print(x_train.describe())
+        # print(y_train.describe())
+
+        print("SCORE:")
+        print("______________________________________________________________ ")
+        print(model.score(x_test, y_test))
+        y_test_predict = model.predict(x_test)
+        print(mse(y_test, y_test_predict) ** 0.5)
+        print("______________________________________________________________ ")
+        # summarize
+        print(model.sprint_statistics())
 
 
     def predict(road_section):
