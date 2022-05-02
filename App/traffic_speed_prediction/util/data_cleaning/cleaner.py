@@ -1,5 +1,6 @@
 from typing import List
 
+# All rules supported by the cleaner
 EXACT_STRING_LENGTH = 0  # int
 MIN_STRING_LENGTH = 1  # int
 MAX_STRING_LENGTH = 2  # int
@@ -20,12 +21,15 @@ EQUALS_FIELD = 16  # Key
 LESS_THAN_FIELD = 17  # Key
 MORE_THAN_FIELD = 18  # Key
 
-
+# A rule for the cleaner
+# rule_type: What the rule checks for
+# arg: the constant which the rule depends on (e.g. a rule_type may be EQUALS and the arg may be 5)
 class Rule:
     def __init__(self, rule_type, arg):
         self.rule_type = rule_type
         self.arg = arg
 
+    # Checks if a given value holds for the rule
     def holds(self, j_obj, val):
         if self.rule_type == EXACT_STRING_LENGTH:
             return len(val) == self.arg
@@ -77,6 +81,7 @@ class Rule:
         else:
             return False
 
+    # Fix the rule
     def fix(self, val):
         if self.rule_type == IS_TYPE:
             return True, self.arg(val)
@@ -85,7 +90,8 @@ class Rule:
         else:
             return False, val
 
-
+# A condition
+# rules: map of strings -> list of rules
 class Condition:
     def __init__(self, rules):
         self.rules = rules
@@ -99,7 +105,7 @@ class Condition:
                 except KeyError:
                     return False
         return True
-
+    
     def enforce(self, j_obj):
         new_j_obj = {}
         for key, rules in self.rules.items():
@@ -121,7 +127,7 @@ class Condition:
                 new_j_obj[key] = j_obj[key]
         return True, new_j_obj
 
-
+# Clean a list of data given by a condition 
 def clean(data: List[dict], condition):
     cleaned_data = []
     for j_obj in data:
