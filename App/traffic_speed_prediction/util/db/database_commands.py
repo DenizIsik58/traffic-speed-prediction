@@ -1,5 +1,7 @@
 import csv
 import json
+import traceback
+
 import requests
 import ujson
 import boto3
@@ -79,16 +81,16 @@ class DatabaseCommands:
             if (nearest_distance > temp_distance):
                 possibleRoad = [str(road_section.road.Road_number), str(road_section.road_section_number)]
                 if((possibleRoad not in roads)):
-                    road_sect.clear()
-                    nearest_distance = temp_distance
-                    road_sect.append(road_section.road.Road_number)
-                    road_sect.append(float(str((road_section.roadTemperature).replace("+", ""))))
-                    road_sect.append(int(road_section.daylight))
-                    road_sect.append(int(str(road_section.weatherSymbol)[1:]))
-                    road_sect.append(int(road_section.roadMaintenanceClass))
-                    road_sect.append(float((road_section.freeFlowSpeed1)))
-                    road_sect.append(int((road_section.road_section_number)))
-                    road_sect.append(str(road_section.roadName))
+                        road_sect.clear()
+                        nearest_distance = temp_distance
+                        road_sect.append(road_section.road.Road_number)
+                        road_sect.append(float(str((road_section.roadTemperature).replace("+", ""))))
+                        road_sect.append(int(road_section.daylight))
+                        road_sect.append(int(str(road_section.weatherSymbol)[1:]))
+                        road_sect.append(int(road_section.roadMaintenanceClass))
+                        road_sect.append(float((road_section.freeFlowSpeed1)))
+                        road_sect.append(int((road_section.road_section_number)))
+                        road_sect.append(str(road_section.roadName))
 
         return road_sect
                 

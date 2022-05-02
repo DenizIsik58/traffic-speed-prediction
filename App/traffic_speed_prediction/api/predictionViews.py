@@ -25,7 +25,10 @@ class GetPrediction(APIView):
         if not auto_ml.isTrained(auto):
             return Response({"message": "Model has not been trained yet!"},
                             status=status.HTTP_400_BAD_REQUEST)
-        dataToPredict = DatabaseCommands.getInfoForPredictionByLatAndLon(float(lat), float(lon), str(existingRoads))
+        try:
+            dataToPredict = DatabaseCommands.getInfoForPredictionByLatAndLon(float(lat), float(lon), str(existingRoads))
+        except:
+            return Response({"message" : "Something went wrong fetching the road information. There might be road maintenance"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         predictedSpeed = auto_ml.predict(dataToPredict)
         prediction = PredictionResponse(roadId=dataToPredict[0], roadSectionId=dataToPredict[6],
                                         roadName=dataToPredict[7], predictedSpeed=predictedSpeed,

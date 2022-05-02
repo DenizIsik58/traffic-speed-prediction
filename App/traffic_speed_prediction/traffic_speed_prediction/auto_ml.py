@@ -29,10 +29,11 @@ class auto_ml:
             x = dataset.drop(columns=['average_speed'])
             y = dataset['average_speed']
             x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2)
-            model = autosklearn.regression.AutoSklearnRegressor(n_jobs=-1)
+            print("120")
+            model = RandomForestRegressor()
+            #autosklearn.regression.AutoSklearnRegressor(time_left_for_this_task=120, per_run_time_limit=30)
             model.fit(x_train, y_train)
         except:
-            print("Exception occured")
             traceback.print_exc()
             self.isBeingTrained = False
             return
