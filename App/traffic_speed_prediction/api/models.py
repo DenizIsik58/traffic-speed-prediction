@@ -1,18 +1,9 @@
 
 #This class contains the models used for the database
 
-from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
-#Is this even used?
-class WeatherHistoryData(models.Model):
-    roadStationId = models.IntegerField(default=0, unique=False)
-    sensorId = models.IntegerField(default=0, unique=False)
-    sensorValue = models.DecimalField(max_digits=4, decimal_places=1, default=0.0, unique=False)
-    measuredTime = models.CharField(max_length=20, default="", unique=False)
-
 #We are identifying roads by their road number
-
 class Road(models.Model):
     Road_number = models.IntegerField()
 
