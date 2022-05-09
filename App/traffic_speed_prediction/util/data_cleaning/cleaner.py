@@ -1,6 +1,9 @@
 from typing import List
 
-# All rules supported by the cleaner
+# All rules types supported by the cleaner (in int enum format).
+# The comments describe the type of the argument that must be given along with the rule type.
+# "Any" implies that the argument is never used - None will be a good substitute.
+# "Key" implies that the argument must be of type string and must be a key that exists on the json object.
 EXACT_STRING_LENGTH = 0  # int
 MIN_STRING_LENGTH = 1  # int
 MAX_STRING_LENGTH = 2  # int
@@ -22,15 +25,22 @@ LESS_THAN_FIELD = 17  # Key
 MORE_THAN_FIELD = 18  # Key
 
 
-# A rule for the cleaner
-# rule_type: What the rule checks for
-# arg: the constant which the rule depends on (e.g. a rule_type may be EQUALS and the arg may be 5)
+# A rule is a certain requirement that must be hold for a single value in the data to be cleaned.
+# The rule has a rule_type, which describes what the rule is,
+# and an argument, which will influence if the rule is holding.
+# When the rule is evaluated [holds()] it will be given an additional argument,
+# that is the one that needs to live up to the rule type, for its data to be clean.
 class Rule:
     def __init__(self, rule_type, arg):
         self.rule_type = rule_type
         self.arg = arg
 
-    # Checks if a given value holds for the rule
+    # Given a value that needs to live up to the requirement of the rule type,
+    # returns a bool, describing if the rule holds.
+    # When evaluating the rule, the rule type will be switched (elif-compared), and the value
+    # (and argument, if the rule type required one) will be checked.
+    # The j_obj parameter is used if the value has to be asserted against the value of another key.
+    # If the given rule type, is not specified here, the default return value is False.
     def holds(self, j_obj, val):
         if self.rule_type == EXACT_STRING_LENGTH:
             return len(val) == self.arg
@@ -82,7 +92,9 @@ class Rule:
         else:
             return False
 
-    # Fix the rule
+    # Given a value returns a bool describing if the value was fixed (or if it was unable to be)
+    # and a new value that has been fixed according to the rule type.
+    # Not all rule types support fixing.
     def fix(self, val):
         if self.rule_type == IS_TYPE:
             return True, self.arg(val)
@@ -92,13 +104,22 @@ class Rule:
             return False, val
 
 
-# A condition
-# rules: map of strings -> list of rules
+# A condition is a set of requirements that must be applied to all values
+# in a json object for it to be clean.
+# The rule parameter is a dictionary of string keys to List[Rule] values, where each key is a field
+# on the json objects, and the list has all the rules that must hold for the specified field.
+# An empty list implies that the field must exist, but does not have to live up to any requirements.
 class Condition:
     def __init__(self, rules):
         self.rules = rules
 
-    # Returns -> if the all rules in this Condition object, holds for a json object
+    # Given a json object, will return a bool describing if all rules applies for that object.
+    # By looping over the keys for the rules and the rules applying to that key,
+    # the values of the corresponding keys fields on the json objects, are evaluated
+    # with all the rules. If a single rule do not hold,
+    # then the whole json object are not clean. If all rules holds, then the data is clean.
+    # A "KeyError" indicates that the current key, do not exist on the json object,
+    # and the data is therefor not clean.
     def apply(self, j_obj):
         for key, rules in self.rules.items():
             for rule in rules:
@@ -106,10 +127,21 @@ class Condition:
                     if not rule.holds(j_obj, j_obj[key]):
                         return False
                 except KeyError:
+                    print("KeyError! '", key, "' is not found")
                     return False
         return True
 
-    # Returns a clean version of the given json object
+    # Given a json object, will return a bool describing if all rules applies for that object,
+    # and a cleaned version of the data.
+    # By looping over the keys for the rules and the rules applying to that key, the values of the
+    # corresponding keys fields on the json objects, are evaluated with all the rules. If a value
+    # can be fixed by the rules rule type, it will be updated. If it can not be fixed, then
+    # it will be evaluated to hold. If a single rule do not hold,
+    # then the whole json object are not clean. If all rules holds, then the data is clean.
+    # A "KeyError" indicates that the current key, do not exist on the json object,
+    # and the data is therefor not clean.
+    # A "ValueError" indicates that there is a value, that were tried to be cast into
+    # another type, that it could not be converted to.
     def enforce(self, j_obj):
         new_j_obj = {}
         for key, rules in self.rules.items():
@@ -132,7 +164,8 @@ class Condition:
         return True, new_j_obj
 
 
-# Clean a list of data given a condition
+# Given a list of json objects (in dictionary format), will remove any element that do not
+# live up to a set of conditions to apply on each field (value of a specific key)
 def clean(data: List[dict], condition):
     cleaned_data = []
     for j_obj in data:
@@ -142,7 +175,10 @@ def clean(data: List[dict], condition):
     return cleaned_data
 
 
-# Cleans a list of data given a condition while keeping all usable data
+# Given a list of json objects (in dictionary format), will try to keep as much data as possible
+# when given a set of conditions to apply on each field (value of a specific key). If the condition
+# is not satisfied, then the fields (values) are updated to meet the required condition. The new
+# json object is kept if it were either clean or could be fixed.
 def clean_and_repair(data: List[dict], condition):
     cleaned_data = []
     for j_obj in data:
