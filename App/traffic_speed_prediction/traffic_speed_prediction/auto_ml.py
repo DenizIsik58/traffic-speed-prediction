@@ -12,7 +12,11 @@ import autosklearn.regression
 
 class auto_ml:
 
-
+    # This function trains the AutoML-model using "BigData.csv" as training data.
+    # The column "average_speed" is used as the outcome data.
+    # Out of the dataset, 0.2 (20%) parts is used for testing.
+    # The model is bases on regression.
+    # The model is tested, and the results are printed to the terminal.
     @staticmethod
     def train():
         global model
@@ -25,8 +29,8 @@ class auto_ml:
 
         model.fit(x_train, y_train)
 
-        #print(x_train.describe())
-        #print(y_train.describe())
+        # print(x_train.describe())
+        # print(y_train.describe())
 
         print("SCORE:")
         print("______________________________________________________________ ")
@@ -34,6 +38,9 @@ class auto_ml:
         y_test_predict = model.predict(x_test)
         print(mse(y_test, y_test_predict) ** 0.5)
         print("______________________________________________________________ ")
+
+    # This method let the model make a prediction (recommended speed), given a list of parameters:
+    #   [road_number, road_temperature, daylight, weather_symbol, roadMaintenanceClass, freeflowspeed]
     @staticmethod
     def predict(road_section):
         dataset = pd.read_csv('traffic_speed_prediction/BigData.csv')
