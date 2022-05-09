@@ -16,10 +16,11 @@ IS_NEGATIVE = 11  # Any
 NOT = 12  # Rule
 OR = 13  # list[Rule]
 FOR_ALL = 14  # Condition
-EXISTS = 15
+EXISTS = 15  # Condition
 EQUALS_FIELD = 16  # Key
 LESS_THAN_FIELD = 17  # Key
 MORE_THAN_FIELD = 18  # Key
+
 
 # A rule for the cleaner
 # rule_type: What the rule checks for
@@ -90,12 +91,14 @@ class Rule:
         else:
             return False, val
 
+
 # A condition
 # rules: map of strings -> list of rules
 class Condition:
     def __init__(self, rules):
         self.rules = rules
 
+    # Returns -> if the all rules in this Condition object, holds for a json object
     def apply(self, j_obj):
         for key, rules in self.rules.items():
             for rule in rules:
@@ -105,7 +108,8 @@ class Condition:
                 except KeyError:
                     return False
         return True
-    
+
+    # Returns a clean version of the given json object
     def enforce(self, j_obj):
         new_j_obj = {}
         for key, rules in self.rules.items():
@@ -127,17 +131,18 @@ class Condition:
                 new_j_obj[key] = j_obj[key]
         return True, new_j_obj
 
-# Clean a list of data given by a condition 
+
+# Clean a list of data given a condition
 def clean(data: List[dict], condition):
     cleaned_data = []
     for j_obj in data:
-
         if condition.apply(j_obj):
             cleaned_data.append(j_obj)
 
     return cleaned_data
 
 
+# Cleans a list of data given a condition while keeping all usable data
 def clean_and_repair(data: List[dict], condition):
     cleaned_data = []
     for j_obj in data:
