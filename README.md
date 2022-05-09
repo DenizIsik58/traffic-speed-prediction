@@ -5,7 +5,7 @@
 ![GitHub branch status check](https://img.shields.io/github/checks-status/denizisik58/traffic-speed-prediction/main?logo=GitHub&style=for-the-badge)
 ![GitHub](https://img.shields.io/github/license/denizisik58/traffic-speed-prediction?style=for-the-badge)
 
-Everything in this repository is currently under development and is being development for the company <u>[Solita](https://www.solita.fi/en/?utm_campaign=EST:+Brand&utm_term=solita&utm_source=adwords&utm_medium=ppc&hsa_kw=solita&hsa_acc=2178929025&hsa_mt=e&hsa_grp=123766618555&hsa_tgt=kwd-334844187&hsa_src=g&hsa_cam=13334249436&hsa_net=adwords&hsa_ad=525097120039&hsa_ver=3&gclid=CjwKCAjw9-KTBhBcEiwAr19igyzTDgaTbxDB4OXuDHPWwFqxYIEXXrlGfyWRza2-p1sCwaj-uH7nPBoCzR4QAvD_BwE) </u>. The following information provided is used to boot up the application for development purposes or deploying the docker stack to production.
+Everything in this repository is currently under development and is being developed for the company <u>[Solita](https://www.solita.fi/en/?utm_campaign=EST:+Brand&utm_term=solita&utm_source=adwords&utm_medium=ppc&hsa_kw=solita&hsa_acc=2178929025&hsa_mt=e&hsa_grp=123766618555&hsa_tgt=kwd-334844187&hsa_src=g&hsa_cam=13334249436&hsa_net=adwords&hsa_ad=525097120039&hsa_ver=3&gclid=CjwKCAjw9-KTBhBcEiwAr19igyzTDgaTbxDB4OXuDHPWwFqxYIEXXrlGfyWRza2-p1sCwaj-uH7nPBoCzR4QAvD_BwE) </u>. The following information provided is used to boot up the application for development purposes or deploying the docker stack to production.
 
 
 This repository is managed by dependabot in order to keep all packages up to date and be alerted if there are any vulnerabilities in the source code.
