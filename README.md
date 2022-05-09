@@ -37,7 +37,7 @@ REACT_APP_BACKEND_PRODUCTION_URL=https://tsp.hostanything.org
 REACT_APP_BACKEND_DEVELOPMENT_URL=http://localhost:8000
 ```
 
-Both .env files contains a variable called NODE_ENV representing the current state of the project. It's very <u>IMPORTANT</u> to update these as it can expose harmful information inside the project to the user, if it ends out in production. 
+Both .env files contains a variable called NODE_ENV representing the current state of the project. It's very <u>IMPORTANT</u> to update these as it can expose harmful information, if it ends out in production. 
 
 Change the value to `development` when you are in development or `production` when you are going to deploy.
 
@@ -63,7 +63,7 @@ The page will reload when you make changes.
 You may also see any lint errors in the console.
 
 #### Frontend in production:
-If you want to see how it looks and functions in production you first need to build the react application and serve it for the public:
+If you want to see how it looks and functions in production you first need to build the react application and then you can serve it for the public:
 
 ```
 1. npm run build
@@ -74,7 +74,9 @@ If you want to see how it looks and functions in production you first need to bu
 
 ## Continuous deployment
 
-Every time the development team publishes a release, a new docker image for the application and frontend will be built and pushed to **GitHub package registry** using GitHub actions. Make sure to add your GitHub access token into your repository. [Follow this tutorial to add secrets to your repository.](https://github.com/Azure/actions-workflow-samples/blob/master/assets/create-secrets-for-GitHub-workflows.md)
+Every time the development team publishes a release, a new docker image for the application and frontend will be built and pushed to **GitHub package registry** using GitHub actions. All files for GitHub actions can be found in the `.github` folder.
+
+Make sure to add your GitHub access token into your repository. [Follow this tutorial to add secrets to your repository.](https://github.com/Azure/actions-workflow-samples/blob/master/assets/create-secrets-for-GitHub-workflows.md)
 
 The docker stack is managed by **shepherd**, which will check for new package version every 5 minutes and update the services on the host machine if there are any changes.
 
