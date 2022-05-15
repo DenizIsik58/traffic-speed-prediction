@@ -91,6 +91,25 @@ Docker swarm has been used for the deployment stack as it allows the development
 
 `sudo docker stack deploy -c deployment.yml tsp` - This will deploy the complete application stack to the swarm by using the *deployment.yml* file.
 
+
+Note that the deployment.yml file contains our own images (App & Frontend) as services together with some other services. Our own images are as described above pushed into our personal GitHub Container Registry. 
+
+If you do not have your images on GitHub Registry yet, please make sure to do so:
+
+Run step 1 for all the services you serve. In this case we are serving the backend (App) & the Frontend. Therefore, we need to build both images and push them to our repository.
+
+Run step 2 for all the services to make sure that the services serves as intended before pushing them into production.
+
+Run step 3 to push the final images to production. Remember, if you already have a docker swarm running with the deployment file, and you update an image by pushing it to your repository, shepherd will see a new version and immediately adjust changes into production.
+```
+1. docker build . --tag ghcr.io/<YourGitHubName>/<ImageName>:latest
+2. docker run ghcr.io/<YourGitHubName>/<ImageName>:latest
+3. docker push ghcr.io/<YourGitHubName>/<ImageName>:latest
+```
+
+In order to see how it's functioning in production, and before you initialize a docker swarm, you can simply run the deployment.yml file by running the 2 commands at the beginning of this section. But make sure that the images exists in your GitHub repository beforehand.
+
+
 ## Contributors
 - Adrian Bay Dorph
 - Anton Marius Breinholt
