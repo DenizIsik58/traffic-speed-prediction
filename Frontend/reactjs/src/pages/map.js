@@ -201,6 +201,42 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             ]);
         }
 
+        function highlightRoads(roads) {
+            const highlightSource = 'ourAPI'
+            for (let i = 0; i < roads.length; i++) {
+                let road = roads[i]
+                console.log(road)
+
+                map.current.addSource(highlightSource, {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'properties': {},
+                        'geometry': {
+                            'type': 'MultiLineString',
+                            'coordinates': road[0][0]
+                        }
+                    },
+                });
+
+                map.current.addLayer({
+                    'id': i.toString() + '_canClick',
+                    'type': 'line',
+                    'source': highlightSource,
+                    'layout': {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    'paint': {
+                        'line-color': isDarkMode ? 'pink' : "purple",
+                        'line-width': 6
+                    }
+                });
+            }
+
+
+        }
+
     return <div  style={{cursor: "pointer"} }><div  className="map-container" ref={mapContainerRef} style={{ width: "100%", height: "85vh" }}>
         <div className="sidebar">
 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
