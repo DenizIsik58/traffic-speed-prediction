@@ -165,8 +165,8 @@ class Scraper:
 
         # Add the geo data of all road sections to all_road_sections as a tuple containing the geo data, road id and road section id
         for road_section in ujson.loads(response)["features"]:
-            index_road_id = int(road_section["properties"]["id"][0])
-            index_road_section_id = int(road_section["properties"]["id"][1])
+            index_road_id = int(road_section["properties"]["id"].split('_')[0])
+            index_road_section_id = int(road_section["properties"]["id"].split('_')[1])
 
             for element in road_section["geometry"]["coordinates"]:
                 all_road_sections.append((element, index_road_id, index_road_section_id))
