@@ -61,7 +61,7 @@ class GetGeoJson(APIView):
         geodata = Scraper.getGeoJsonForRoadSection(roadNumber, roadSectionId)
 
         # geodata is only none if the road section couldn't be found for the roadNumber
-        if (geodata is None):
+        if geodata is None:
             return Response(geodata, status=status.HTTP_404_NOT_FOUND)
 
         return Response(geodata, status=status.HTTP_200_OK)
@@ -73,7 +73,7 @@ class GetGeoJsonForAllRoadSections(APIView):
         road_sections_in_db = Road_section.objects
         for element in all_road_section_geo_data:
             (geo_data, road_id, road_section_id) = element
-            if road_sections_in_db.get(road__contains=road_id, road_section_number__contains = road_section_id):
+            if road_sections_in_db.get(road__Road_number=road_id, road_section_number=road_section_id) is not None:
                 all_road_section_geo_data_in_db.append(geo_data)
 
         if len(all_road_section_geo_data_in_db) > 0:
