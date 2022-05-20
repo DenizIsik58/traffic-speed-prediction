@@ -65,3 +65,9 @@ class GetGeoJson(APIView):
             return Response(geodata, status=status.HTTP_404_NOT_FOUND)
 
         return Response(geodata, status=status.HTTP_200_OK)
+
+    def getAllRoads(self, request):
+        Scraper.getGeoJsonForAllRoadSections()
+
+
+

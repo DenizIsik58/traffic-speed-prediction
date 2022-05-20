@@ -1,7 +1,5 @@
 import string
-import time
 import traceback
-import datetime
 import requests
 import ujson
 
@@ -134,7 +132,7 @@ class Scraper:
 
     @staticmethod
     def getGeoJsonForRoadSection(roadNumber, roadSectionId):
-        apiPath = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/" + roadNumber;
+        apiPath = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/" + roadNumber
 
         response = requests.get(apiPath).text
         allSectionsData = []
@@ -149,12 +147,30 @@ class Scraper:
             # If we find the correct road section, return its list of points
             # A road section can appear multiple times, as it is split into smaller segments
             # We ignore this, and just find the entire road section
-            if (int(index_roadSectionId) == int(roadSectionId)):
+            if int(index_roadSectionId) == int(roadSectionId):
                 for element in road_section["geometry"]["coordinates"]:
                     allSectionsData.append(element)
 
         # If nothing is found, return none
-        if (len(allSectionsData) > 0):
+        if len(allSectionsData) > 0:
             return allSectionsData
+        else:
+            return None
+
+    @staticmethod
+    def getGeoJsonForAllRoadSections():
+        api_path = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/"
+        response = requests.get(api_path).text
+        all_road_sections = []
+
+        # Add the geo data of all road sections to all_road_sections
+        for road_section in ujson.loads(response)["features"]:
+
+            for element in road_section["geometry"]["coordinates"]:
+                all_road_sections.append(element)
+
+        # If all_road_sections is empty return None else return all_road_sections
+        if len(all_road_sections) > 0:
+            return all_road_sections
         else:
             return None
