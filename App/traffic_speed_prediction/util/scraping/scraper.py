@@ -161,13 +161,15 @@ class Scraper:
     def getGeoJsonForAllRoadSections():
         api_path = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/"
         response = requests.get(api_path).text
-        all_road_sections = []
+        all_road_sections = [] # list of (geo data, road id, road section id)
 
-        # Add the geo data of all road sections to all_road_sections
+        # Add the geo data of all road sections to all_road_sections as a tuple containing the geo data, road id and road section id
         for road_section in ujson.loads(response)["features"]:
+            index_road_id = road_section["properties"]["id"]
+            index_road_section_id = index_road_id.split("_")[1]
 
             for element in road_section["geometry"]["coordinates"]:
-                all_road_sections.append(element)
+                all_road_sections.append((element, index_road_id, index_road_section_id))
 
         # If all_road_sections is empty return None else return all_road_sections
         if len(all_road_sections) > 0:
