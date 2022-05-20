@@ -73,7 +73,7 @@ class GetGeoJsonForAllRoadSections(APIView):
         road_sections_in_db = Road_section.objects.all()
         for element in all_road_section_geo_data:
             (geo_data, road_id, road_section_id) = element
-            if len(road_sections_in_db.filter(road=road_id, road_section_number = road_section_id)) != 0:
+            if road_sections_in_db.filter(road=road_id, road_section_number = road_section_id).exists():
                 all_road_section_geo_data_in_db.append(geo_data)
 
         if len(all_road_section_geo_data_in_db) > 0:
