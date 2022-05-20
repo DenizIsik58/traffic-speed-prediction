@@ -10,13 +10,13 @@ services:
     ports:
       - "3000:3000"
     command: >
-      sh -c "npm start"
+      sh -c "serve -s build"
 
   app:
     image: ghcr.io/denizisik58/tsp:latest
     restart: always
     volumes:
-      - .:/app
+      - .:/application
     env_file:
       - ./.env
     ports:
@@ -43,9 +43,9 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      SLEEP_TIME: 3600
+      SLEEP_TIME: 7200
       IMAGE_AUTOCLEAN_LIMIT: 3
-      IGNORELIST_SERVICES: 'frontend_shepherd_1 frontend_db_1'
+      IGNORELIST_SERVICES: 'tsp_shepherd tsp_db'
       TZ: Europe/Copenhagen
     deploy:
       placement:

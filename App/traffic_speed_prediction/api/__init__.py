@@ -1,0 +1,1 @@
+#Django expects this file to be here, in order for the app to work
