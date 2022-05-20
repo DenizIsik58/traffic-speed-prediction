@@ -1,6 +1,8 @@
 import React, {useEffect, useRef, useState} from "react";
 import mapboxgl from "mapbox-gl";
-import * as process from "process";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import {Alert} from "reactstrap";
+
 
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_SECRET_KEY;
 
@@ -26,7 +28,9 @@ const Map = () => {
     const [speed, setSpeed] = useState(null);
     const [speedLimit, setSpeedLimit] = useState(null);
     const [isDarkMode, setDarkMode] = useState(false);
-
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showWarning, setShowWarning] = useState(false);
+    const [showError, setShowError] = useState(false);
 
   // initialize map when component mounts
   useEffect(() => {
@@ -45,16 +49,23 @@ const Map = () => {
     setZoom(map.current.getZoom().toFixed(2));
     });
 
-    map.current.on('click', () => {
-          const newLng = map.current.getCenter().lng;
-          const newLat = map.current.getCenter().lat;
+    map.current.on('click', (e) => {
+          const newLng = JSON.stringify(e.lngLat.wrap().lng);
+          const newLat = JSON.stringify(e.lngLat.wrap().lat);
           predict(newLng, newLat);
-
         });
 
   }, []);
      // eslint-disable-line react-hooks/exhaustive-deps
 
+    function clearTimer() {
+        setTimeout(() => {
+      // After 3 seconds set the showSuccess value to false
+      setShowSuccess(false)
+        setShowWarning(false)
+        setShowError(false)
+    }, 3000)
+    }
 
     function predict(latitude, longitude){
 
@@ -100,7 +111,6 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             //add markers (kilometer prediction) source
 
 
-
              map.current.addLayer({
                 'id': layer_name,
                 'type': 'line',
@@ -144,23 +154,32 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
 
         async function fetch_prediction(givenLon, givenLat)
         {
-            const lon = JSON.stringify(givenLon)
-            const lat = JSON.stringify(givenLat)
 
             if(debug)
             {
                 console.log("Recieved coords:")
 
-
-                console.log("Longitude:")
-                console.log(lon)
-                console.log("Latitude:")
-                console.log(lat)
             }
 
             //this would be cleaner with string formatting, but I couldnt get it to work
-            const apiPath = (process.env.REACT_APP_ENVIRONMENT === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-pred&lat=" + lat + "&lon=" + lon + "&existingRoads=''"
+            const apiPath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-pred&lat=" + givenLat + "&lon=" + givenLon + "&existingRoads=''"
             const response = await fetch(apiPath)
+            if (response.status === 400) {
+                setShowWarning(true)
+                clearTimer()
+                return
+            }else if (response.status === 226) {
+                setShowWarning(true)
+                clearTimer()
+                return
+            }else if (response.status === 500) {
+                setShowError(true)
+                clearTimer()
+                return
+            }else if (response.status === 200) {
+                setShowSuccess(true)
+                clearTimer()
+            }
 
             return await response.json();
         }
@@ -169,7 +188,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
         {
             // API call to the server
             // Get the geodata of the road section
-            const apiPath = (process.env.REACT_APP_ENVIRONMENT === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
+            const apiPath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
             const response = await fetch(apiPath)
             return await response.json();
         }
@@ -186,6 +205,20 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
         <div className="sidebar">
 Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
 </div>
+        {showSuccess ? (<div  className="alerts">
+             <Alert show={showSuccess}  color="success">
+                Successful road lookup!
+            </Alert>
+    </div>): showWarning ? (<div  className="alerts">
+             <Alert show={showSuccess}  color="warning">
+                The model is currently being trained or hasn't been trained yet. Please be patient!
+            </Alert>
+    </div>) : showError ? (<div  className="alerts">
+             <Alert show={showSuccess}  color="danger">
+                An exception occurred during lookup. The road might be under maintenance
+            </Alert>
+    </div>) : <div></div>}
+
         <div className="roadInfo">
 Road Name: { roadName } | Speed: {speed} | Speed Limit: N/A
 </div>

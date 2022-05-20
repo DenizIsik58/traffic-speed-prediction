@@ -37,9 +37,9 @@ class Scraper:
                 "roadConditions"] != []:
                 continue
 
-            daylight = cleaned_road_condition[0]["roadConditions"][0]["daylight"]
-            road_temp = cleaned_road_condition[0]["roadConditions"][0]["roadTemperature"]
-            weather_symbol = cleaned_road_condition[0]["roadConditions"][0]["weatherSymbol"]
+            daylight = cleaned_road_condition[0]["roadConditions"][1]["daylight"]
+            road_temp = cleaned_road_condition[0]["roadConditions"][1]["roadTemperature"]
+            weather_symbol = cleaned_road_condition[0]["roadConditions"][1]["weatherSymbol"]
             road_number = str(cleaned_road_condition[0]["id"]).split("_")[0]
             road_sections = []
             road_maintenance_classes = []

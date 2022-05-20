@@ -42,7 +42,23 @@ left: 10px;
 border-radius: 4px;
 }
 
-@media screen and (max-width: 900px) {
+.alerts {
+color: #fff;
+  margin-right: 40%;
+  margin-left: 40%;
+  margin-top: 25%;
+  width: 20%;
+padding: 6px 12px;
+font-family: monospace;
+z-index: 5;
+position: absolute;
+top: 0;
+left: 10px;
+
+border-radius: 4px;
+}
+
+@media screen and (max-width: 1200px) {
 
   .sidebar {
         display:none;
