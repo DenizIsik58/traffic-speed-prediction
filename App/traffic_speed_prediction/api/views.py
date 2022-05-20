@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 
-from.webscraper import tryGet
+#from.webscraper import tryGet
 from .serializers import RoadSectionSerializer
 from rest_framework import viewsets
 from .models import Road_section
@@ -39,6 +39,7 @@ class CreateWeatherHistoryData(APIView):
     serializer_class = WeatherHistoryDataSerializer
 
     def post(self, request):
+        return None
         if not self.request.session.exists(self.request.session.session_key):
             self.request.session.create()
         serializer = self.serializer_class(data=request.data)
@@ -50,14 +51,14 @@ class CreateWeatherHistoryData(APIView):
             measuredTime = serializer.data.get('measuredTime')
             queryset = WeatherHistoryData.objects.filter(roadStationId = roadStationId)
 
-            js = tryGet()
-            for d in js:
-                roadStationId = d['roadStationId']
-                sensorId = d['sensorId']
-                sensorValue = d['sensorValue']
-                measuredTime = d['measuredTime']
-                weatherHistoryData = WeatherHistoryData(roadStationId=roadStationId, sensorId=sensorId, sensorValue=sensorValue, measuredTime=measuredTime)
-                weatherHistoryData.save()
+            # js = tryGet()
+            # for d in js:
+            #     roadStationId = d['roadStationId']
+            #     sensorId = d['sensorId']
+            #     sensorValue = d['sensorValue']
+            #     measuredTime = d['measuredTime']
+            #     weatherHistoryData = WeatherHistoryData(roadStationId=roadStationId, sensorId=sensorId, sensorValue=sensorValue, measuredTime=measuredTime)
+            #     weatherHistoryData.save()
 
 
             # if queryset.exists():
@@ -71,8 +72,8 @@ class CreateWeatherHistoryData(APIView):
             #     weatherHistoryData = WeatherHistoryData(roadStationId=roadStationId, sensorId=sensorId,
             #                                 sensorValue=sensorValue, measuredTime=measuredTime)
             #     weatherHistoryData.save()
-
-            return Response(WeatherHistoryDataSerializer(weatherHistoryData).data, status=status.HTTP_201_CREATED)
+            return None
+            #return Response(WeatherHistoryDataSerializer(weatherHistoryData).data, status=status.HTTP_201_CREATED)
 
         return Response({'Bad Request': 'Invalid data...'}, status=status.HTTP_400_BAD_REQUEST)
 

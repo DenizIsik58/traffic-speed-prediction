@@ -16,7 +16,8 @@ class DatabaseCommands:
 
     @staticmethod
     def load_database():
-        Scraper.load_data()
+        #Scraper.load_data()
+        print("HEJ")
 
     @staticmethod
     def extract_data_and_write_to_csv():
