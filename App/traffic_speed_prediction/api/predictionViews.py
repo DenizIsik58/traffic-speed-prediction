@@ -67,7 +67,15 @@ class GetGeoJson(APIView):
         return Response(geodata, status=status.HTTP_200_OK)
 
     def getAllRoads(self, request):
-        Scraper.getGeoJsonForAllRoadSections()
+        all_road_section_geo_data_in_db = []
+        all_road_section_geo_data = Scraper.getGeoJsonForAllRoadSections()
+        road_sections_in_db = Road_section.objects.all()
+        for element in all_road_section_geo_data:
+            (geo_data, road_id, road_section_id) = element
+            if len(road_sections_in_db.filter(road=road_id, road_section_number = road_section_id)) != 0:
+                all_road_section_geo_data_in_db.append(geo_data)
 
-
-
+        if len(all_road_section_geo_data_in_db) > 0:
+            return all_road_section_geo_data_in_db
+        else:
+            return None
