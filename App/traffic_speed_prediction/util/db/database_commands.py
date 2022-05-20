@@ -17,7 +17,8 @@ class DatabaseCommands:
     # Calls the Scraper's load_data method
     @staticmethod
     def load_database():
-        Scraper.load_data()
+        #Scraper.load_data()
+        print("HEJ")
 
     # Writes each row in the database's api_road_section table into a csv file
     @staticmethod

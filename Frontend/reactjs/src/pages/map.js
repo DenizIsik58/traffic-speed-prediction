@@ -37,16 +37,56 @@ const Map = () => {
 
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
-    container: mapContainerRef.current,
-    style: 'mapbox://styles/mapbox/navigation-day-v1',
-      center: [lng, lat], // starting position
-            zoom: zoom,
+        container: mapContainerRef.current,
+        style: 'mapbox://styles/mapbox/navigation-day-v1',
+        center: [lng, lat], // starting position
+                zoom: zoom, 
     });
 
+    map.current.on('load', function () {
+        console.log("loading data");
+        let allGeoDataPromise = getAllGeoData();
+
+
+        allGeoDataPromise.then(function(geodata) {
+            console.log("done loading:")
+            console.log(geodata)
+
+            map.current.addSource("ALL_ROADS", {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'MultiLineString',
+                        'coordinates': geodata,
+                    }
+                },
+            });
+    
+            map.current.addLayer({
+                'id': "ALL_ROAD_LAYER",
+                'type': 'line',
+                'source': "ALL_ROADS",
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                'paint': {
+                    'line-color': 'red',
+                    'line-width': 4,
+                    'line-opacity': 0.2
+                }
+            });
+        })
+        
+    });
+       
+
     map.current.on('move', () => {
-    setLng(map.current.getCenter().lng.toFixed(2));
-    setLat(map.current.getCenter().lat.toFixed(2));
-    setZoom(map.current.getZoom().toFixed(2));
+        setLng(map.current.getCenter().lng.toFixed(2));
+        setLat(map.current.getCenter().lat.toFixed(2));
+        setZoom(map.current.getZoom().toFixed(2));
     });
 
     map.current.on('click', (e) => {
@@ -66,6 +106,16 @@ const Map = () => {
         setShowError(false)
     }, 3000)
     }
+
+    async function getAllGeoData()
+    {
+        console.log("fetching");
+        const apiPath = 'http://localhost:8000/api/get-geojsonforallroadsections'
+        const response = await fetch(apiPath)
+        
+        return await response.json();
+    }
+
 
     function predict(latitude, longitude){
 
@@ -128,7 +178,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
                     'line-cap': 'round'
                 },
                 'paint': {
-                    'line-color': isDarkMode ? 'white' : "black",
+                    'line-color': 'purple',
                     'line-width': 4
                 }
             });
@@ -207,6 +257,42 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
                 "get",
                 `name_${language}`
             ]);
+        }
+
+        function highlightRoads(roads) {
+            const highlightSource = 'ourAPI'
+            for (let i = 0; i < roads.length; i++) {
+                let road = roads[i]
+                console.log(road)
+
+                map.current.addSource(highlightSource, {
+                    'type': 'geojson',
+                    'data': {
+                        'type': 'Feature',
+                        'properties': {},
+                        'geometry': {
+                            'type': 'MultiLineString',
+                            'coordinates': road[0][0]
+                        }
+                    },
+                });
+
+                map.current.addLayer({
+                    'id': i.toString() + '_canClick',
+                    'type': 'line',
+                    'source': highlightSource,
+                    'layout': {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    'paint': {
+                        'line-color': isDarkMode ? 'pink' : "purple",
+                        'line-width': 6
+                    }
+                });
+            }
+
+
         }
 
     return <div  style={{cursor: "pointer"} }><div  className="map-container" ref={mapContainerRef} style={{ width: "100%", height: "85vh" }}>
