@@ -37,16 +37,21 @@ const Map = () => {
 
     if (map.current) return; // initialize map only once
     map.current = new mapboxgl.Map({
-    container: mapContainerRef.current,
-    style: 'mapbox://styles/mapbox/navigation-day-v1',
-      center: [lng, lat], // starting position
-            zoom: zoom,
+        container: mapContainerRef.current,
+        style: 'mapbox://styles/mapbox/navigation-day-v1',
+        center: [lng, lat], // starting position
+                zoom: zoom, 
     });
 
+    map.on('load', function () {
+        let allGeoData = 's'
+    });
+       
+
     map.current.on('move', () => {
-    setLng(map.current.getCenter().lng.toFixed(2));
-    setLat(map.current.getCenter().lat.toFixed(2));
-    setZoom(map.current.getZoom().toFixed(2));
+        setLng(map.current.getCenter().lng.toFixed(2));
+        setLat(map.current.getCenter().lat.toFixed(2));
+        setZoom(map.current.getZoom().toFixed(2));
     });
 
     map.current.on('click', (e) => {
@@ -66,6 +71,14 @@ const Map = () => {
         setShowError(false)
     }, 3000)
     }
+
+    function getAllGeoData()
+    {
+        const apiPath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
+        const response = await fetch(apiPath)
+        return await response.json();
+    }
+
 
     function predict(latitude, longitude){
 
