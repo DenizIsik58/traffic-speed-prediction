@@ -66,7 +66,8 @@ class GetGeoJson(APIView):
 
         return Response(geodata, status=status.HTTP_200_OK)
 
-    def getAllRoads(self, request):
+class GetGeoJsonForAllRoadSections(APIView):
+    def get(self, request):
         all_road_section_geo_data_in_db = []
         all_road_section_geo_data = Scraper.getGeoJsonForAllRoadSections()
         road_sections_in_db = Road_section.objects.all()
