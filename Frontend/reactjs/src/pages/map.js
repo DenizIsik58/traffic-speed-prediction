@@ -43,8 +43,43 @@ const Map = () => {
                 zoom: zoom, 
     });
 
-    map.on('load', function () {
-        let allGeoData = 's'
+    map.current.on('load', function () {
+        console.log("loading data");
+        let allGeoDataPromise = getAllGeoData();
+
+
+        allGeoDataPromise.then(function(geodata) {
+            console.log("done loading:")
+            console.log(geodata)
+
+            map.current.addSource("ALL_ROADS", {
+                'type': 'geojson',
+                'data': {
+                    'type': 'Feature',
+                    'properties': {},
+                    'geometry': {
+                        'type': 'MultiLineString',
+                        'coordinates': geodata,
+                    }
+                },
+            });
+    
+            map.current.addLayer({
+                'id': "ALL_ROAD_LAYER",
+                'type': 'line',
+                'source': "ALL_ROADS",
+                'layout': {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                'paint': {
+                    'line-color': 'red',
+                    'line-width': 4,
+                    'line-opacity': 0.2
+                }
+            });
+        })
+        
     });
        
 
@@ -72,10 +107,12 @@ const Map = () => {
     }, 3000)
     }
 
-    function getAllGeoData()
+    async function getAllGeoData()
     {
-        const apiPath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/get-geojson&roadNumber=" + roadNumber + "&roadSectionId=" + roadSectionId
+        console.log("fetching");
+        const apiPath = 'http://localhost:8000/api/get-geojsonforallroadsections'
         const response = await fetch(apiPath)
+        
         return await response.json();
     }
 
@@ -133,7 +170,7 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
                     'line-cap': 'round'
                 },
                 'paint': {
-                    'line-color': isDarkMode ? 'white' : "black",
+                    'line-color': 'purple',
                     'line-width': 4
                 }
             });
