@@ -19,6 +19,11 @@ class auto_ml:
         self.isBeingTrained = isBeingTrained
         self.isTrained = isTrained
 
+    # This function trains the AutoML-model using "BigData.csv" as training data.
+    # The column "average_speed" is used as the outcome data.
+    # Out of the dataset, 0.2 (20%) parts is used for testing.
+    # The model is bases on regression.
+    # The model is tested, and the results are printed to the terminal.
     def train(self):
         global model
         if self.isBeingTrained or self.isTrained:
@@ -54,7 +59,8 @@ class auto_ml:
         # summarize
         print(model.sprint_statistics())
 
-
+    # This method let the model make a prediction (recommended speed), given a list of parameters:
+    #   [road_number, road_temperature, daylight, weather_symbol, roadMaintenanceClass, freeflowspeed]
     def predict(road_section):
         return model.predict(np.array(
             [[road_section[0], road_section[1], road_section[2], road_section[3], road_section[4], road_section[5]]]))[
