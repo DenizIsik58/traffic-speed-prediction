@@ -110,8 +110,8 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             setSpeed(prediction_formatted)
             //add markers (kilometer prediction) source
 
-            if (map.current.getLayer((numberOfRoads - 2).toString()) !== undefined) {
-                map.current.removeLayer((numberOfRoads - 2).toString())
+            if (map.current.getLayer((numberOfRoads - 1).toString()) !== undefined) {
+                map.current.removeLayer((numberOfRoads - 1).toString())
             }
 
 

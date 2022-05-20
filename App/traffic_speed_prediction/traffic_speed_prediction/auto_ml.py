@@ -57,7 +57,7 @@ class auto_ml:
         print(mse(y_test, y_test_predict) ** 0.5)
         print("______________________________________________________________ ")
         # summarize
-        print(model.sprint_statistics())
+        #print(model.sprint_statistics())
 
     # This method let the model make a prediction (recommended speed), given a list of parameters:
     #   [road_number, road_temperature, daylight, weather_symbol, roadMaintenanceClass, freeflowspeed]
