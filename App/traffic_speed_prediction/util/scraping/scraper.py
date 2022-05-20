@@ -21,6 +21,8 @@ class Scraper:
     def fetch_and_create_db_object_from_tms_station_data():
         pass
 
+    # Get all known road sections from an API call
+    # and then save them to the database
     @staticmethod
     def load_data():
         # Find all the ids related to road stations and road number
@@ -70,6 +72,11 @@ class Scraper:
                 except:
                     traceback.print_exc()
                     break
+            
+            # Find all the road sections and save them to the database
+            # A road section will have much data in common with its road 
+            # (so all road sections of the same road will share some data)
+            # Maybe this should be made into an index loop
             i = -1
             for section in road_sections:
 
@@ -130,6 +137,8 @@ class Scraper:
             except:
                 traceback.print_exc()
 
+    # Get geojson for a specific road id and road section id
+    # The geojson contains the points which are needed to draw the road
     @staticmethod
     def getGeoJsonForRoadSection(roadNumber, roadSectionId):
         apiPath = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/" + roadNumber
