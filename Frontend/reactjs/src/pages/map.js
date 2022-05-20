@@ -110,9 +110,17 @@ function load_road_from_geojson(prediction, source_name, layer_name, multiLineSt
             setSpeed(prediction_formatted)
             //add markers (kilometer prediction) source
 
+            //the id, of the line highlighting a road
+            const lineId = "0"
 
+            //if there already is a line (highlighted road), then remove it
+            if (map.current.getLayer(lineId)) {
+                map.current.removeLayer(lineId)
+            }
+
+            //highlight a road
              map.current.addLayer({
-                'id': layer_name,
+                'id': lineId,
                 'type': 'line',
                 'source': source_name,
                 'layout': {
