@@ -77,6 +77,6 @@ class GetGeoJsonForAllRoadSections(APIView):
                 all_road_section_geo_data_in_db.append(geo_data)
 
         if len(all_road_section_geo_data_in_db) > 0:
-            return Response(all_road_section_geo_data, status=status.HTTP_200_OK)
+            return Response(all_road_section_geo_data_in_db, status=status.HTTP_200_OK)
         else:
-            return Response(all_road_section_geo_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(all_road_section_geo_data_in_db, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
