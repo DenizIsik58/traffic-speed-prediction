@@ -8,7 +8,6 @@ from util.config.ReadConfig import Config
 from api.models import Road, Road_section, TMS_station
 from util.data_cleaning.cleaner import *
 from util.data_cleaning.cleaner_conditions import *
-from rest_framework.response import Response
 import json
 
 
