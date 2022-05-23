@@ -106,6 +106,7 @@ class Scraper:
                                 break
                     except:
                         break
+        # Update all_road_sections_geodata with new data
         UpdateGeoJsonForAllRoadSections.put()
 
     @staticmethod
