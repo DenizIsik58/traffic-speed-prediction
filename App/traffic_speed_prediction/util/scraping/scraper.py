@@ -167,7 +167,7 @@ class Scraper:
             return None
 
     @staticmethod
-    def getGeoJsonForAllRoadSections():
+    def get_geo_data_for_all_road_sections():
         api_path = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/"
         response = requests.get(api_path).text
         all_road_sections = [] # list of (geo data, road id, road section id)

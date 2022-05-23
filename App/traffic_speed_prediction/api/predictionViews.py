@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from util.db.database_commands import DatabaseCommands
 from traffic_speed_prediction.auto_ml import auto_ml
+import json
 
 class GetPrediction(APIView):
     serializer_class = PredictionResponseSerializer
@@ -66,20 +67,30 @@ class GetGeoJson(APIView):
 
 class GetGeoJsonForAllRoadSections(APIView):
     def get(self, request):
-        print("in getting geojson")
+        # This method takes geo data from Scraper.get_geo_data_for_all_road_sections() and adds it to a list if the corresponding road section exists in the database
         all_road_section_geo_data_in_db = []
-        all_road_section_geo_data = Scraper.getGeoJsonForAllRoadSections()
+        all_road_section_geo_data = Scraper.get_geo_data_for_all_road_sections()
         road_sections_in_db = list(map(lambda e : (e.road.Road_number, e.road_section_number), Road_section.objects.all()))
 
         for element in all_road_section_geo_data:
             (geo_data, road_id, road_section_id) = element
-           
-            #if Road_section.objects.get(road__Road_number=road_id, road_section_number=road_section_id) is not None:
+
             if (road_id, road_section_id) in road_sections_in_db:
-                print("Found road: " + str(road_id) + ", section: " + str(road_section_id))
                 all_road_section_geo_data_in_db.append(geo_data)
 
         if len(all_road_section_geo_data_in_db) > 0:
             return Response(all_road_section_geo_data_in_db, status=status.HTTP_200_OK)
         else:
             return Response(all_road_section_geo_data_in_db, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class UpdateGeoJsonForAllRoadSections(APIView):
+    def update(self, request):
+        geodata = GetGeoJsonForAllRoadSections.get()
+        with open("all_road_sections_geodata.json") as outfile: # Where should we put the json file?
+            json.dump(geodata, outfile)
+
+class ReadGeoJsonForAllRoadSections(APIView):
+    def get(self):
+        with open("all_road_sections_geodata.json") as openfile:
+            return json.load(openfile)
+
