@@ -86,11 +86,11 @@ class GetGeoJsonForAllRoadSections(APIView):
 class UpdateGeoJsonForAllRoadSections(APIView):
     def update(self, request):
         geodata = GetGeoJsonForAllRoadSections.get()
-        with open("all_road_sections_geodata.json") as outfile: # Where should we put the json file?
+        with open("../all_road_sections_geodata.json", "w") as outfile: # Where should we put the json file?
             json.dump(geodata, outfile)
 
 class ReadGeoJsonForAllRoadSections(APIView):
-    def get(self):
-        with open("all_road_sections_geodata.json") as openfile:
+    def get(self, request):
+        with open("../all_road_sections_geodata.json", "r") as openfile:
             return json.load(openfile)
 
