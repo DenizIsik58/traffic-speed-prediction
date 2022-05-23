@@ -198,18 +198,22 @@ class Scraper:
     def get_all_road_sections_geodata_in_db():
         all_road_section_geo_data_in_db = []
         all_road_section_geo_data = Scraper.get_geodata_for_all_road_sections()
-        road_sections_in_db = list(
-            map(lambda e: (e.road.Road_number, e.road_section_number), Road_section.objects.all()))
+        road_sections_in_db = []
+        count = 0
+        for element in Road_section.objects.all():
+            road_sections_in_db.append((element.road.Road_number, element.road_section_number))
+            count += 1
+            print(count)
 
         for element in all_road_section_geo_data:
             (geo_data, road_id, road_section_id) = element
-
             if (road_id, road_section_id) in road_sections_in_db:
                 all_road_section_geo_data_in_db.append(geo_data)
         return all_road_section_geo_data_in_db
 
     @staticmethod
     def update_all_road_sections_json():
+        print('update_all_road_sections_json has been called')
         all_road_section_geo_data_in_db = Scraper.get_all_road_sections_geodata_in_db()
         with open("traffic_speed_prediction/all_road_sections_geodata.json",
                   "w") as outfile:  # Where should we put the json file?
