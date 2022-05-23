@@ -84,13 +84,30 @@ class GetGeoJsonForAllRoadSections(APIView):
             return Response(all_road_section_geo_data_in_db, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class UpdateGeoJsonForAllRoadSections(APIView):
-    def update(self, request):
-        geodata = GetGeoJsonForAllRoadSections.get()
-        with open("../all_road_sections_geodata.json", "w") as outfile: # Where should we put the json file?
-            json.dump(geodata, outfile)
+    def get(self, request):
+        all_road_section_geo_data_in_db = []
+        all_road_section_geo_data = Scraper.get_geo_data_for_all_road_sections()
+        road_sections_in_db = list(map(lambda e : (e.road.Road_number, e.road_section_number), Road_section.objects.all()))
+
+        for element in all_road_section_geo_data:
+            (geo_data, road_id, road_section_id) = element
+
+            if (road_id, road_section_id) in road_sections_in_db:
+                all_road_section_geo_data_in_db.append(geo_data)
+
+
+        with open("traffic_speed_prediction/all_road_sections_geodata.json", "w") as outfile: # Where should we put the json file?
+            json.dump(all_road_section_geo_data_in_db, outfile)
+        
+        if len(all_road_section_geo_data_in_db) > 0:
+            return Response(all_road_section_geo_data_in_db, status=status.HTTP_200_OK)
+        else:
+            return Response(all_road_section_geo_data_in_db, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class ReadGeoJsonForAllRoadSections(APIView):
     def get(self, request):
-        with open("../all_road_sections_geodata.json", "r") as openfile:
-            return json.load(openfile)
+        with open("traffic_speed_prediction/all_road_sections_geodata.json", "r") as openfile:
+            return Response(json.load(openfile),  status=status.HTTP_200_OK)
+    
+        
 

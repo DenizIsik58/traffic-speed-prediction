@@ -110,7 +110,7 @@ const Map = () => {
     async function getAllGeoData()
     {
         console.log("fetching");
-        const apiPath = 'http://localhost:8000/api/get-geojsonforallroadsections'
+        const apiPath = 'http://localhost:8000/api/read-geojsonforallroadsections'
         const response = await fetch(apiPath)
         
         return await response.json();
