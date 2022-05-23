@@ -25,7 +25,7 @@
     "react-dom": "^18.0.0",
     "react-mapbox-gl": "^5.1.1",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "reactstrap": "^9.0.2",
     "serve": "^13.0.2",
     "styled-components": "^5.3.5",

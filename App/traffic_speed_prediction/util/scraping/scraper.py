@@ -8,7 +8,8 @@ from util.config.ReadConfig import Config
 from api.models import Road, Road_section, TMS_station
 from util.data_cleaning.cleaner import *
 from util.data_cleaning.cleaner_conditions import *
-from api.predictoin_Views.py import UpdateGeoJsonForAllRoadSections
+from rest_framework.response import Response
+import json
 
 
 class Scraper:
@@ -106,8 +107,11 @@ class Scraper:
                                 break
                     except:
                         break
-        # Update all_road_sections_geodata with new data
-        UpdateGeoJsonForAllRoadSections.put()
+
+        # Update all_road_sections_geodata.json with new data
+        Scraper.update_all_road_sections_json()
+
+
 
     @staticmethod
     def get_live_road_section_info_by_id(road_number, road_section_id):
@@ -190,3 +194,25 @@ class Scraper:
             return all_road_sections
         else:
             return None
+
+    @staticmethod
+    def get_all_road_sections_geodata_in_db():
+        all_road_section_geo_data_in_db = []
+        all_road_section_geo_data = Scraper.get_geodata_for_all_road_sections()
+        road_sections_in_db = list(
+            map(lambda e: (e.road.Road_number, e.road_section_number), Road_section.objects.all()))
+
+        for element in all_road_section_geo_data:
+            (geo_data, road_id, road_section_id) = element
+
+            if (road_id, road_section_id) in road_sections_in_db:
+                all_road_section_geo_data_in_db.append(geo_data)
+        return all_road_section_geo_data_in_db
+
+    @staticmethod
+    def update_all_road_sections_json():
+        all_road_section_geo_data_in_db = Scraper.get_all_road_sections_geodata_in_db()
+        with open("traffic_speed_prediction/all_road_sections_geodata.json",
+                  "w") as outfile:  # Where should we put the json file?
+            json.dump(all_road_section_geo_data_in_db, outfile)
+        return all_road_section_geo_data_in_db
