@@ -8,6 +8,7 @@ from util.config.ReadConfig import Config
 from api.models import Road, Road_section, TMS_station
 from util.data_cleaning.cleaner import *
 from util.data_cleaning.cleaner_conditions import *
+from api.predictoin_Views.py import UpdateGeoJsonForAllRoadSections
 
 
 class Scraper:
@@ -105,6 +106,7 @@ class Scraper:
                                 break
                     except:
                         break
+        UpdateGeoJsonForAllRoadSections.put()
 
     @staticmethod
     def get_live_road_section_info_by_id(road_number, road_section_id):
@@ -166,8 +168,10 @@ class Scraper:
         else:
             return None
 
+
+
     @staticmethod
-    def get_geo_data_for_all_road_sections():
+    def get_geodata_for_all_road_sections():
         api_path = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/"
         response = requests.get(api_path).text
         all_road_sections = [] # list of (geo data, road id, road section id)

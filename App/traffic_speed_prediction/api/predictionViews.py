@@ -69,7 +69,7 @@ class GetGeoJsonForAllRoadSections(APIView):
     def get(self, request):
         # This method takes geo data from Scraper.get_geo_data_for_all_road_sections() and adds it to a list if the corresponding road section exists in the database
         all_road_section_geo_data_in_db = []
-        all_road_section_geo_data = Scraper.get_geo_data_for_all_road_sections()
+        all_road_section_geo_data = Scraper.get_geodata_for_all_road_sections()
         road_sections_in_db = list(map(lambda e : (e.road.Road_number, e.road_section_number), Road_section.objects.all()))
 
         for element in all_road_section_geo_data:
@@ -84,9 +84,9 @@ class GetGeoJsonForAllRoadSections(APIView):
             return Response(all_road_section_geo_data_in_db, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class UpdateGeoJsonForAllRoadSections(APIView):
-    def get(self, request):
+    def put(self, request):
         all_road_section_geo_data_in_db = []
-        all_road_section_geo_data = Scraper.get_geo_data_for_all_road_sections()
+        all_road_section_geo_data = Scraper.get_geodata_for_all_road_sections()
         road_sections_in_db = list(map(lambda e : (e.road.Road_number, e.road_section_number), Road_section.objects.all()))
 
         for element in all_road_section_geo_data:
