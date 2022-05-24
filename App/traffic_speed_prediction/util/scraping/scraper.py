@@ -8,6 +8,7 @@ from util.config.ReadConfig import Config
 from api.models import Road, Road_section, TMS_station
 from util.data_cleaning.cleaner import *
 from util.data_cleaning.cleaner_conditions import *
+import json
 
 
 class Scraper:
@@ -106,6 +107,11 @@ class Scraper:
                     except:
                         break
 
+        # Update all_road_sections_geodata.json with new data
+        Scraper.update_all_road_sections_json()
+
+
+
     @staticmethod
     def get_live_road_section_info_by_id(road_number, road_section_id):
         road_section = []
@@ -166,8 +172,10 @@ class Scraper:
         else:
             return None
 
+
+
     @staticmethod
-    def getGeoJsonForAllRoadSections():
+    def get_geodata_for_all_road_sections():
         api_path = "https://tie.digitraffic.fi/api/v2/metadata/forecast-sections/"
         response = requests.get(api_path).text
         all_road_sections = [] # list of (geo data, road id, road section id)
@@ -185,3 +193,29 @@ class Scraper:
             return all_road_sections
         else:
             return None
+
+    @staticmethod
+    def get_all_road_sections_geodata_in_db():
+        all_road_section_geo_data_in_db = []
+        all_road_section_geo_data = Scraper.get_geodata_for_all_road_sections()
+        road_sections_in_db = []
+        count = 0
+        for element in Road_section.objects.all():
+            road_sections_in_db.append((element.road.Road_number, element.road_section_number))
+            count += 1
+            print(count)
+
+        for element in all_road_section_geo_data:
+            (geo_data, road_id, road_section_id) = element
+            if (road_id, road_section_id) in road_sections_in_db:
+                all_road_section_geo_data_in_db.append(geo_data)
+        return all_road_section_geo_data_in_db
+
+    @staticmethod
+    def update_all_road_sections_json():
+        print('update_all_road_sections_json has been called')
+        all_road_section_geo_data_in_db = Scraper.get_all_road_sections_geodata_in_db()
+        with open("traffic_speed_prediction/all_road_sections_geodata.json",
+                  "w") as outfile:  # Where should we put the json file?
+            json.dump(all_road_section_geo_data_in_db, outfile)
+        return all_road_section_geo_data_in_db

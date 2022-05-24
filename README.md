@@ -111,6 +111,28 @@ Run step 3 to push the final images to production. Remember, if you already have
 
 In order to see how it's functioning in production, and before you initialize a docker swarm, you can simply run the deployment.yml file by running the 2 commands at the beginning of this section. But make sure that the images exists in your GitHub repository beforehand.
 
+## Additional information
+
+The cloud host of choice for this project is Linode, and the database is postgres. You can use whatever
+provider you want to use to host the application on and the same goes with the database. 
+
+
+Keep in mind that the machine learning part can be a heavy process and therefore needs a strong host machine to train itself
+(We are currently using a Linux machine with 2GB RAM and are having difficulties).
+
+All you need to do to get started with the project is:
+
+```
+1. Find a provider you want to host your application on e.g AWS EC2
+2. Find a database provider you want to store your data on e.g AWS DynamoDB
+3. Put the information into the .ENV files
+4. Scrape the data by using our scraper and load your database up with road information.
+5. Train the model.
+6. Set up the services with docker swarm by using the guide above.
+7. Host the service to the public and enjoy your predictions!
+```
+
+
 
 ## Contributors
 - Adrian Bay Dorph

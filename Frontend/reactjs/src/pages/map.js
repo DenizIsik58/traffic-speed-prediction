@@ -44,14 +44,9 @@ const Map = () => {
     });
 
     map.current.on('load', function () {
-        console.log("loading data");
         let allGeoDataPromise = getAllGeoData();
 
-
         allGeoDataPromise.then(function(geodata) {
-            console.log("done loading:")
-            console.log(geodata)
-
             map.current.addSource("ALL_ROADS", {
                 'type': 'geojson',
                 'data': {
@@ -107,10 +102,8 @@ const Map = () => {
     }, 3000)
     }
 
-    async function getAllGeoData()
-    {
-        console.log("fetching");
-        const apiPath = 'http://localhost:8000/api/get-geojsonforallroadsections'
+    async function getAllGeoData() {
+        const apiPath = (process.env.NODE_ENV === "production" ? process.env.REACT_APP_BACKEND_PRODUCTION_URL : process.env.REACT_APP_BACKEND_DEVELOPMENT_URL) + "/api/read-geojsonforallroadsections"
         const response = await fetch(apiPath)
         
         return await response.json();
@@ -139,9 +132,7 @@ const Map = () => {
             })
         }
 
-function load_road_from_geojson(prediction, source_name, layer_name, multiLineString)
-        {
-
+function load_road_from_geojson(prediction, source_name, layer_name, multiLineString) {
              map.current.addSource(source_name, {
                 'type': 'geojson',
                 'data': {

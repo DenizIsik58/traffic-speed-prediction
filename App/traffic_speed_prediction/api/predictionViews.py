@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from util.db.database_commands import DatabaseCommands
 from traffic_speed_prediction.auto_ml import auto_ml
+import json
 
 class GetPrediction(APIView):
     serializer_class = PredictionResponseSerializer
@@ -61,25 +62,29 @@ class GetGeoJson(APIView):
         # geodata is only none if the road section couldn't be found for the roadNumber
         if geodata is None:
             return Response(geodata, status=status.HTTP_404_NOT_FOUND)
-
         return Response(geodata, status=status.HTTP_200_OK)
 
 class GetGeoJsonForAllRoadSections(APIView):
     def get(self, request):
-        print("in getting geojson")
-        all_road_section_geo_data_in_db = []
-        all_road_section_geo_data = Scraper.getGeoJsonForAllRoadSections()
-        road_sections_in_db = list(map(lambda e : (e.road.Road_number, e.road_section_number), Road_section.objects.all()))
-
-        for element in all_road_section_geo_data:
-            (geo_data, road_id, road_section_id) = element
-           
-            #if Road_section.objects.get(road__Road_number=road_id, road_section_number=road_section_id) is not None:
-            if (road_id, road_section_id) in road_sections_in_db:
-                print("Found road: " + str(road_id) + ", section: " + str(road_section_id))
-                all_road_section_geo_data_in_db.append(geo_data)
-
+        # This method takes geo data from Scraper.get_geo_data_for_all_road_sections() and adds it to a list if the corresponding road section exists in the database
+        all_road_section_geo_data_in_db = Scraper.get_all_road_sections_geodata_in_db()
         if len(all_road_section_geo_data_in_db) > 0:
             return Response(all_road_section_geo_data_in_db, status=status.HTTP_200_OK)
         else:
             return Response(all_road_section_geo_data_in_db, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class UpdateGeoJsonForAllRoadSections(APIView):
+    def get(self, request):
+        all_road_section_geo_data_in_db = Scraper.update_all_road_sections_json()
+        if len(all_road_section_geo_data_in_db) > 0:
+            return Response(all_road_section_geo_data_in_db, status=status.HTTP_200_OK)
+        else:
+            return Response(all_road_section_geo_data_in_db, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class ReadGeoJsonForAllRoadSections(APIView):
+    def get(self, request):
+        with open("traffic_speed_prediction/all_road_sections_geodata.json", "r") as openfile:
+            return Response(json.load(openfile),  status=status.HTTP_200_OK)
+    
+        
+
