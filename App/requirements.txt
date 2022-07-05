@@ -48,7 +48,7 @@ threadpoolctl==3.1.0
 tomli==2.0.1
 tzdata==2022.1
 ua-parser==0.10.0
-ujson==5.1.0
+ujson==5.4.0
 urllib3==1.26.9
 virtualenv==20.14.0
 websocket-client==0.59.0
