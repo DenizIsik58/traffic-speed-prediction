@@ -7,7 +7,7 @@ attrs==21.4.0
 boto3==1.21.27
 botocore==1.24.27
 Brotli==1.0.9
-certifi==2021.10.8
+certifi==2022.12.7
 charset-normalizer==2.0.12
 colorama==0.4.4
 distlib==0.3.4
